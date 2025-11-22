@@ -3,283 +3,181 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Beni-Wealth — Pool (Player vs System)</title>
+  <title>EwomaClassicStore — Quality at affordable prices</title>
 
   <!-- Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- favicon (logo) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
+
+  <meta name="description" content="EwomaClassicStore — Accessories, wigs and gadgets. Bulk and single purchases with quality at affordable prices." />
 
   <style>
     :root{
-      --bg-1: #0b0613;
-      --bg-2: #0f0820;
-      --panel: rgba(255,255,255,0.03);
-      --muted: rgba(255,255,255,0.62);
-      --text: #eaf2ff;
-      --accent-a: #8446ff;
-      --accent-b: #6ce2c8;
-      --accent-grad: linear-gradient(135deg, var(--accent-a), #5b3bff 45%, var(--accent-b) 100%);
-      --glass: rgba(255,255,255,0.03);
-      --radius: 14px;
-      --container-w: 420px;
-      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --bg:#f5fbff;
+      --white:#ffffff;
+      --blue-50:#eef7ff;
+      --blue-200:#cfe9ff;
+      --blue-500:#0b78ff;
+      --blue-700:#0a4fb3;
+      --muted:#5b6b7a;
+      --radius:14px;
+      --shadow: 0 12px 40px rgba(11,120,255,0.08);
+      font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
-    body{
-      background: radial-gradient(1000px 600px at 10% 10%, rgba(132,70,255,0.10), transparent),
-                  radial-gradient(900px 500px at 90% 90%, rgba(47,224,184,0.06), transparent),
-                  linear-gradient(180deg,var(--bg-1),var(--bg-2));
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      display:flex;justify-content:center;padding:18px;
-    }
+    body{background:linear-gradient(180deg,var(--bg),#f0f8ff);color:#083047;display:flex;justify-content:center;padding:28px}
 
-    /* phone-like centered container to match your dashboard feel */
-    .phone{
-      width:100%;max-width:var(--container-w);min-height:720px;border-radius:28px;padding:18px 16px 110px;background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 18px 60px rgba(0,0,0,0.6);overflow:auto;position:relative;margin:6px auto;
-    }
+    .site{width:100%;max-width:1100px;background:var(--white);border-radius:16px;padding:28px;box-shadow:var(--shadow);overflow:hidden}
 
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .title{display:flex;gap:12px;align-items:center}
-    .title h1{font-size:15px;margin:0;font-weight:700}
-    .muted{color:var(--muted);font-size:12px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:64px;height:64px;border-radius:12px;overflow:hidden;flex:0 0 64px;box-shadow:0 8px 28px rgba(11,120,255,0.12)}
+    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+    .brand h1{font-size:18px;margin:0;color:var(--blue-700);letter-spacing:0.2px}
+    .brand p{margin:0;font-size:13px;color:var(--muted)}
 
-    /* table card follows dark 'glass' panel style like your dashboard */
-    .table-card{border-radius:16px;padding:12px;background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
-    .table-wrap{width:100%;border-radius:12px;overflow:hidden}
-    canvas{display:block;width:100%;height:auto;border-radius:10px;background:#071812;touch-action:none}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:600}
+    .btn.primary{background:linear-gradient(90deg,var(--blue-500),var(--blue-700));color:var(--white);box-shadow:0 8px 30px rgba(11,120,255,0.14)}
+    .btn.ghost{background:transparent;border:1px solid rgba(8,48,71,0.06);color:var(--blue-700)}
 
-    .controls{display:flex;gap:8px;align-items:center;margin-top:10px}
-    .btn{padding:10px 12px;border-radius:12px;background:var(--accent-grad);color:#041219;border:none;cursor:pointer;font-weight:700}
-    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+    main{display:grid;grid-template-columns:1fr 380px;gap:28px;margin-top:20px;align-items:start}
 
-    .side{margin-top:12px}
-    .card{background:transparent;border-radius:12px;padding:10px;border:1px solid rgba(255,255,255,0.02);}
-    .small{font-size:13px}
+    /* Hero */
+    .hero{padding:6px}
+    .kicker{display:inline-block;background:var(--blue-50);color:var(--blue-700);padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px}
+    .title{font-size:30px;margin:14px 0;color:#062a44;line-height:1.04}
+    .motto{font-size:16px;color:var(--muted);margin-bottom:18px}
+    .hero-cta{display:flex;gap:12px;margin-top:12px}
 
-    .controls-row{display:flex;gap:8px;align-items:center;justify-content:space-between}
-    .power-display{font-weight:700;color:var(--text)}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+    .feature{background:linear-gradient(180deg,#ffffff,#fbfeff);border-radius:12px;padding:14px;border:1px solid rgba(8,48,71,0.03)}
+    .feature h4{margin:0 0 6px 0;font-size:14px;color:var(--blue-700)}
+    .feature p{margin:0;color:var(--muted);font-size:13px}
 
-    /* bottom nav styled similar to dashboard */
-    .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;height:74px;width:calc(min(var(--container-w),100%) - 28px);max-width:var(--container-w);background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:38px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 18px 60px rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.04);z-index:999}
-    .nav-btn{width:56px;text-align:center;color:var(--muted);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:6px}
-    .center-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#7a5fff,#35d6b1);display:grid;place-items:center;color:#041219;font-size:26px;box-shadow:0 18px 60px rgba(87,52,164,0.2);transform:translateY(-18px);border:none}
+    /* aside */
+    .aside{padding:18px;border-radius:12px;background:linear-gradient(180deg,#f7fbff,#ffffff);border:1px solid rgba(8,48,71,0.03)}
+    .aside h3{margin:0 0 12px 0}
+    .list{display:flex;flex-direction:column;gap:12px}
+    .list-item{display:flex;gap:12px;align-items:flex-start}
+    .dot{width:48px;height:48px;border-radius:10px;background:var(--blue-50);display:grid;place-items:center;font-weight:700;color:var(--blue-700)}
+    .item-text h4{margin:0;font-size:14px;color:var(--blue-700)}
+    .item-text p{margin:4px 0 0;color:var(--muted);font-size:13px}
 
-    @media (max-width:420px){ .phone{min-height:calc(100vh - 40px);padding-bottom:120px;border-radius:20px} .bottom-nav{left:14px;right:14px;transform:none;width:auto;max-width:calc(100% - 28px)} }
+    .hero-image{margin-top:18px;border-radius:12px;overflow:hidden;border:1px solid rgba(8,48,71,0.03)}
+    .hero-image img{width:100%;height:auto;display:block}
+
+    footer{margin-top:20px;padding-top:18px;border-top:1px dashed rgba(8,48,71,0.04);display:flex;justify-content:space-between;align-items:center}
+    .legal{font-size:13px;color:var(--muted)}
+
+    /* responsive */
+    @media (max-width:980px){ main{grid-template-columns:1fr 340px}} 
+    @media (max-width:820px){ body{padding:18px} .site{padding:18px} main{grid-template-columns:1fr; } .aside{order:2} .hero{order:1} }
   </style>
 </head>
 <body>
-  <div class="phone" role="main">
+  <div class="site" role="main">
     <header>
-      <div class="title">
-        <div style="width:48px;height:48px;border-radius:12px;background:var(--accent-grad);display:grid;place-items:center;color:#041219;font-weight:800">BW</div>
+      <div class="brand" aria-label="EwomaClassicStore brand">
+        <div class="logo" aria-hidden="true"><img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="EwomaClassicStore logo"></div>
         <div>
-          <h1>Beni-Wealth — Pool</h1>
-          <div class="muted small">Player vs System — 50% fairness</div>
+          <h1>EwomaClassicStore</h1>
+          <p>Accessories • Wigs • Gadgets</p>
         </div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button id="newGameBtn" class="btn">New</button>
-        <button id="toggleAI" class="ghost">AI Turn</button>
-      </div>
+
+      <nav class="cta" aria-label="Primary actions">
+        <!-- Assumption: Login -> login.html, Sign-up -> register.html -->
+        <a href="login.html" class="btn ghost" role="button">Log in</a>
+        <a href="register.html" class="btn primary" role="button">Sign up</a>
+      </nav>
     </header>
 
-    <section class="table-card">
-      <div class="table-wrap">
-        <canvas id="table" width="760" height="420" aria-label="Pool table"></canvas>
-      </div>
+    <main>
+      <section class="hero">
+        <span class="kicker">Accessories • Wigs • Gadgets</span>
+        <h2 class="title">EwomaClassicStore — Quality at affordable prices</h2>
+        <p class="motto">Shop stylish accessories, premium wigs and the latest gadgets. Bulk ordering for businesses and single-unit purchases for individuals — all delivered with reliable service and clear pricing.</p>
 
-      <div class="controls" style="margin-top:10px;flex-wrap:wrap;">
-        <div class="controls-row" style="flex:1;gap:8px;align-items:center">
-          <div class="small muted">Turn: <strong id="turnLabel">Player</strong></div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <label class="small muted">Aim assist</label>
-            <input type="checkbox" id="aimAssist" checked />
-          </div>
-        </div>
-      </div>
-
-      <div class="side">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div class="small muted">Player</div>
-              <div id="playerScore">Balls potted: 0</div>
-            </div>
-            <div>
-              <div class="small muted">System</div>
-              <div id="aiScore">Balls potted: 0</div>
-            </div>
-          </div>
+        <div class="hero-cta">
+          <a href="register.html" class="btn primary">Create account</a>
+          <a href="#features" class="btn ghost">Explore services</a>
         </div>
 
-        <div class="card" style="margin-top:10px">
-          <div class="small muted">Shot Controls</div>
-          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div class="small">Power: <span id="powerVal" class="power-display">30</span></div>
-              <input id="power" type="range" min="8" max="55" value="30" style="flex:1" />
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div class="small">Angle (°): <span id="angleVal">0</span></div>
-              <div style="display:flex;gap:8px">
-                <button id="angleDown" class="ghost">◀</button>
-                <button id="angleUp" class="ghost">▶</button>
-              </div>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button id="setShot" class="btn" style="flex:1">Set Aim</button>
-              <button id="shootBtn" class="btn" style="flex:1">Shoot</button>
-            </div>
+        <div class="features" id="features">
+          <div class="feature">
+            <h4>Bulk Purchase</h4>
+            <p>Competitive tiered pricing for large orders, priority fulfillment and dedicated support for resellers and retailers.</p>
+          </div>
+          <div class="feature">
+            <h4>Single Purchase</h4>
+            <p>Order single items with fast checkout and free/low-cost shipping options for personal shoppers.</p>
+          </div>
+          <div class="feature">
+            <h4>Curated Collections</h4>
+            <p>Hand-picked accessories and wig collections — quality-checked before they reach you.</p>
+          </div>
+          <div class="feature">
+            <h4>Secure Payments</h4>
+            <p>Multiple payment methods with secure checkout and order tracking for peace of mind.</p>
           </div>
         </div>
 
-        <div class="card" style="margin-top:10px">
-          <div class="small muted">Firebase (Beni-Wealth)</div>
-          <div class="muted small" style="margin-top:6px">projectId: <strong>beni-wealths</strong> — initialized (no writes)</div>
+        <div class="hero-image" aria-hidden="true" style="display:none">
+          <!-- optional product/brand image placeholder, hidden by default -->
+          <img src="" alt="" />
         </div>
-      </div>
-    </section>
+      </section>
 
-    <div class="bottom-nav" role="navigation" aria-label="Main navigation">
-      <div class="nav-btn">🏠<div style="font-size:11px;color:var(--muted)">Home</div></div>
-      <div class="nav-btn">🔗<div style="font-size:11px;color:var(--muted)">shortlinks</div></div>
-      <div style="flex:0 0 92px;display:flex;justify-content:center;align-items:center"><button class="center-btn">➕</button></div>
-      <div class="nav-btn">💬<div style="font-size:11px;color:var(--muted)">News</div></div>
-      <div class="nav-btn">👤<div style="font-size:11px;color:var(--muted)">Assets</div></div>
-    </div>
+      <aside class="aside" aria-label="Why choose EwomaClassicStore">
+        <h3>Why choose EwomaClassicStore?</h3>
+        <div class="list">
+          <div class="list-item">
+            <div class="dot">01</div>
+            <div class="item-text"><h4>Quality Products</h4><p>We source from trusted suppliers and inspect products for quality.</p></div>
+          </div>
+          <div class="list-item">
+            <div class="dot">02</div>
+            <div class="item-text"><h4>Flexible Orders</h4><p>Buy in bulk or single units using the same streamlined ordering process.</p></div>
+          </div>
+          <div class="list-item">
+            <div class="dot">03</div>
+            <div class="item-text"><h4>Fast Delivery</h4><p>Priority dispatch for bulk orders and reliable tracking for all purchases.</p></div>
+          </div>
+          <div class="list-item">
+            <div class="dot">04</div>
+            <div class="item-text"><h4>Support</h4><p>Dedicated sales and aftercare support for every order.</p></div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;display:flex;gap:8px">
+          <a href="login.html" class="btn ghost" style="flex:1">Log in</a>
+          <a href="register.html" class="btn primary" style="flex:1">Create account</a>
+        </div>
+
+        <div style="margin-top:14px;font-size:13px;color:var(--muted)">Contact sales: <a href="mailto:sales@ewomaclassicstore.example" style="color:var(--blue-700);text-decoration:none">sales@ewomaclassicstore.example</a></div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="legal">© <span id="year"></span> EwomaClassicStore. All rights reserved.</div>
+      <div style="font-size:13px;color:var(--muted)">Designed to deliver — Quality at affordable prices</div>
+    </footer>
   </div>
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
-    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js';
-    import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDy_L7uJeoaWXbUB-LVk_fBv8yHeRjNjZk",
-      authDomain: "beni-wealths.firebaseapp.com",
-      projectId: "beni-wealths",
-      storageBucket: "beni-wealths.firebasestorage.app",
-      messagingSenderId: "807950483822",
-      appId: "1:807950483822:web:e10fa87307e041c4d8417f",
-      measurementId: "G-Z2XP3YN6NS"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    try{ getAnalytics(app); }catch(e){}
-    const db = getFirestore(app);
-    console.log('Firebase (Beni-Wealth) initialized (prototype)');
-
-    // -- Gameplay code (same mechanics as before, adapted to dark theme & phone layout) --
-    const canvas = document.getElementById('table');
-    const ctx = canvas.getContext('2d');
-
-    function fitCanvas(){
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      canvas.width = Math.floor(rect.width * dpr);
-      canvas.height = Math.floor((rect.width * 0.55) * dpr);
-      canvas.style.height = (rect.width * 0.55) + 'px';
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-    window.addEventListener('resize', ()=> fitCanvas());
-    setTimeout(fitCanvas,120);
-
-    // logical table size (world coords)
-    let W = 760, H = 420;
-    const pocketRadius = 18, ballRadius = 9, padding = 30;
-    const friction = 0.988;
-
-    let balls = [], cueBallId = 0;
-    let isAiming=false, aimStart=null, aimEnd={x:0,y:0}, queuedAim=null;
-    let currentTurn='player', allowPlayerShot=true, replay=[];
-
-    const powerInput = document.getElementById('power'); const powerVal = document.getElementById('powerVal');
-    const angleVal = document.getElementById('angleVal'); const angleUp = document.getElementById('angleUp'); const angleDown = document.getElementById('angleDown');
-    powerInput.addEventListener('input', ()=> powerVal.textContent = powerInput.value);
-
-    let currentAngle = 0; function setAngle(a){ currentAngle = ((a%360)+360)%360; angleVal.textContent = Math.round(currentAngle); }
-    angleUp.addEventListener('click', ()=> setAngle(currentAngle + 1)); angleDown.addEventListener('click', ()=> setAngle(currentAngle - 1));
-
-    const pockets = [ {x: padding, y: padding}, {x: W/2, y: padding}, {x: W-padding, y: padding}, {x: padding, y: H-padding}, {x: W/2, y: H-padding}, {x: W-padding, y: H-padding} ];
-
-    function resetTable(){
-      W=760;H=420;balls=[];
-      balls.push({id:0,x:160,y:H/2,vx:0,vy:0,r:ballRadius,color:'#ffffff',active:true});
-      const rack = [ {x:520,y:H/2-18},{x:538,y:H/2},{x:538,y:H/2-36},{x:556,y:H/2-18},{x:556,y:H/2+18},{x:574,y:H/2} ];
-      for(let i=0;i<rack.length;i++) balls.push({id:i+1,x:rack[i].x,y:rack[i].y,vx:0,vy:0,r:ballRadius,color:'#ffcc00',active:true});
-      cueBallId=0; document.getElementById('playerScore').textContent='Balls potted: 0'; document.getElementById('aiScore').textContent='Balls potted: 0'; currentTurn='player'; allowPlayerShot=true; replay=[]; fitCanvas(); updateTurnLabel();
-    }
-
-    function worldToScreen(v){ const rect = canvas.getBoundingClientRect(); const scale = rect.width / 760; return {x: v.x * scale, y: v.y * scale}; }
-    function screenToWorld(x,y){ const rect = canvas.getBoundingClientRect(); const scale = rect.width / 760; return {x: x/scale, y: y/scale}; }
-
-    function drawTable(){
-      const rect = canvas.getBoundingClientRect(); const scale = rect.width / 760;
-      ctx.clearRect(0,0,rect.width,rect.height);
-      ctx.save(); ctx.scale(scale,scale);
-      // felt
-      ctx.fillStyle = '#071812'; ctx.fillRect(0,0,W,H);
-      // rails
-      ctx.fillStyle = '#2a5a3b'; ctx.fillRect(0,0,W,padding); ctx.fillRect(0,H-padding,W,padding); ctx.fillRect(0,0,padding,H); ctx.fillRect(W-padding,0,padding,H);
-      // pockets
-      for(const p of pockets){ ctx.beginPath(); ctx.fillStyle='#000'; ctx.arc(p.x,p.y,pocketRadius,0,Math.PI*2); ctx.fill(); }
-
-      // aim assist ghost
-      if(document.getElementById('aimAssist').checked) drawAimPrediction();
-
-      // balls
-      for(const b of balls){ if(!b.active) continue; ctx.beginPath(); ctx.fillStyle=b.color; ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=1; ctx.stroke(); }
-
-      // drag line
-      if(isAiming){ const cue = balls.find(x=>x.id===cueBallId); ctx.beginPath(); ctx.moveTo(cue.x,cue.y); ctx.lineTo(aimEnd.x,aimEnd.y); ctx.strokeStyle='rgba(255,255,255,0.7)'; ctx.lineWidth=2; ctx.setLineDash([6,5]); ctx.stroke(); ctx.setLineDash([]); }
-
-      ctx.restore();
-    }
-
-    function drawAimPrediction(){
-      const cue = balls.find(b=>b.id===cueBallId && b.active); if(!cue) return;
-      ctx.save(); ctx.scale(canvas.getBoundingClientRect().width/760, canvas.getBoundingClientRect().width/760);
-      // simple ghost: find best object->pocket candidate
-      let best=null;
-      for(const obj of balls.filter(b=>b.id!==cueBallId && b.active)){
-        for(const p of pockets){ const px=p.x-obj.x, py=p.y-obj.y; const dPocket=Math.hypot(px,py); const contactX = obj.x - (px/dPocket)*ballRadius; const contactY = obj.y - (py/dPocket)*ballRadius; const dirX=contactX-cue.x, dirY=contactY-cue.y; const dCue=Math.hypot(dirX,dirY); const score=1/(1+dCue*0.008+dPocket*0.01); if(!best||score>best.score) best={obj,p,contact:{x:contactX,y:contactY},score,angle:Math.atan2(dirY,dirX)} }
-      }
-      if(best){ ctx.beginPath(); ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.arc(best.contact.x,best.contact.y,ballRadius,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(best.obj.x,best.obj.y); ctx.lineTo(best.p.x,best.p.y); ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=2; ctx.stroke(); ctx.beginPath(); ctx.moveTo(cue.x,cue.y); ctx.lineTo(best.contact.x,best.contact.y); ctx.strokeStyle='rgba(255,255,255,0.45)'; ctx.lineWidth=2; ctx.stroke(); }
-      ctx.restore();
-    }
-
-    function stepPhysics(){
-      for(const b of balls){ if(!b.active) continue; b.x+=b.vx; b.y+=b.vy; b.vx*=friction; b.vy*=friction; if(Math.hypot(b.vx,b.vy)<0.01){b.vx=0;b.vy=0} }
-      // collisions
-      for(let i=0;i<balls.length;i++){
-        for(let j=i+1;j<balls.length;j++){
-          const A=balls[i], B=balls[j]; if(!A.active||!B.active) continue; const dx=B.x-A.x, dy=B.y-A.y, dist=Math.hypot(dx,dy); const minD=A.r+B.r; if(dist<minD&&dist>0){ const nx=dx/dist, ny=dy/dist; const overlap=(minD-dist)/2; A.x-=nx*overlap; A.y-=ny*overlap; B.x+=nx*overlap; B.y+=ny*overlap; const relvx=B.vx-A.vx, relvy=B.vy-A.vy; const sep=relvx*nx+relvy*ny; if(sep<0){ const impulse=-1.9*sep; A.vx-=impulse*nx; A.vy-=impulse*ny; B.vx+=impulse*nx; B.vy+=impulse*ny } }
-        }
-      }
-      // rails
-      for(const b of balls){ if(!b.active) continue; if(b.x < padding + b.r){ b.x = padding + b.r; b.vx *= -0.82 } if(b.x > W - padding - b.r){ b.x = W - padding - b.r; b.vx *= -0.82 } if(b.y < padding + b.r){ b.y = padding + b.r; b.vy *= -0.82 } if(b.y > H - padding - b.r){ b.y = H - padding - b.r; b.vy *= -0.82 } }
-      // pockets
-      for(const p of pockets){ for(const b of balls){ if(!b.active) continue; const d=Math.hypot(b.x-p.x,b.y-p.y); if(d < pocketRadius){ b.active=false; b.vx=0; b.vy=0; recordPot(b.id); } }}
-    }
-
-    function anyBallMoving(){ return balls.some(b=>b.active && (Math.abs(b.vx)>0.05 || Math.abs(b.vy)>0.05)); }
-
-    function gameLoop(){ stepPhysics(); drawTable(); replay.push(balls.map(b=>({id:b.id,x:b.x,y:b.y,vx:b.vx,vy:b.vy,active:b.active}))); if(!anyBallMoving()){ if(currentTurn==='ai' && allowPlayerShot===false){ currentTurn='player'; allowPlayerShot=true; updateTurnLabel(); } } requestAnimationFrame(gameLoop); }
-
-    function recordPot(ballId){ if(ballId===cueBallId){ setTimeout(()=>{ const cue=balls.find(b=>b.id===cueBallId); if(cue){ cue.active=true; cue.x=160; cue.y=H/2; cue.vx=0; cue.vy=0 } },400); return; } if(currentTurn==='player' || allowPlayerShot===true){ const el=document.getElementById('playerScore'); const v=parseInt(el.textContent.split(':')[1]) + 1; el.textContent='Balls potted: '+v; } else { const el=document.getElementById('aiScore'); const v=parseInt(el.textContent.split(':')[1]) + 1; el.textContent='Balls potted: '+v; } }
-
-    // input handling: improved precision for tap/drag
-    canvas.addEventListener('pointerdown',(e)=>{ const rect=canvas.getBoundingClientRect(); const sx=e.clientX-rect.left, sy=e.clientY-rect.top; const w=screenToWorld(sx,sy); const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; if(Math.hypot(w.x-cue.x,w.y-cue.y) < 40){ isAiming=true; aimStart={x:cue.x,y:cue.y}; aimEnd={x:w.x,y:w.y}; } else { const dx=w.x-cue.x, dy=w.y-cue.y; const ang=Math.atan2(dy,dx)*180/Math.PI; queuedAim={angle:ang,power:parseInt(powerInput.value)}; setAngle(ang); } });
-    canvas.addEventListener('pointermove',(e)=>{ if(!isAiming) return; const rect=canvas.getBoundingClientRect(); const sx=e.clientX-rect.left, sy=e.clientY-rect.top; const w=screenToWorld(sx,sy); aimEnd.x=w.x; aimEnd.y=w.y; });
-    canvas.addEventListener('pointerup',(e)=>{ if(isAiming){ isAiming=false; const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; const dx=aimStart.x-aimEnd.x, dy=aimStart.y-aimEnd.y; const power=Math.min(55, Math.hypot(dx,dy)/3); const ang=Math.atan2(dy,dx); cue.vx=Math.cos(ang)*power*0.6; cue.vy=Math.sin(ang)*power*0.6; allowPlayerShot=false; currentTurn='player'; updateTurnLabel(); const waitForStop=setInterval(()=>{ if(!anyBallMoving()){ clearInterval(waitForStop); currentTurn='ai'; allowPlayerShot=false; updateTurnLabel(); setTimeout(()=>{ aiTakeTurn(); },700); } },400); } });
-
-    // tap-to-aim + shoot via controls
-    canvas.addEventListener('click',(e)=>{ const rect=canvas.getBoundingClientRect(); const sx=e.clientX-rect.left, sy=e.clientY-rect.top; const w=screenToWorld(sx,sy); const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; const dx=w.x-cue.x, dy=w.y-cue.y; const ang=Math.atan2(dy,dx)*180/Math.PI; queuedAim={angle:ang,power:parseInt(powerInput.value)}; setAngle(ang); });
-
-    function performShootFromControls(){ const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; if(!queuedAim){ alert('Tap on the table to set where to aim first.'); return; } const ang=queuedAim.angle*Math.PI/180; const power=parseInt(powerInput.value); cue.vx=Math.cos(ang)*power*0.6; cue.vy=Math.sin(ang)*power*0.6; queuedAim=null; allowPlayerShot=false; currentTurn='player'; updateTurnLabel(); const waitForStop=setInterval(()=>{ if(!anyBallMoving()){ clearInterval(waitForStop); currentTurn='ai'; allowPlayerShot=false; updateTurnLabel(); setTimeout(()=>{ aiTakeTurn(); },700); } },400); }
-
-    // AI (50% fairness)
-    function aiTakeTurn(){ const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; const objects=balls.filter(b=>b.id!==cueBallId && b.active); if(objects.length===0){ currentTurn='player'; allowPlayerShot=true; updateTurnLabel(); return; } const candidates=[]; for(const obj of objects){ for(const p of pockets){ const pocketDirX=p.x-obj.x, pocketDirY=p.y-obj.y; const distPocket=Math.hypot(pocketDirX,pocketDirY); const contactX=obj.x-(pocketDirX/distPocket)*ballRadius; const contactY=obj.y-(pocketDirY/distPocket)*ballRadius; const dirX=contactX-cue.x, dirY=contactY-cue.y; const distCue=Math.hypot(dirX,dirY); const angle=Math.atan2(dirY,dirX); const successEstimate=1/(1+distCue*0.008+distPocket*0.008); candidates.push({obj,p,contact:{x:contactX,y:contactY},angle,distCue,distPocket,score:successEstimate}); } }
-      candidates.sort((a,b)=>b.score-a.score); let chosen=candidates[0]; if(!chosen){ currentTurn='player'; allowPlayerShot=true; updateTurnLabel(); return; } const uiSkill=parseFloat(document.getElementById('aiSkill')?.value||0.5)||0.5; const baseAccuracy=uiSkill; const fairnessToggle=Math.random()<0.5; let aimAngle=chosen.angle; let power=Math.min(55, Math.max(18, 30 - c
+    // smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault(); const id = a.getAttribute('href').slice(1); const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    });
+  </script>
+</body>
+              </html>
+              
