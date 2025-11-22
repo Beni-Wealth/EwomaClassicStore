@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ewoma Classicstore — Affordable Hair & Jewelry</title>
+  <title>Ewoma Classicstore — Getting Quality For Less</title>
   <meta name="description" content="Ewoma Classicstore — quality human hair, synthetic hair, braids and jewelry at affordable prices." />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -82,35 +82,33 @@
 
     <div class="actions">
       <a class="btn outline" href="#categories">Shop by category</a>
-      <button class="btn">Sign in</button>
+      <a class="btn" href="signin.html">Sign In</a>
+      <a class="btn outline" href="signup.html">Sign Up</a>
     </div>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-left">
-        <h2>Your one-stop marketplace for hair & jewelry</h2>
-        <p>At Ewoma Classicstore we source premium human hair, synthetic (SDD) and braided hair, plus elegant jewelry — from everyday studs to real-gold pieces — all at affordable prices. Browse trusted sellers, compare offers, and shop with confidence.</p>
+        <h2>Welcome to Ewoma Classicstore</h2>
+        <p>We specialize in offering a wide selection of hair and jewelry categories to suit different tastes and styles. Our store provides human hair, synthetic (SDD) hair, braided hair, and a variety of jewelry including wrist watches, engagement rings, necklaces, studs, and real gold pieces. We focus on delivering quality products that meet everyday beauty and fashion needs.</p>
         <div class="features">
-          <span class="chip">Free shipping over ₦20,000</span>
-          <span class="chip">Secure payments</span>
-          <span class="chip">30-day returns</span>
+          <span class="chip">Human Hair</span>
+          <span class="chip">Braided Hair</span>
+          <span class="chip">Jewelry & Accessories</span>
         </div>
         <div style="margin-top:20px;display:flex;gap:12px">
-          <a class="btn" href="#featured">Shop now</a>
-          <a class="btn outline" href="#contact">Contact sales</a>
+          <a class="btn" href="#categories">Explore Categories</a>
+          <a class="btn outline" href="signin.html">Sign In</a>
         </div>
       </div>
 
       <aside class="hero-right">
-        <img src="https://via.placeholder.com/600x400?text=Featured+Collection" alt="Featured collection" />
+        <img src="https://via.placeholder.com/600x400?text=Ewoma+Classicstore" alt="Store preview" />
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
           <div>
-            <div style="font-weight:700">Summer Essentials</div>
-            <div class="small">Top picks: human hair wigs & gold chains</div>
-          </div>
-          <div>
-            <a class="btn" href="#featured">Explore</a>
+            <div style="font-weight:700">Our Collections</div>
+            <div class="small">Explore different styles and product categories</div>
           </div>
         </div>
       </aside>
@@ -264,3 +262,115 @@
 </body>
 </html>
 
+<!-- SIGNIN PAGE: signin.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign In — Ewoma Classicstore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#0b74ff;--muted:#6b7280}
+    body{font-family:'Poppins',sans-serif;margin:0;background:#f8fbff;display:flex;min-height:100vh;align-items:center;justify-content:center}
+    .card{background:#fff;padding:28px;border-radius:12px;box-shadow:0 10px 30px rgba(11,116,255,0.06);width:100%;max-width:420px}
+    h2{color:var(--primary);margin:0 0 12px}
+    label{display:block;margin:10px 0 6px;font-size:14px;color:var(--muted)}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid #e6eefc}
+    .btn{margin-top:16px;padding:12px;border-radius:10px;background:var(--primary);color:#fff;border:0;width:100%;font-weight:600}
+    .muted{color:var(--muted);font-size:14px;margin-top:10px;text-align:center}
+    a{color:var(--primary)}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h2>Sign In</h2>
+    <form id="signinForm">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required minlength="6" />
+
+      <button class="btn" type="submit">Sign In</button>
+    </form>
+    <div class="muted">Need an account? <a href="signup.html">Sign Up</a></div>
+    <div class="muted"><a href="index.html">Back to home</a></div>
+  </main>
+
+  <script>
+    document.getElementById('signinForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      // placeholder behaviour — integrate with your auth backend
+      alert('Sign in submitted. Connect this form to your authentication backend.');
+      // Example redirect after sign-in
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
+
+<!-- SIGNUP PAGE: signup.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up — Ewoma Classicstore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#0b74ff;--muted:#6b7280}
+    body{font-family:'Poppins',sans-serif;margin:0;background:#f8fbff;display:flex;min-height:100vh;align-items:center;justify-content:center}
+    .card{background:#fff;padding:28px;border-radius:12px;box-shadow:0 10px 30px rgba(11,116,255,0.06);width:100%;max-width:520px}
+    h2{color:var(--primary);margin:0 0 12px}
+    label{display:block;margin:10px 0 6px;font-size:14px;color:var(--muted)}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid #e6eefc}
+    .row{display:flex;gap:12px}
+    .btn{margin-top:16px;padding:12px;border-radius:10px;background:var(--primary);color:#fff;border:0;width:100%;font-weight:600}
+    .muted{color:var(--muted);font-size:14px;margin-top:10px;text-align:center}
+    a{color:var(--primary)}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h2>Create an account</h2>
+    <form id="signupForm">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" required />
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+
+      <div class="row">
+        <div style="flex:1">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" required minlength="6" />
+        </div>
+        <div style="flex:1">
+          <label for="confirm">Confirm</label>
+          <input id="confirm" name="confirm" type="password" required minlength="6" />
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Sign Up</button>
+    </form>
+    <div class="muted">Already have an account? <a href="signin.html">Sign In</a></div>
+    <div class="muted"><a href="index.html">Back to home</a></div>
+  </main>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      var p = document.getElementById('password').value;
+      var c = document.getElementById('confirm').value;
+      if(p !== c){
+        alert('Passwords do not match');
+        return;
+      }
+      // placeholder behaviour — integrate with your user creation backend
+      alert('Account created (demo). Connect this form to your user creation backend.');
+      window.location.href = 'signin.html';
+    });
+  </script>
+</body>
+</html>
