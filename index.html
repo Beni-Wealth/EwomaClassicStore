@@ -2,347 +2,284 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ewoma Classicstore — Affordable Hair & Jewelry</title>
-  <meta name="description" content="Ewoma Classicstore — quality human hair, synthetic hair, braids and jewelry at affordable prices." />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Beni-Wealth — Pool (Player vs System)</title>
+
+  <!-- Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+
   <style>
     :root{
-      --bg:#ffffff;
-      --primary:#0b74ff; /* blue */
-      --primary-700:#075ed6;
-      --muted:#6b7280;
-      --card-shadow: 0 8px 24px rgba(13,42,80,0.08);
-      --radius:16px;
-      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      --bg-1: #0b0613;
+      --bg-2: #0f0820;
+      --panel: rgba(255,255,255,0.03);
+      --muted: rgba(255,255,255,0.62);
+      --text: #eaf2ff;
+      --accent-a: #8446ff;
+      --accent-b: #6ce2c8;
+      --accent-grad: linear-gradient(135deg, var(--accent-a), #5b3bff 45%, var(--accent-b) 100%);
+      --glass: rgba(255,255,255,0.03);
+      --radius: 14px;
+      --container-w: 420px;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:#0f1724;line-height:1.4}
-    a{color:inherit;text-decoration:none}
-
-    /* NAV */
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid #eef2ff;background:linear-gradient(180deg, rgba(11,116,255,0.05), transparent)}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand img{width:48px;height:48px;object-fit:cover;border-radius:8px}
-    .brand h1{font-size:18px;margin:0;font-weight:700;color:var(--primary)}
-    .search{flex:1;max-width:700px;margin:0 20px}
-    .search input{width:100%;padding:12px 16px;border-radius:12px;border:1px solid #e6eefc;background:#fff;box-shadow:var(--card-shadow)}
-    .actions{display:flex;gap:12px;align-items:center}
-    .btn{padding:10px 14px;border-radius:12px;background:var(--primary);color:#fff;font-weight:600;cursor:pointer}
-    .btn.outline{background:transparent;border:1px solid var(--primary);color:var(--primary)}
-
-    /* HERO */
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:32px;padding:48px 28px;align-items:center}
-    .hero-left h2{font-size:34px;margin:0 0 12px;color:var(--primary-700)}
-    .hero-left p{color:var(--muted);margin:0 0 20px}
-    .features{display:flex;gap:12px;flex-wrap:wrap}
-    .chip{background:#f3f8ff;padding:10px 12px;border-radius:12px;color:var(--primary-700);font-weight:600}
-    .hero-right{background:linear-gradient(180deg, rgba(11,116,255,0.06), rgba(11,116,255,0.02));padding:20px;border-radius:16px;box-shadow:var(--card-shadow)}
-    .hero-right img{width:100%;height:260px;object-fit:cover;border-radius:12px}
-
-    /* CATEGORIES */
-    .section{padding:36px 28px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}
-    .card{background:#fff;border-radius:12px;padding:16px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:12px}
-    .card .thumb{height:140px;border-radius:10px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-weight:600;color:var(--muted)}
-    .card h3{margin:0;font-size:16px}
-    .price{color:var(--primary);font-weight:700}
-
-    /* FOOTER */
-    footer{border-top:1px solid #eef2ff;padding:28px;background:#f8fbff}
-    .footer-grid{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
-    .footer-links{display:flex;gap:12px;align-items:center}
-    .small{color:var(--muted);font-size:14px}
-
-    /* responsive */
-    @media (max-width:920px){
-      .hero{grid-template-columns:1fr;gap:20px}
-      .search{max-width:none;margin:12px 0}
-      .nav{padding:12px}
+    html,body{height:100%;margin:0}
+    body{
+      background: radial-gradient(1000px 600px at 10% 10%, rgba(132,70,255,0.10), transparent),
+                  radial-gradient(900px 500px at 90% 90%, rgba(47,224,184,0.06), transparent),
+                  linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;justify-content:center;padding:18px;
     }
-    @media (max-width:520px){
-      .brand h1{font-size:16px}
-      .hero-left h2{font-size:26px}
-      .hero-right img{height:180px}
-      .card .thumb{height:110px}
+
+    /* phone-like centered container to match your dashboard feel */
+    .phone{
+      width:100%;max-width:var(--container-w);min-height:720px;border-radius:28px;padding:18px 16px 110px;background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 18px 60px rgba(0,0,0,0.6);overflow:auto;position:relative;margin:6px auto;
     }
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .title{display:flex;gap:12px;align-items:center}
+    .title h1{font-size:15px;margin:0;font-weight:700}
+    .muted{color:var(--muted);font-size:12px}
+
+    /* table card follows dark 'glass' panel style like your dashboard */
+    .table-card{border-radius:16px;padding:12px;background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+    .table-wrap{width:100%;border-radius:12px;overflow:hidden}
+    canvas{display:block;width:100%;height:auto;border-radius:10px;background:#071812;touch-action:none}
+
+    .controls{display:flex;gap:8px;align-items:center;margin-top:10px}
+    .btn{padding:10px 12px;border-radius:12px;background:var(--accent-grad);color:#041219;border:none;cursor:pointer;font-weight:700}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    .side{margin-top:12px}
+    .card{background:transparent;border-radius:12px;padding:10px;border:1px solid rgba(255,255,255,0.02);}
+    .small{font-size:13px}
+
+    .controls-row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .power-display{font-weight:700;color:var(--text)}
+
+    /* bottom nav styled similar to dashboard */
+    .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;height:74px;width:calc(min(var(--container-w),100%) - 28px);max-width:var(--container-w);background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:38px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 18px 60px rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.04);z-index:999}
+    .nav-btn{width:56px;text-align:center;color:var(--muted);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .center-btn{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#7a5fff,#35d6b1);display:grid;place-items:center;color:#041219;font-size:26px;box-shadow:0 18px 60px rgba(87,52,164,0.2);transform:translateY(-18px);border:none}
+
+    @media (max-width:420px){ .phone{min-height:calc(100vh - 40px);padding-bottom:120px;border-radius:20px} .bottom-nav{left:14px;right:14px;transform:none;width:auto;max-width:calc(100% - 28px)} }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-        <img src="/mnt/data/c894cf55-63b7-4cfe-96bd-d7cf8d0253f4.png" alt="Ewoma Classicstore Logo" />
-        <h1>Ewoma Classicstore</h1>
+  <div class="phone" role="main">
+    <header>
+      <div class="title">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--accent-grad);display:grid;place-items:center;color:#041219;font-weight:800">BW</div>
+        <div>
+          <h1>Beni-Wealth — Pool</h1>
+          <div class="muted small">Player vs System — 50% fairness</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="newGameBtn" class="btn">New</button>
+        <button id="toggleAI" class="ghost">AI Turn</button>
+      </div>
+    </header>
+
+    <section class="table-card">
+      <div class="table-wrap">
+        <canvas id="table" width="760" height="420" aria-label="Pool table"></canvas>
+      </div>
+
+      <div class="controls" style="margin-top:10px;flex-wrap:wrap;">
+        <div class="controls-row" style="flex:1;gap:8px;align-items:center">
+          <div class="small muted">Turn: <strong id="turnLabel">Player</strong></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label class="small muted">Aim assist</label>
+            <input type="checkbox" id="aimAssist" checked />
+          </div>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="small muted">Player</div>
+              <div id="playerScore">Balls potted: 0</div>
+            </div>
+            <div>
+              <div class="small muted">System</div>
+              <div id="aiScore">Balls potted: 0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:10px">
+          <div class="small muted">Shot Controls</div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="small">Power: <span id="powerVal" class="power-display">30</span></div>
+              <input id="power" type="range" min="8" max="55" value="30" style="flex:1" />
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="small">Angle (°): <span id="angleVal">0</span></div>
+              <div style="display:flex;gap:8px">
+                <button id="angleDown" class="ghost">◀</button>
+                <button id="angleUp" class="ghost">▶</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button id="setShot" class="btn" style="flex:1">Set Aim</button>
+              <button id="shootBtn" class="btn" style="flex:1">Shoot</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:10px">
+          <div class="small muted">Firebase (Beni-Wealth)</div>
+          <div class="muted small" style="margin-top:6px">projectId: <strong>beni-wealths</strong> — initialized (no writes)</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bottom-nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-btn">🏠<div style="font-size:11px;color:var(--muted)">Home</div></div>
+      <div class="nav-btn">🔗<div style="font-size:11px;color:var(--muted)">shortlinks</div></div>
+      <div style="flex:0 0 92px;display:flex;justify-content:center;align-items:center"><button class="center-btn">➕</button></div>
+      <div class="nav-btn">💬<div style="font-size:11px;color:var(--muted)">News</div></div>
+      <div class="nav-btn">👤<div style="font-size:11px;color:var(--muted)">Assets</div></div>
     </div>
-    <nav>
-        <a href="signin.html" class="nav-btn">Sign In</a>
-        <a href="signup.html" class="nav-btn">Sign Up</a>
-    </nav>
-</header>
+  </div>
 
-  <main>
-    <section class="hero">
-    <h2>What We Sell</h2>
-    <p>At Ewoma Classicstore, we specialize in quality fashion items including clothing, shoes, bags, and accessories for both men and women. Our products are carefully selected to provide comfort, durability, and a stylish look suitable for different occasions.</p>
-</section>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js';
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
 
-    <section id="categories" class="section">
-      <h2 style="margin:0 0 12px;color:var(--primary-700)">Shop by category</h2>
-      <p class="small" style="margin:0 0 18px">Wide selection across hair types and jewelry — curated for quality and price.</p>
-      <div class="grid">
-        <article class="card">
-          <div class="thumb">Human Hair</div>
-          <h3>Premium Human Hair</h3>
-          <div class="small">Wigs, closures, bundles — natural textures.</div>
-          <div class="price">From ₦12,000</div>
-        </article>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDy_L7uJeoaWXbUB-LVk_fBv8yHeRjNjZk",
+      authDomain: "beni-wealths.firebaseapp.com",
+      projectId: "beni-wealths",
+      storageBucket: "beni-wealths.firebasestorage.app",
+      messagingSenderId: "807950483822",
+      appId: "1:807950483822:web:e10fa87307e041c4d8417f",
+      measurementId: "G-Z2XP3YN6NS"
+    };
 
-        <article class="card">
-          <div class="thumb">Synthetic / SDD</div>
-          <h3>SDD & Synthetic Hair</h3>
-          <div class="small">Affordable styles, vivid colors, easy maintenance.</div>
-          <div class="price">From ₦3,500</div>
-        </article>
+    const app = initializeApp(firebaseConfig);
+    try{ getAnalytics(app); }catch(e){}
+    const db = getFirestore(app);
+    console.log('Firebase (Beni-Wealth) initialized (prototype)');
 
-        <article class="card">
-          <div class="thumb">Braided</div>
-          <h3>Braided Hair</h3>
-          <div class="small">Box braids, twists, cornrows — ready to wear.</div>
-          <div class="price">From ₦2,000</div>
-        </article>
+    // -- Gameplay code (same mechanics as before, adapted to dark theme & phone layout) --
+    const canvas = document.getElementById('table');
+    const ctx = canvas.getContext('2d');
 
-        <article class="card">
-          <div class="thumb">Watches</div>
-          <h3>Wrist Watches</h3>
-          <div class="small">Fashion and classic timepieces — affordable and elegant.</div>
-          <div class="price">From ₦4,500</div>
-        </article>
+    function fitCanvas(){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor((rect.width * 0.55) * dpr);
+      canvas.style.height = (rect.width * 0.55) + 'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    window.addEventListener('resize', ()=> fitCanvas());
+    setTimeout(fitCanvas,120);
 
-        <article class="card">
-          <div class="thumb">Rings</div>
-          <h3>Engagement & Fashion Rings</h3>
-          <div class="small">Silver, gold-plated, and real-gold options.</div>
-          <div class="price">From ₦6,000</div>
-        </article>
+    // logical table size (world coords)
+    let W = 760, H = 420;
+    const pocketRadius = 18, ballRadius = 9, padding = 30;
+    const friction = 0.988;
 
-        <article class="card">
-          <div class="thumb">Necklaces</div>
-          <h3>Necklaces & Chains</h3>
-          <div class="small">From delicate pendants to statement pieces.</div>
-          <div class="price">From ₦3,000</div>
-        </article>
-      </div>
-    </section>
+    let balls = [], cueBallId = 0;
+    let isAiming=false, aimStart=null, aimEnd={x:0,y:0}, queuedAim=null;
+    let currentTurn='player', allowPlayerShot=true, replay=[];
 
-    <section id="featured" class="section" style="padding-top:8px">
-      <h2 style="margin:0 0 12px;color:var(--primary-700)">Featured products</h2>
-      <p class="small" style="margin:0 0 18px">Example listings — connect this to a backend or CMS to populate real items.</p>
-      <div class="grid">
-        <!-- sample product cards -->
-        <div class="card">
-          <div class="thumb">Wig — Body Wave</div>
-          <h3>Body Wave Human Hair Wig</h3>
-          <div class="small">360 lace, natural density.</div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price">₦26,500</div>
-            <a class="btn outline" href="#">View</a>
-          </div>
-        </div>
+    const powerInput = document.getElementById('power'); const powerVal = document.getElementById('powerVal');
+    const angleVal = document.getElementById('angleVal'); const angleUp = document.getElementById('angleUp'); const angleDown = document.getElementById('angleDown');
+    powerInput.addEventListener('input', ()=> powerVal.textContent = powerInput.value);
 
-        <div class="card">
-          <div class="thumb">Gold Ring</div>
-          <h3>18K Real Gold Ring</h3>
-          <div class="small">Classic engagement style.</div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price">₦120,000</div>
-            <a class="btn outline" href="#">View</a>
-          </div>
-        </div>
+    let currentAngle = 0; function setAngle(a){ currentAngle = ((a%360)+360)%360; angleVal.textContent = Math.round(currentAngle); }
+    angleUp.addEventListener('click', ()=> setAngle(currentAngle + 1)); angleDown.addEventListener('click', ()=> setAngle(currentAngle - 1));
 
-        <div class="card">
-          <div class="thumb">Studs</div>
-          <h3>Diamond Stud Earrings</h3>
-          <div class="small">Sparkling classics.</div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price">₦45,000</div>
-            <a class="btn outline" href="#">View</a>
-          </div>
-        </div>
+    const pockets = [ {x: padding, y: padding}, {x: W/2, y: padding}, {x: W-padding, y: padding}, {x: padding, y: H-padding}, {x: W/2, y: H-padding}, {x: W-padding, y: H-padding} ];
 
-        <div class="card">
-          <div class="thumb">Braids</div>
-          <h3>Pre-twisted Senegalese Braids</h3>
-          <div class="small">Lightweight, long-lasting.</div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="price">₦8,500</div>
-            <a class="btn outline" href="#">View</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    function resetTable(){
+      W=760;H=420;balls=[];
+      balls.push({id:0,x:160,y:H/2,vx:0,vy:0,r:ballRadius,color:'#ffffff',active:true});
+      const rack = [ {x:520,y:H/2-18},{x:538,y:H/2},{x:538,y:H/2-36},{x:556,y:H/2-18},{x:556,y:H/2+18},{x:574,y:H/2} ];
+      for(let i=0;i<rack.length;i++) balls.push({id:i+1,x:rack[i].x,y:rack[i].y,vx:0,vy:0,r:ballRadius,color:'#ffcc00',active:true});
+      cueBallId=0; document.getElementById('playerScore').textContent='Balls potted: 0'; document.getElementById('aiScore').textContent='Balls potted: 0'; currentTurn='player'; allowPlayerShot=true; replay=[]; fitCanvas(); updateTurnLabel();
+    }
 
-    <section id="about" class="section" style="background:linear-gradient(180deg, #f8fbff, transparent)">
-      <h2 style="margin:0 0 12px;color:var(--primary-700)">What we do</h2>
-      <p class="small" style="margin:0 0 8px">Ewoma Classicstore connects buyers with reliable sellers of hair and fine jewelry. We focus on:</p>
-      <ul class="small" style="margin:8px 0 0 18px;color:var(--muted)">
-        <li>Curating high-quality human and synthetic hair products.</li>
-        <li>Offering a variety of jewelry — from fashion pieces to real gold.</li>
-        <li>Providing transparent pricing and trusted delivery options.</li>
-      </ul>
-    </section>
+    function worldToScreen(v){ const rect = canvas.getBoundingClientRect(); const scale = rect.width / 760; return {x: v.x * scale, y: v.y * scale}; }
+    function screenToWorld(x,y){ const rect = canvas.getBoundingClientRect(); const scale = rect.width / 760; return {x: x/scale, y: y/scale}; }
 
-    <section id="newsletter" class="section">
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <div style="flex:1;min-width:220px">
-          <h3 style="margin:0 0 6px">Get exclusive deals</h3>
-          <p class="small" style="margin:0">Join our newsletter for discounts and new arrivals.</p>
-        </div>
-        <form style="display:flex;gap:8px;flex:1;max-width:520px">
-          <input aria-label="Email for newsletter" placeholder="Enter your email" style="flex:1;padding:12px;border-radius:12px;border:1px solid #e6eefc" />
-          <button class="btn" type="submit">Subscribe</button>
-        </form>
-      </div>
-    </section>
-  </main>
+    function drawTable(){
+      const rect = canvas.getBoundingClientRect(); const scale = rect.width / 760;
+      ctx.clearRect(0,0,rect.width,rect.height);
+      ctx.save(); ctx.scale(scale,scale);
+      // felt
+      ctx.fillStyle = '#071812'; ctx.fillRect(0,0,W,H);
+      // rails
+      ctx.fillStyle = '#2a5a3b'; ctx.fillRect(0,0,W,padding); ctx.fillRect(0,H-padding,W,padding); ctx.fillRect(0,0,padding,H); ctx.fillRect(W-padding,0,padding,H);
+      // pockets
+      for(const p of pockets){ ctx.beginPath(); ctx.fillStyle='#000'; ctx.arc(p.x,p.y,pocketRadius,0,Math.PI*2); ctx.fill(); }
 
-  <footer>
-    <div class="footer-grid">
-      <div>
-        <strong>Ewoma Classicstore</strong>
-        <div class="small">Quality hair & jewelry at affordable prices.</div>
-      </div>
+      // aim assist ghost
+      if(document.getElementById('aimAssist').checked) drawAimPrediction();
 
-      <div class="footer-links">
-        <a class="small" href="#contact">Contact us</a>
-        <a class="small" href="/privacy-policy.html">Privacy policy</a>
-        <span class="small">|</span>
-        <span class="small">Copyright Ewoma Classicstore 2026</span>
-      </div>
-    </div>
+      // balls
+      for(const b of balls){ if(!b.active) continue; ctx.beginPath(); ctx.fillStyle=b.color; ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=1; ctx.stroke(); }
 
-    <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
-      <div class="small">Need help? Email <a href="mailto:support@ewomaclassicstore.com">support@ewomaclassicstore.com</a> or call +234 800 000 0000</div>
-      <div class="small">Made with ♥ — Secure checkout available</div>
-    </div>
-  </footer>
+      // drag line
+      if(isAiming){ const cue = balls.find(x=>x.id===cueBallId); ctx.beginPath(); ctx.moveTo(cue.x,cue.y); ctx.lineTo(aimEnd.x,aimEnd.y); ctx.strokeStyle='rgba(255,255,255,0.7)'; ctx.lineWidth=2; ctx.setLineDash([6,5]); ctx.stroke(); ctx.setLineDash([]); }
 
-  <script>
-    // Mobile-friendly enhancements could be added here.
-    // This page is a static starter template — connect to your backend or e-commerce platform to power cart, search and listings.
-    document.querySelectorAll('form').forEach(f => f.addEventListener('submit', e => { e.preventDefault(); alert('Thanks — this is a demo signup. Connect the form to your mailing service.'); }));
-  </script>
-</body>
-</html>
+      ctx.restore();
+    }
 
-<!-- SIGNIN PAGE: signin.html -->
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign In — Ewoma Classicstore</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{--primary:#0b74ff;--muted:#6b7280}
-    body{font-family:'Poppins',sans-serif;margin:0;background:#f8fbff;display:flex;min-height:100vh;align-items:center;justify-content:center}
-    .card{background:#fff;padding:28px;border-radius:12px;box-shadow:0 10px 30px rgba(11,116,255,0.06);width:100%;max-width:420px}
-    h2{color:var(--primary);margin:0 0 12px}
-    label{display:block;margin:10px 0 6px;font-size:14px;color:var(--muted)}
-    input{width:100%;padding:12px;border-radius:10px;border:1px solid #e6eefc}
-    .btn{margin-top:16px;padding:12px;border-radius:10px;background:var(--primary);color:#fff;border:0;width:100%;font-weight:600}
-    .muted{color:var(--muted);font-size:14px;margin-top:10px;text-align:center}
-    a{color:var(--primary)}
-  </style>
-</head>
-<body>
-  <main class="card">
-    <h2>Sign In</h2>
-    <form id="signinForm">
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" required />
-
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" required minlength="6" />
-
-      <button class="btn" type="submit">Sign In</button>
-    </form>
-    <div class="muted">Need an account? <a href="signup.html">Sign Up</a></div>
-    <div class="muted"><a href="index.html">Back to home</a></div>
-  </main>
-
-  <script>
-    document.getElementById('signinForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      // placeholder behaviour — integrate with your auth backend
-      alert('Sign in submitted. Connect this form to your authentication backend.');
-      // Example redirect after sign-in
-      window.location.href = 'index.html';
-    });
-  </script>
-</body>
-</html>
-
-<!-- SIGNUP PAGE: signup.html -->
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign Up — Ewoma Classicstore</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{--primary:#0b74ff;--muted:#6b7280}
-    body{font-family:'Poppins',sans-serif;margin:0;background:#f8fbff;display:flex;min-height:100vh;align-items:center;justify-content:center}
-    .card{background:#fff;padding:28px;border-radius:12px;box-shadow:0 10px 30px rgba(11,116,255,0.06);width:100%;max-width:520px}
-    h2{color:var(--primary);margin:0 0 12px}
-    label{display:block;margin:10px 0 6px;font-size:14px;color:var(--muted)}
-    input{width:100%;padding:12px;border-radius:10px;border:1px solid #e6eefc}
-    .row{display:flex;gap:12px}
-    .btn{margin-top:16px;padding:12px;border-radius:10px;background:var(--primary);color:#fff;border:0;width:100%;font-weight:600}
-    .muted{color:var(--muted);font-size:14px;margin-top:10px;text-align:center}
-    a{color:var(--primary)}
-  </style>
-</head>
-<body>
-  <main class="card">
-    <h2>Create an account</h2>
-    <form id="signupForm">
-      <label for="name">Full name</label>
-      <input id="name" name="name" type="text" required />
-
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" required />
-
-      <div class="row">
-        <div style="flex:1">
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" required minlength="6" />
-        </div>
-        <div style="flex:1">
-          <label for="confirm">Confirm</label>
-          <input id="confirm" name="confirm" type="password" required minlength="6" />
-        </div>
-      </div>
-
-      <button class="btn" type="submit">Sign Up</button>
-    </form>
-    <div class="muted">Already have an account? <a href="signin.html">Sign In</a></div>
-    <div class="muted"><a href="index.html">Back to home</a></div>
-  </main>
-
-  <script>
-    document.getElementById('signupForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      var p = document.getElementById('password').value;
-      var c = document.getElementById('confirm').value;
-      if(p !== c){
-        alert('Passwords do not match');
-        return;
+    function drawAimPrediction(){
+      const cue = balls.find(b=>b.id===cueBallId && b.active); if(!cue) return;
+      ctx.save(); ctx.scale(canvas.getBoundingClientRect().width/760, canvas.getBoundingClientRect().width/760);
+      // simple ghost: find best object->pocket candidate
+      let best=null;
+      for(const obj of balls.filter(b=>b.id!==cueBallId && b.active)){
+        for(const p of pockets){ const px=p.x-obj.x, py=p.y-obj.y; const dPocket=Math.hypot(px,py); const contactX = obj.x - (px/dPocket)*ballRadius; const contactY = obj.y - (py/dPocket)*ballRadius; const dirX=contactX-cue.x, dirY=contactY-cue.y; const dCue=Math.hypot(dirX,dirY); const score=1/(1+dCue*0.008+dPocket*0.01); if(!best||score>best.score) best={obj,p,contact:{x:contactX,y:contactY},score,angle:Math.atan2(dirY,dirX)} }
       }
-      // placeholder behaviour — integrate with your user creation backend
-      alert('Account created (demo). Connect this form to your user creation backend.');
-      window.location.href = 'signin.html';
-    });
-  </script>
-</body>
-</html>
+      if(best){ ctx.beginPath(); ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.arc(best.contact.x,best.contact.y,ballRadius,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(best.obj.x,best.obj.y); ctx.lineTo(best.p.x,best.p.y); ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=2; ctx.stroke(); ctx.beginPath(); ctx.moveTo(cue.x,cue.y); ctx.lineTo(best.contact.x,best.contact.y); ctx.strokeStyle='rgba(255,255,255,0.45)'; ctx.lineWidth=2; ctx.stroke(); }
+      ctx.restore();
+    }
+
+    function stepPhysics(){
+      for(const b of balls){ if(!b.active) continue; b.x+=b.vx; b.y+=b.vy; b.vx*=friction; b.vy*=friction; if(Math.hypot(b.vx,b.vy)<0.01){b.vx=0;b.vy=0} }
+      // collisions
+      for(let i=0;i<balls.length;i++){
+        for(let j=i+1;j<balls.length;j++){
+          const A=balls[i], B=balls[j]; if(!A.active||!B.active) continue; const dx=B.x-A.x, dy=B.y-A.y, dist=Math.hypot(dx,dy); const minD=A.r+B.r; if(dist<minD&&dist>0){ const nx=dx/dist, ny=dy/dist; const overlap=(minD-dist)/2; A.x-=nx*overlap; A.y-=ny*overlap; B.x+=nx*overlap; B.y+=ny*overlap; const relvx=B.vx-A.vx, relvy=B.vy-A.vy; const sep=relvx*nx+relvy*ny; if(sep<0){ const impulse=-1.9*sep; A.vx-=impulse*nx; A.vy-=impulse*ny; B.vx+=impulse*nx; B.vy+=impulse*ny } }
+        }
+      }
+      // rails
+      for(const b of balls){ if(!b.active) continue; if(b.x < padding + b.r){ b.x = padding + b.r; b.vx *= -0.82 } if(b.x > W - padding - b.r){ b.x = W - padding - b.r; b.vx *= -0.82 } if(b.y < padding + b.r){ b.y = padding + b.r; b.vy *= -0.82 } if(b.y > H - padding - b.r){ b.y = H - padding - b.r; b.vy *= -0.82 } }
+      // pockets
+      for(const p of pockets){ for(const b of balls){ if(!b.active) continue; const d=Math.hypot(b.x-p.x,b.y-p.y); if(d < pocketRadius){ b.active=false; b.vx=0; b.vy=0; recordPot(b.id); } }}
+    }
+
+    function anyBallMoving(){ return balls.some(b=>b.active && (Math.abs(b.vx)>0.05 || Math.abs(b.vy)>0.05)); }
+
+    function gameLoop(){ stepPhysics(); drawTable(); replay.push(balls.map(b=>({id:b.id,x:b.x,y:b.y,vx:b.vx,vy:b.vy,active:b.active}))); if(!anyBallMoving()){ if(currentTurn==='ai' && allowPlayerShot===false){ currentTurn='player'; allowPlayerShot=true; updateTurnLabel(); } } requestAnimationFrame(gameLoop); }
+
+    function recordPot(ballId){ if(ballId===cueBallId){ setTimeout(()=>{ const cue=balls.find(b=>b.id===cueBallId); if(cue){ cue.active=true; cue.x=160; cue.y=H/2; cue.vx=0; cue.vy=0 } },400); return; } if(currentTurn==='player' || allowPlayerShot===true){ const el=document.getElementById('playerScore'); const v=parseInt(el.textContent.split(':')[1]) + 1; el.textContent='Balls potted: '+v; } else { const el=document.getElementById('aiScore'); const v=parseInt(el.textContent.split(':')[1]) + 1; el.textContent='Balls potted: '+v; } }
+
+    // input handling: improved precision for tap/drag
+    canvas.addEventListener('pointerdown',(e)=>{ const rect=canvas.getBoundingClientRect(); const sx=e.clientX-rect.left, sy=e.clientY-rect.top; const w=screenToWorld(sx,sy); const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; if(Math.hypot(w.x-cue.x,w.y-cue.y) < 40){ isAiming=true; aimStart={x:cue.x,y:cue.y}; aimEnd={x:w.x,y:w.y}; } else { const dx=w.x-cue.x, dy=w.y-cue.y; const ang=Math.atan2(dy,dx)*180/Math.PI; queuedAim={angle:ang,power:parseInt(powerInput.value)}; setAngle(ang); } });
+    canvas.addEventListener('pointermove',(e)=>{ if(!isAiming) return; const rect=canvas.getBoundingClientRect(); const sx=e.clientX-rect.left, sy=e.clientY-rect.top; const w=screenToWorld(sx,sy); aimEnd.x=w.x; aimEnd.y=w.y; });
+    canvas.addEventListener('pointerup',(e)=>{ if(isAiming){ isAiming=false; const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; const dx=aimStart.x-aimEnd.x, dy=aimStart.y-aimEnd.y; const power=Math.min(55, Math.hypot(dx,dy)/3); const ang=Math.atan2(dy,dx); cue.vx=Math.cos(ang)*power*0.6; cue.vy=Math.sin(ang)*power*0.6; allowPlayerShot=false; currentTurn='player'; updateTurnLabel(); const waitForStop=setInterval(()=>{ if(!anyBallMoving()){ clearInterval(waitForStop); currentTurn='ai'; allowPlayerShot=false; updateTurnLabel(); setTimeout(()=>{ aiTakeTurn(); },700); } },400); } });
+
+    // tap-to-aim + shoot via controls
+    canvas.addEventListener('click',(e)=>{ const rect=canvas.getBoundingClientRect(); const sx=e.clientX-rect.left, sy=e.clientY-rect.top; const w=screenToWorld(sx,sy); const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; const dx=w.x-cue.x, dy=w.y-cue.y; const ang=Math.atan2(dy,dx)*180/Math.PI; queuedAim={angle:ang,power:parseInt(powerInput.value)}; setAngle(ang); });
+
+    function performShootFromControls(){ const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; if(!queuedAim){ alert('Tap on the table to set where to aim first.'); return; } const ang=queuedAim.angle*Math.PI/180; const power=parseInt(powerInput.value); cue.vx=Math.cos(ang)*power*0.6; cue.vy=Math.sin(ang)*power*0.6; queuedAim=null; allowPlayerShot=false; currentTurn='player'; updateTurnLabel(); const waitForStop=setInterval(()=>{ if(!anyBallMoving()){ clearInterval(waitForStop); currentTurn='ai'; allowPlayerShot=false; updateTurnLabel(); setTimeout(()=>{ aiTakeTurn(); },700); } },400); }
+
+    // AI (50% fairness)
+    function aiTakeTurn(){ const cue=balls.find(b=>b.id===cueBallId && b.active); if(!cue) return; const objects=balls.filter(b=>b.id!==cueBallId && b.active); if(objects.length===0){ currentTurn='player'; allowPlayerShot=true; updateTurnLabel(); return; } const candidates=[]; for(const obj of objects){ for(const p of pockets){ const pocketDirX=p.x-obj.x, pocketDirY=p.y-obj.y; const distPocket=Math.hypot(pocketDirX,pocketDirY); const contactX=obj.x-(pocketDirX/distPocket)*ballRadius; const contactY=obj.y-(pocketDirY/distPocket)*ballRadius; const dirX=contactX-cue.x, dirY=contactY-cue.y; const distCue=Math.hypot(dirX,dirY); const angle=Math.atan2(dirY,dirX); const successEstimate=1/(1+distCue*0.008+distPocket*0.008); candidates.push({obj,p,contact:{x:contactX,y:contactY},angle,distCue,distPocket,score:successEstimate}); } }
+      candidates.sort((a,b)=>b.score-a.score); let chosen=candidates[0]; if(!chosen){ currentTurn='player'; allowPlayerShot=true; updateTurnLabel(); return; } const uiSkill=parseFloat(document.getElementById('aiSkill')?.value||0.5)||0.5; const baseAccuracy=uiSkill; const fairnessToggle=Math.random()<0.5; let aimAngle=chosen.angle; let power=Math.min(55, Math.max(18, 30 - c
