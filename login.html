@@ -4,14 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login — Ewoma Classicstore</title>
-  <meta name="description" content="Login to Ewoma Classicstore" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- favicon (uses your Cloudinary image) -->
+  <link rel="icon" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" />
+
+  <!-- font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --bg1:#e8f1ff;
-      --primary:#0b74ff;
-      --muted:#6b7280;
-      --glass:rgba(255,255,255,0.78);
+      --bg1: #eef6ff;
+      --primary: #0b74ff;
+      --muted: #6b7280;
+      --glass: rgba(255,255,255,0.86);
     }
     *{box-sizing:border-box}
     body{
@@ -20,157 +25,185 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;
-      background:linear-gradient(135deg,var(--bg1),#f7fbff);
-      color:#0f1724;
+      font-family: 'Poppins', system-ui, -apple-system, Roboto, Arial;
+      background: linear-gradient(180deg, var(--bg1), #ffffff);
+      color: #07203a;
+      padding: 24px;
     }
 
-    .container{width:100%;max-width:980px;padding:28px}
     .card{
-      background:linear-gradient(180deg,var(--glass),rgba(255,255,255,0.94));
-      backdrop-filter:blur(8px);
-      border-radius:18px;
-      box-shadow:0 18px 40px rgba(15,23,36,0.08);
-      display:flex;
-      gap:36px;
+      width:100%;
+      max-width:420px;
+      background: linear-gradient(180deg, var(--glass), #ffffff);
+      border-radius:16px;
+      box-shadow: 0 18px 40px rgba(12,40,80,0.08);
       padding:28px;
-      align-items:center;
+      text-align:center;
     }
 
-    .visual{flex:1;display:flex;flex-direction:column;gap:18px;align-items:center;padding:18px}
     .logo{
-      width:92px;height:92px;border-radius:14px;overflow:hidden;
-      box-shadow:0 12px 30px rgba(11,116,255,0.08);
-      display:flex;align-items:center;justify-content:center;background:#fff;
+      width:96px;
+      height:96px;
+      margin:0 auto 12px;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow: 0 8px 30px rgba(11,116,255,0.06);
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
     .logo img{width:100%;height:100%;object-fit:cover;display:block}
-    .brand{font-weight:700;color:var(--primary);font-size:20px}
-    .lead{color:var(--muted);text-align:center;max-width:320px}
 
-    .form-wrap{width:420px;max-width:100%}
-    h2{margin:0 0 6px;color:var(--primary);font-size:22px}
-    p.sub{margin:0 0 18px;color:var(--muted)}
+    h1{font-size:20px;margin:6px 0 4px;color:var(--primary);font-weight:600}
+    p.lead{margin:0 0 18px;color:var(--muted);font-size:14px}
 
-    form{display:flex;flex-direction:column;gap:12px}
+    form{display:flex;flex-direction:column;gap:12px;text-align:left}
     label{font-size:13px;color:var(--muted);margin-bottom:6px}
-    .input{display:flex;align-items:center;background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #eef6ff;gap:8px}
-    .input input{border:0;outline:none;font-size:15px;flex:1;background:transparent}
-    .input svg{width:18px;height:18px;margin-right:4px;opacity:0.65}
+    .field{
+      background:#fff;border-radius:10px;padding:12px;border:1px solid #eef7ff;display:flex;gap:10px;align-items:center;
+    }
+    .field input{border:0;outline:none;font-size:15px;width:100%;background:transparent}
 
-    .row{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);gap:12px}
-    .row label{display:flex;align-items:center;gap:8px;cursor:pointer}
-    a.link{color:var(--primary);text-decoration:none;font-weight:600}
+    .row{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted)}
+    .btn{
+      margin-top:8px;padding:12px;border-radius:10px;border:0;background:var(--primary);color:#fff;font-weight:600;cursor:pointer;width:100%;
+      box-shadow: 0 8px 20px rgba(11,116,255,0.08);
+    }
+    .link{color:var(--primary);text-decoration:none;font-weight:600}
 
-    .actions{display:flex;flex-direction:column;gap:10px;margin-top:6px}
-    .btn{padding:12px;border-radius:12px;border:0;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(11,116,255,0.12);color:var(--primary)}
+    .small{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
 
-    .foot{margin-top:10px;font-size:13px;color:var(--muted);text-align:center}
-
-    @media (max-width:880px){
-      .card{flex-direction:column;padding:20px}
-      .visual{order:2}
-      .form-wrap{order:1}
+    @media (max-width:460px){
+      .card{padding:18px}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <div class="visual">
-        <!-- logo: using your Cloudinary image -->
-        <div class="logo">
-          <img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="Ewoma Classicstore Logo" />
-        </div>
-        <div class="brand">Ewoma Classicstore</div>
-        <div class="lead">Log in with your account username and password to access orders, saved items, and account settings.</div>
-      </div>
-
-      <div class="form-wrap">
-        <h2>Login</h2>
-        <p class="sub">Enter your username and password below.</p>
-
-        <form id="loginForm" autocomplete="on" novalidate>
-          <div>
-            <label for="username">Username</label>
-            <div class="input" aria-hidden="false">
-              <!-- user icon -->
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zM4 20c0-3.314 2.686-6 6-6h4c3.314 0 6 2.686 6 6v0" stroke="#0f1724" stroke-opacity="0.6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <input id="username" name="username" type="text" placeholder="your username" required autocomplete="username" />
-            </div>
-          </div>
-
-          <div>
-            <label for="password">Password</label>
-            <div class="input" style="position:relative">
-              <!-- lock icon -->
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="3" y="11" width="18" height="10" rx="2" stroke="#0f1724" stroke-opacity="0.6" stroke-width="1.2"/>
-                <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#0f1724" stroke-opacity="0.6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <input id="password" name="password" type="password" placeholder="your password" required minlength="6" autocomplete="current-password" />
-              <button type="button" id="toggle" aria-label="Toggle password" style="background:none;border:0;cursor:pointer;margin-left:6px">
-                <svg id="eyeOpen" viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#0f1724" stroke-opacity="0.6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="12" cy="12" r="3" stroke="#0f1724" stroke-opacity="0.6" stroke-width="1.2"/>
-                </svg>
-                <svg id="eyeClosed" viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">
-                  <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6 0-10-7-10-7a21.66 21.66 0 0 1 5.18-4.21M3 3l18 18" stroke="#0f1724" stroke-opacity="0.6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:6px">
-            <label><input type="checkbox" /> Remember me</label>
-            <a class="link" href="forgot-password.html">Forgot password?</a>
-          </div>
-
-          <div class="actions">
-            <button class="btn" type="submit">Log in</button>
-            <button type="button" class="btn ghost" onclick="window.location.href='signup.html'">Create account</button>
-          </div>
-
-          <div class="foot">By logging in you agree to our <a class="link" href="privacy-policy.html">privacy policy</a>.</div>
-        </form>
-      </div>
+  <main class="card" role="main" aria-labelledby="loginTitle">
+    <div class="logo" aria-hidden="true">
+      <img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="Ewoma Classicstore logo">
     </div>
-  </div>
 
-  <script>
-    // Toggle password visibility
-    const pw = document.getElementById('password');
-    const toggle = document.getElementById('toggle');
-    const eyeOpen = document.getElementById('eyeOpen');
-    const eyeClosed = document.getElementById('eyeClosed');
+    <h1 id="loginTitle">Log in</h1>
+    <p class="lead">Enter your username (or email) and password.</p>
 
-    toggle.addEventListener('click', () => {
-      if(pw.type === 'password'){
-        pw.type = 'text';
-        eyeOpen.style.display = 'none';
-        eyeClosed.style.display = 'block';
-      } else {
-        pw.type = 'password';
-        eyeOpen.style.display = 'block';
-        eyeClosed.style.display = 'none';
-      }
-    });
+    <div id="msg" class="small" style="display:none;color:#7a1b1b;background:#fff6f6;padding:10px;border-radius:8px;margin-bottom:10px;border:1px solid #ffd6d6"></div>
 
-    // Simple client-side demo submission
-    document.getElementById('loginForm').addEventListener('submit', function(e){
+    <form id="loginForm" autocomplete="on" novalidate>
+      <div>
+        <label for="identifier">Username or email</label>
+        <div class="field">
+          <input id="identifier" name="identifier" type="text" placeholder="username or email" required autocomplete="username" />
+        </div>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <div class="field" style="position:relative">
+          <input id="password" name="password" type="password" placeholder="password" required minlength="6" autocomplete="current-password" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:4px">
+        <label style="display:flex;align-items:center;gap:8px"><input id="remember" type="checkbox" /> Remember me</label>
+        <a class="link" href="forgot-password.html" id="forgot">Forgot?</a>
+      </div>
+
+      <button class="btn" type="submit">Sign in</button>
+
+      <div class="small">No account? <a href="signup.html" class="link">Create one</a></div>
+    </form>
+  </main>
+
+  <!-- Firebase (modular) + simple auth -->
+  <script type="module">
+    // Firebase core + Analytics (as you requested)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    // Your Firebase config (provided)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAhsWovZGZEwqY1QRJygQ2toECTeQarmsM",
+      authDomain: "ewomaclassicstore.firebaseapp.com",
+      projectId: "ewomaclassicstore",
+      storageBucket: "ewomaclassicstore.firebasestorage.app",
+      messagingSenderId: "436665012312",
+      appId: "1:436665012312:web:3b6f663ef44217e9c63a2d",
+      measurementId: "G-Q090M73LVG"
+    };
+
+    // Init
+    const app = initializeApp(firebaseConfig);
+    // analytics is optional for auth but included as requested
+    try { getAnalytics(app); } catch(e){ /* analytics may fail in some environments */ }
+
+    const auth = getAuth(app);
+    const db = getFirestore(app); // optional: used only if you want username -> email mapping
+
+    // Elements
+    const form = document.getElementById('loginForm');
+    const identifier = document.getElementById('identifier');
+    const password = document.getElementById('password');
+    const msg = document.getElementById('msg');
+
+    function showMessage(text, timeout = 5000){
+      msg.textContent = text;
+      msg.style.display = 'block';
+      setTimeout(()=> msg.style.display = 'none', timeout);
+    }
+
+    // Minimal username -> email resolve (optional)
+    async function resolveUsername(username){
+      try {
+        const q = query(collection(db, 'users'), where('username', '==', username));
+        const snap = await getDocs(q);
+        if(!snap.empty) return snap.docs[0].data().email || null;
+      } catch(e){ console.error(e) }
+      return null;
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const u = document.getElementById('username').value.trim();
-      const p = pw.value;
-      if(!u || !p){
-        alert('Please fill username and password');
+      msg.style.display = 'none';
+      const idVal = identifier.value.trim();
+      const pwVal = password.value;
+
+      if(!idVal || !pwVal){
+        showMessage('Please fill both fields.');
         return;
       }
-      // Demo behaviour — replace with real auth integration
-      alert('Login submitted (demo). Integrate this form with your authentication API.');
-      // After successful login, redirect to home or dashboard
-      window.location.href = 'index.html';
+
+      // If the user typed an email-like identifier, use it directly.
+      // Otherwise, attempt an optional username -> email lookup in Firestore.
+      let emailToUse = null;
+      if(idVal.includes('@')) {
+        emailToUse = idVal;
+      } else {
+        // Try to resolve username to email; if not found, tell user to use email or register.
+        showMessage('Resolving username...', 2000);
+        emailToUse = await resolveUsername(idVal);
+        if(!emailToUse){
+          showMessage('Username not found. Please use your email or register.');
+          return;
+        }
+      }
+
+      // Sign in via Firebase Auth
+      try {
+        await signInWithEmailAndPassword(auth, emailToUse, pwVal);
+        showMessage('Login successful — redirecting...', 900);
+        setTimeout(()=> window.location.href = 'index.html', 900);
+      } catch(err){
+        console.error(err);
+        let text = 'Login failed. Check credentials.';
+        if(err.code === 'auth/wrong-password') text = 'Incorrect password.';
+        if(err.code === 'auth/user-not-found') text = 'No account found for that email.';
+        if(err.code === 'auth/invalid-email') text = 'Invalid email.';
+        showMessage(text);
+      }
     });
   </script>
 </body>
