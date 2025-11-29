@@ -17,23 +17,22 @@
     :root{
       --bg-0: #eef7ff;
       --bg-1: #f7fbff;
-      --card: #ffffff;
+      --glass: rgba(255,255,255,0.92);
       --muted: #5b6b7a;
       --accent-a: #0b78ff;
       --accent-b: #0a4fb3;
-      --glass: rgba(255,255,255,0.85);
       --radius: 14px;
       --shadow-lg: 0 30px 80px rgba(7,38,82,0.08);
       --shadow-sm: 0 8px 26px rgba(7,38,82,0.06);
       font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      color-scheme: light;
     }
 
-    /* Full-bleed layout that fits desktop screens */
+    /* Full-bleed layout */
     html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg-0),var(--bg-1));-webkit-font-smoothing:antialiased}
-    .page{height:100vh;display:flex;flex-direction:column}
-    .shell{flex:1;display:grid;grid-template-columns:320px 1fr;gap:20px;padding:22px;align-items:start;max-width:1600px;margin:0 auto;width:100%}
-    @media (max-width:980px){ .shell{grid-template-columns:1fr; padding:14px} }
+    .page{min-height:100vh;display:flex;flex-direction:column}
+    /* Shell uses a two-column desktop layout but stacks on small screens */
+    .shell{flex:1;display:grid;grid-template-columns:300px 1fr;gap:20px;padding:22px;align-items:start;max-width:1400px;margin:0 auto;width:100%}
+    @media (max-width:980px){ .shell{grid-template-columns:1fr;padding:14px} }
 
     header.appbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
     .brand{display:flex;gap:12px;align-items:center}
@@ -41,48 +40,20 @@
     .brand h1{margin:0;font-size:18px}
     .brand p{margin:0;color:var(--muted);font-size:13px}
 
-    /* Left column (profile + nav) */
-    .left {
-      display:flex;flex-direction:column;gap:16px;
-    }
-    .card {
-      background:var(--glass);
-      border-radius:var(--radius);
-      padding:16px;
-      box-shadow:var(--shadow-sm);
-      border:1px solid rgba(10,40,85,0.04);
-    }
-
-    .profile {
-      display:flex;gap:12px;align-items:center;
-    }
-    .avatar {
-      width:76px;height:76px;border-radius:12px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));
-      display:grid;place-items:center;color:#041219;font-weight:900;font-size:24px;box-shadow:0 10px 30px rgba(11,120,255,0.08)
-    }
+    /* Left column (only profile) */
+    .left { display:flex; flex-direction:column; gap:16px; }
+    .card { background:var(--glass); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow-sm); border:1px solid rgba(10,40,85,0.04); }
+    .profile { display:flex; gap:12px; align-items:center; }
+    .avatar { width:76px;height:76px;border-radius:12px;background:linear-gradient(135deg,var(--accent-a),var(--accent-b)); display:grid;place-items:center;color:#041219;font-weight:900;font-size:24px;box-shadow:0 10px 30px rgba(11,120,255,0.08) }
     .user-info h2{margin:0;font-size:16px}
     .user-info p{margin:6px 0 0;color:var(--muted);font-size:13px}
 
-    .left .nav {
-      display:flex;flex-direction:column;gap:8px;margin-top:4px;
-    }
-    .left .nav a {
-      display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;text-decoration:none;color:inherit;border:1px solid transparent;
-    }
-    .left .nav a:hover { background:linear-gradient(90deg, rgba(11,120,255,0.06), rgba(10,79,179,0.02)); border-color:rgba(8,48,71,0.04) }
+    /* Right column (main workspace) */
+    .main { display:flex; flex-direction:column; gap:16px; }
 
-    .left .small-muted{color:var(--muted);font-size:13px}
-
-    /* Right: main workspace */
-    .main {
-      display:flex;flex-direction:column;gap:16px;
-    }
-
-    .quick-actions {
-      display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
-    }
-    @media (max-width:1100px){ .quick-actions{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:560px){ .quick-actions{grid-template-columns:1fr} }
+    .quick-actions { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    @media (min-width:1100px){ .quick-actions{ grid-template-columns:repeat(4,1fr); } }
+    @media (max-width:560px){ .quick-actions{ grid-template-columns:1fr; } }
 
     .action {
       background: linear-gradient(180deg,#fff,#fbfeff);
@@ -91,63 +62,62 @@
       transition: transform .12s ease, box-shadow .12s ease;
     }
     .action:hover{ transform: translateY(-6px); box-shadow: var(--shadow-lg) }
-
     .action h3{margin:0;font-size:15px}
     .action p{margin:0;color:var(--muted);font-size:13px}
 
-    /* Activity / feed area */
-    .feed {
-      display:grid;grid-template-columns:1fr 360px;gap:12px;
-    }
-    @media (max-width:980px){ .feed{grid-template-columns:1fr} .feed aside{order:2} }
+    /* Make the main area fill available height on desktop for a full-screen feel */
+    .fullbleed { width:100%; height: calc(100vh - 170px); overflow:auto; padding-right:8px; box-sizing:border-box; }
 
-    .activity {
-      display:flex;flex-direction:column;gap:12px;
-    }
-    .activity .panel-list{display:flex;flex-direction:column;gap:10px}
-
-    .panel-compact{padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfeff);border:1px solid rgba(8,48,71,0.03);box-shadow:var(--shadow-sm)}
-
-    /* Bottom navigation (mobile-style, fixed) */
+    /* Prominent bottom navigation — visible and larger on desktop & mobile */
     .bottom-nav {
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
       bottom: 18px;
-      width: min(980px, calc(100% - 48px));
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
+      width: min(980px, calc(100% - 36px));
+      background: linear-gradient(90deg,var(--accent-a),var(--accent-b));
+      color: #fff;
       border-radius: 14px;
-      padding:8px 12px;
+      padding:10px 12px;
       display:flex;
       align-items:center;
       justify-content:space-around;
-      gap:12px;
-      box-shadow: 0 18px 50px rgba(7,38,82,0.08);
-      border:1px solid rgba(8,48,71,0.04);
+      gap:8px;
+      box-shadow: 0 22px 60px rgba(7,38,82,0.16);
       z-index:999;
+      border: 1px solid rgba(255,255,255,0.08);
+      height:72px;
     }
-    .nav-item{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:12px;text-decoration:none}
-    .nav-item .icon{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(11,120,255,0.08),rgba(10,79,179,0.06));font-weight:800;color:var(--primaryB)}
-    .nav-item.primary .icon{background:linear-gradient(90deg,var(--accent-a),var(--accent-b));color:#fff}
-
-    /* utility */
-    .muted{color:var(--muted)}
-    .btn {
-      padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent-a),var(--accent-b));color:#fff;font-weight:700;cursor:pointer;
+    .nav-item{
+      display:flex;flex-direction:column;align-items:center;gap:8px;color:#fff;text-decoration:none;font-size:13px; width:90px;
     }
-    .btn.ghost{background:transparent;border:1px solid rgba(8,48,71,0.06);color:var(--accent-b)}
+    .nav-item .icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,0.12);font-weight:800}
+    .nav-item.active .icon{background:rgba(255,255,255,0.22)}
+    .nav-item span{font-weight:700;font-size:13px}
 
-    /* make main page fit full screen visually */
-    .fullbleed { width:100%; height: calc(100vh - 110px); overflow:auto; padding-right:8px; box-sizing:border-box; }
+    /* Adjust shell bottom padding so main content is not covered by nav */
+    .shell { padding-bottom: 110px; }
 
-    /* subtle utility */
-    .kicker { font-size:12px;color:var(--muted); border-radius:999px;padding:6px 10px;background:linear-gradient(90deg,rgba(11,120,255,0.04),transparent) }
+    /* utility buttons */
+    .btn { padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent-a),var(--accent-b));color:#fff;font-weight:700;cursor:pointer; }
+    .btn.ghost{ background: transparent; border:1px solid rgba(8,48,71,0.06); color:var(--accent-b); }
+
+    .muted{ color:var(--muted); }
+    .kicker { font-size:12px; color:var(--muted); border-radius:999px; padding:6px 10px; background:linear-gradient(90deg,rgba(11,120,255,0.04),transparent) }
+
+    /* responsive tweaks */
+    @media (max-width:480px){
+      .avatar{ width:64px;height:64px; font-size:20px }
+      .brand h1{ font-size:16px }
+      .bottom-nav{ height:76px; padding:8px; gap:6px; }
+      .nav-item{ width:70px; font-size:12px; gap:6px }
+    }
   </style>
 </head>
 <body>
   <div class="page">
     <div class="shell" role="application" aria-label="Ewoma dashboard shell">
-      <!-- App header -->
+      <!-- header -->
       <header class="appbar">
         <div class="brand">
           <div class="logo" aria-hidden="true">
@@ -156,7 +126,7 @@
           </div>
           <div>
             <h1>EwomaClassicStore</h1>
-            <p class="muted">Dashboard — fast, modern and full-screen</p>
+            <p class="muted">Dashboard — full-screen & mobile friendly</p>
           </div>
         </div>
 
@@ -166,52 +136,22 @@
         </div>
       </header>
 
-      <!-- LEFT column -->
-      <aside class="left">
-        <div class="card profile" role="region" aria-label="profile">
+      <!-- LEFT: only profile -->
+      <aside class="left" aria-label="profile">
+        <div class="card profile" role="region" aria-label="profile card">
           <div class="avatar" id="avatar">U</div>
           <div class="user-info">
             <h2 id="displayName">Not signed in</h2>
             <p id="uidline" class="muted">UID: -</p>
-            <div style="margin-top:8px;display:flex;gap:8px">
+            <div style="margin-top:10px;display:flex;gap:8px">
               <button id="signOutBtn" class="btn" style="display:none">Sign out</button>
               <a class="btn ghost" href="orders.html" style="text-decoration:none">My orders</a>
             </div>
           </div>
         </div>
-
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:800">Quick links</div>
-            <div class="muted" style="font-size:13px">Shortcuts</div>
-          </div>
-          <div class="nav" style="margin-top:12px">
-            <a href="orders.html" title="Orders"><strong>Orders</strong><div class="muted small">Track shipments & reorders</div></a>
-            <a href="location.html" title="Locations"><strong>Location</strong><div class="muted small">Manage addresses</div></a>
-            <a href="inbox.html" title="Inbox"><strong>Inbox</strong><div class="muted small">Messages & alerts</div></a>
-            <a href="help.html" title="Help & support"><strong>Help & Support</strong><div class="muted small">24/7 assistance</div></a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:800">Account summary</div>
-            <div class="muted" style="font-size:13px" id="accountStatus">Guest</div>
-          </div>
-          <div style="margin-top:10px">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div class="muted">Saved addresses</div>
-              <div id="addrCount" style="font-weight:800">0</div>
-            </div>
-            <div style="margin-top:10px;display:flex;gap:8px">
-              <a class="btn ghost" href="location.html">Manage</a>
-              <a class="btn" href="orders.html">Orders</a>
-            </div>
-          </div>
-        </div>
       </aside>
 
-      <!-- RIGHT column (main) -->
+      <!-- RIGHT: main -->
       <main class="main fullbleed" role="main" aria-live="polite">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
@@ -225,7 +165,7 @@
           </div>
         </div>
 
-        <!-- Quick actions -->
+        <!-- Action tiles (kept: Orders, Location, Inbox, Help) -->
         <div class="quick-actions" style="margin-top:12px">
           <div class="action" id="ordersCard" role="button" tabindex="0" aria-label="Orders">
             <div>
@@ -260,85 +200,35 @@
           </div>
         </div>
 
-        <!-- Activity feed & right column -->
-        <div class="feed" style="margin-top:14px">
-          <section class="activity">
-            <div class="panel-compact card">
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <div style="font-weight:800">Recent activity</div>
-                <div class="muted small">Live</div>
-              </div>
-              <div style="margin-top:10px" id="activityList">
-                <div class="muted small">No activity yet</div>
-              </div>
-            </div>
-
-            <div class="panel-compact card" style="margin-top:10px">
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <div style="font-weight:800">Quick tools</div>
-                <div class="muted small">Utilities</div>
-              </div>
-              <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-                <a class="btn ghost" href="orders.html">Manage orders</a>
-                <a class="btn ghost" href="location.html">Addresses</a>
-                <a class="btn ghost" href="inbox.html">Messages</a>
-                <a class="btn ghost" href="help.html">Help center</a>
-              </div>
-            </div>
-          </section>
-
-          <aside>
-            <div class="card panel-compact">
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <div style="font-weight:800">Notifications</div>
-                <div id="notifCount" class="muted small">0</div>
-              </div>
-              <div style="margin-top:10px" id="notifList">
-                <div class="muted small">No notifications</div>
-              </div>
-            </div>
-
-            <div class="card panel-compact" style="margin-top:12px">
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <div style="font-weight:800">Quick stats</div>
-                <div class="muted small">Overview</div>
-              </div>
-              <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-                <div style="min-width:120px">
-                  <div class="muted small">Saved addresses</div>
-                  <div style="font-weight:800;margin-top:6px" id="statAddrs">0</div>
-                </div>
-                <div style="min-width:120px">
-                  <div class="muted small">Orders</div>
-                  <div style="font-weight:800;margin-top:6px" id="statOrders">0</div>
-                </div>
-              </div>
-            </div>
-          </aside>
+        <!-- Minimal activity placeholder (you removed activity sections) -->
+        <div style="margin-top:18px">
+          <div class="card" style="padding:14px;text-align:center;color:var(--muted)">
+            No additional panels — streamlined dashboard. Use the bottom navigation or quick actions.
+          </div>
         </div>
       </main>
     </div>
 
-    <!-- Bottom navigation -->
+    <!-- BIG bottom navigation (visible & prominent) -->
     <nav class="bottom-nav" aria-label="Main navigation">
       <a class="nav-item" href="home.html" title="Home">
         <div class="icon">🏠</div>
-        <div>Home</div>
+        <span>Home</span>
       </a>
 
       <a class="nav-item" href="categories.html" title="Categories">
         <div class="icon">📂</div>
-        <div>Categories</div>
+        <span>Categories</span>
       </a>
 
       <a class="nav-item" href="cart.html" title="Cart">
         <div class="icon">🛒</div>
-        <div>Cart</div>
+        <span>Cart</span>
       </a>
 
-      <a class="nav-item primary" href="dashboard.html" title="Account">
+      <a class="nav-item active" href="dashboard.html" title="Account">
         <div class="icon">👤</div>
-        <div>Account</div>
+        <span>Account</span>
       </a>
     </nav>
   </div>
@@ -367,14 +257,8 @@
     const displayNameEl = document.getElementById('displayName');
     const uidLine = document.getElementById('uidline');
     const avatarEl = document.getElementById('avatar');
-    const accountStatusEl = document.getElementById('accountStatus');
-    const addrCount = document.getElementById('addrCount');
-    const notifCount = document.getElementById('notifCount');
-    const statAddrs = document.getElementById('statAddrs');
-    const statOrders = document.getElementById('statOrders');
 
-    // clicking authBtn: always redirect to login.html.
-    // if user is signed in, sign them out first, then redirect.
+    // clicking authBtn: always redirect to login.html; sign out first if needed
     async function goToLoginAfterSignOut(){
       try {
         if(auth.currentUser){
@@ -386,16 +270,10 @@
         window.location.href = 'login.html';
       }
     }
-    authBtn.addEventListener('click', () => {
-      // redirect to login page (client signs out if needed)
-      goToLoginAfterSignOut();
-    });
+    authBtn.addEventListener('click', () => goToLoginAfterSignOut());
+    signOutBtn.addEventListener('click', () => goToLoginAfterSignOut());
 
-    signOutBtn.addEventListener('click', () => {
-      goToLoginAfterSignOut();
-    });
-
-    // simple click handlers for action cards
+    // quick navigation handlers
     document.getElementById('ordersCard').addEventListener('click', ()=> location.href = 'orders.html');
     document.getElementById('locationCard').addEventListener('click', ()=> location.href = 'location.html');
     document.getElementById('inboxCard').addEventListener('click', ()=> location.href = 'inbox.html');
@@ -410,11 +288,6 @@
         avatarEl.textContent = 'U';
         authBtn.textContent = 'Sign in';
         signOutBtn.style.display = 'none';
-        accountStatusEl.textContent = 'Guest';
-        addrCount.textContent = '0';
-        statAddrs.textContent = '0';
-        statOrders.textContent = '0';
-        notifCount.textContent = '0';
       } else {
         const name = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
         displayNameEl.textContent = name;
@@ -422,16 +295,10 @@
         avatarEl.textContent = (name[0]||'U').toUpperCase();
         authBtn.textContent = 'Account';
         signOutBtn.style.display = 'inline-block';
-        accountStatusEl.textContent = user.email || 'Account';
-        // placeholder counters — replace with Firestore reads if you have collections
-        addrCount.textContent = '1';
-        statAddrs.textContent = '1';
-        statOrders.textContent = '0';
-        notifCount.textContent = '0';
       }
     });
 
-    // keyboard accessibility
+    // keyboard accessibility for cards
     document.querySelectorAll('.action').forEach(card=>{
       card.addEventListener('keydown', (e)=> {
         if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
