@@ -6,7 +6,7 @@
   <title>EwomaClassicStore — Quality at affordable prices</title>
 
   <!-- Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300,400,600,700&display=swap" rel="stylesheet">
 
   <!-- favicon (logo) -->
   <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
@@ -55,11 +55,6 @@
     .motto{font-size:16px;color:var(--muted);margin-bottom:14px}
     .hero-cta{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
 
-    /* quick order */
-    .quick-order{display:flex;gap:8px;margin-top:14px}
-    .quick-order input{flex:1;padding:12px;border-radius:12px;border:1px solid rgba(8,48,71,0.06);font-size:14px}
-    .quick-order .small-btn{padding:10px 12px;border-radius:12px;border:none;background:var(--blue-500);color:#fff}
-
     .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
     .feature{background:linear-gradient(180deg,#ffffff,#fbfeff);border-radius:12px;padding:12px;border:1px solid rgba(8,48,71,0.03)}
     .feature h4{margin:0 0 6px 0;font-size:14px;color:var(--blue-700)}
@@ -81,17 +76,13 @@
     .item-text h4{margin:0;font-size:14px;color:var(--blue-700)}
     .item-text p{margin:4px 0 0;color:var(--muted);font-size:13px}
 
-    .newsletter{display:flex;gap:8px;margin-top:12px}
-    .newsletter input{flex:1;padding:10px;border-radius:12px;border:1px solid rgba(8,48,71,0.06)}
-
     footer{margin-top:18px;padding-top:14px;border-top:1px dashed rgba(8,48,71,0.04);display:flex;justify-content:space-between;align-items:center}
     .legal{font-size:13px;color:var(--muted)}
 
     /* responsive rules */
     @media (max-width:1000px){ main{grid-template-columns:1fr 320px} }
     @media (max-width:820px){ body{padding:14px} .site{padding:14px} header{align-items:flex-start} .cta{width:100%;margin-top:8px;justify-content:space-between} main{grid-template-columns:1fr} .aside{order:2} .hero{order:1} .title{font-size:26px} }
-    @media (max-width:420px){ .title{font-size:22px} .logo{width:48px;height:48px} .kicker{padding:5px 8px} .btn{padding:10px;border-radius:10px;font-size:14px} .quick-order input{font-size:13px} }
-
+    @media (max-width:420px){ .title{font-size:22px} .logo{width:48px;height:48px} .kicker{padding:5px 8px} .btn{padding:10px;border-radius:10px;font-size:14px} }
   </style>
 </head>
 <body>
@@ -122,10 +113,7 @@
           <a href="#services" class="btn ghost">Explore services</a>
         </div>
 
-        <div class="quick-order" aria-label="Quick order">
-          <input type="text" placeholder="Search items, e.g. 'lace wig' or 'powerbank'" aria-label="Search products" />
-          <button class="small-btn">Search</button>
-        </div>
+        <!-- removed quick-search block as requested; kept CTAs above -->
 
         <div class="features" id="services">
           <div class="feature">
@@ -212,10 +200,7 @@
           <a href="register.html" class="btn primary" style="flex:1">Create account</a>
         </div>
 
-        <div class="newsletter" style="margin-top:12px">
-          <input type="email" placeholder="Your email for offers" aria-label="newsletter email" />
-          <button class="btn primary">Subscribe</button>
-        </div>
+        <!-- newsletter removed as requested -->
 
         <div style="margin-top:12px;font-size:13px;color:var(--muted)">Contact sales: <a href="mailto:sales@ewomaclassicstore.example" style="color:var(--blue-700);text-decoration:none">sales@ewomaclassicstore.example</a></div>
       </aside>
