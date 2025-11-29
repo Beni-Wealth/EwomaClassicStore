@@ -105,6 +105,7 @@
     }
     .small{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
     .msg{display:none;padding:10px;border-radius:8px;background:#fff6f6;border:1px solid #ffd6d6;color:#7a1b1b;font-size:14px;text-align:center}
+    .status{display:none;padding:10px;border-radius:8px;background:#f0f7ff;border:1px solid #d7eaff;color:#073763;font-size:14px;text-align:center}
 
     /* small tweaks so rules don't make too-large elements on tiny screens */
     @media (max-width:420px){
@@ -134,6 +135,7 @@
       <p class="lead-form">Enter your username/email and password.</p>
 
       <div id="message" class="msg" role="status" aria-live="polite"></div>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
 
       <form id="loginForm" autocomplete="on" novalidate>
         <div>
@@ -155,7 +157,7 @@
           <a class="link" href="forgot-password.html">Forgot?</a>
         </div>
 
-        <button class="btn" type="submit">Sign in</button>
+        <button id="submitBtn" class="btn" type="submit">Sign in</button>
 
         <div class="small">No account? <a class="link" href="register.html">Create one</a></div>
       </form>
@@ -191,61 +193,120 @@
     const identifier = document.getElementById('identifier');
     const password = document.getElementById('password');
     const message = document.getElementById('message');
+    const status = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
 
-    function showMessage(text, timeout = 5000){
+    // helpers
+    function showMessage(text, timeout = 4000){
       message.textContent = text;
       message.style.display = 'block';
-      setTimeout(()=> message.style.display = 'none', timeout);
+      message.style.opacity = '1';
+      if(timeout) setTimeout(()=> { message.style.display = 'none'; }, timeout);
     }
+    function showStatus(text){
+      status.textContent = text;
+      status.style.display = 'block';
+    }
+    function hideStatus(){ status.style.display = 'none'; }
 
-    // optional: resolve username -> email from Firestore users collection
+    // optional: resolve username -> email using users collection
     async function resolveUsername(username){
       try {
+        // guard: username lookups may not exist in your DB — don't fail hard
         const q = query(collection(db, 'users'), where('username', '==', username));
         const snap = await getDocs(q);
-        if(!snap.empty) return snap.docs[0].data().email || null;
-      } catch(e){ console.error('resolveUsername error', e) }
+        if(!snap.empty){
+          const d = snap.docs[0].data();
+          return d.email || null;
+        }
+      } catch(e){
+        console.warn('resolveUsername failed', e);
+      }
       return null;
     }
 
+    // protect against double submits
+    let processing = false;
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      message.style.display = 'none';
+      if(processing) return;
+      // minimal front-end validation
       const idVal = identifier.value.trim();
       const pw = password.value;
-
       if(!idVal || !pw){
         showMessage('Please fill both fields.');
         return;
       }
-
-      // If identifier looks like email, use it; otherwise attempt optional username lookup.
-      let emailToUse = null;
-      if(idVal.includes('@')) {
-        emailToUse = idVal;
-      } else {
-        // optional: attempt to resolve username to email (requires a 'users' collection)
-        showMessage('Resolving username...', 2000);
-        emailToUse = await resolveUsername(idVal);
-        if(!emailToUse){
-          showMessage('Username not found. Use your email or sign up.');
-          return;
-        }
+      if(pw.length < 6){
+        showMessage('Password must be at least 6 characters.');
+        return;
       }
+
+      processing = true;
+      submitBtn.disabled = true;
+      showStatus('Processing…');
 
       try {
-        await signInWithEmailAndPassword(auth, emailToUse, pw);
-        showMessage('Login successful — redirecting...', 900);
-        setTimeout(()=> window.location.href = 'dashboard.html', 900);
+        // Determine whether identifier is an email
+        let emailToUse = null;
+        if(idVal.includes('@')){
+          emailToUse = idVal;
+        } else {
+          showStatus('Resolving username...');
+          // attempt lookup — if your DB doesn't have username field this will return null
+          emailToUse = await resolveUsername(idVal);
+          if(!emailToUse){
+            hideStatus();
+            showMessage('Username not found — please use your email or sign up.', 5000);
+            processing = false;
+            submitBtn.disabled = false;
+            return;
+          }
+        }
+
+        showStatus('Signing in...');
+        try {
+          const cred = await signInWithEmailAndPassword(auth, emailToUse, pw);
+          console.log('signIn success', cred);
+          showStatus('Signed in — redirecting...');
+          // small delay to let user see status
+          setTimeout(()=> window.location.href = 'dashboard.html', 700);
+        } catch(authErr){
+          console.error('signInWithEmailAndPassword error', authErr);
+          // map a few common errors to friendly text
+          let txt = 'Login failed. Check credentials.';
+          if(authErr && authErr.code){
+            if(authErr.code === 'auth/wrong-password') txt = 'Incorrect password.';
+            else if(authErr.code === 'auth/user-not-found') txt = 'No account found for that email.';
+            else if(authErr.code === 'auth/invalid-email') txt = 'Invalid email address.';
+            else txt = authErr.message || txt;
+          }
+          hideStatus();
+          showMessage(txt, 7000);
+          processing = false;
+          submitBtn.disabled = false;
+          return;
+        }
       } catch(err){
-        console.error('Auth error', err);
-        let txt = 'Login failed. Check credentials.';
-        if(err.code === 'auth/wrong-password') txt = 'Incorrect password.';
-        if(err.code === 'auth/user-not-found') txt = 'No account found for that email.';
-        if(err.code === 'auth/invalid-email') txt = 'Invalid email.';
-        showMessage(txt);
+        console.error('Unexpected login error', err);
+        hideStatus();
+        showMessage('An error occurred. Check console for details.');
+        processing = false;
+        submitBtn.disabled = false;
+        return;
       }
     });
+
+    // global error listener that surfaces module/runtime errors to the UI (helpful during debugging)
+    window.addEventListener('error', (ev) => {
+      console.error('Runtime error', ev.error || ev.message);
+      showMessage('A runtime error occurred. See console for details.', 6000);
+    });
+
+    // small accessibility: press Enter on identifier -> focus password, press Enter on password triggers submit naturally
+    identifier.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); password.focus(); } });
+
   </script>
 </body>
 </html>
