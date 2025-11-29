@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>EwomaClassicStore — Dashboard</title>
+
+  <!-- Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300,400,600,700&display=swap" rel="stylesheet">
+
+  <!-- favicon (logo) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
+
+  <meta name="theme-color" content="#0b78ff">
+  <style>
+    :root{
+      --bg:#f5fbff;
+      --white:#ffffff;
+      --muted:#5b6b7a;
+      --primaryA:#0b78ff;
+      --primaryB:#0a4fb3;
+      --accent: linear-gradient(90deg,var(--primaryA),var(--primaryB));
+      --card-shadow: 0 12px 36px rgba(11,120,255,0.08);
+      --radius:12px;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      color-scheme: light;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#f7fbff,#eef8ff);-webkit-font-smoothing:antialiased}
+    .wrap{max-width:1100px;margin:20px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:64px;height:64px;border-radius:12px;overflow:hidden;flex:0 0 64px;box-shadow:0 8px 24px rgba(11,120,255,0.12)}
+    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+    h1{margin:0;font-size:18px;color:#062a44}
+    .muted{color:var(--muted);font-size:13px}
+
+    main{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px;align-items:start}
+    .panel{background:var(--white);border-radius:12px;padding:16px;border:1px solid rgba(8,48,71,0.04);box-shadow:var(--card-shadow)}
+    .profile {
+      display:flex;align-items:center;gap:12px;
+    }
+    .avatar{
+      width:68px;height:68px;border-radius:12px;background:linear-gradient(135deg,var(--primaryA),var(--primaryB));
+      display:grid;place-items:center;color:#041219;font-weight:800;font-size:22px;
+      box-shadow:0 8px 28px rgba(11,120,255,0.12);
+    }
+    .user-info{flex:1}
+    .user-info h2{margin:0;font-size:16px}
+    .user-info p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    .section-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .action-card{padding:12px;border-radius:10px;border:1px solid rgba(8,48,71,0.03);background:linear-gradient(180deg,#fff,#fbfeff);cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:90px;justify-content:space-between}
+    .action-card h3{margin:0;font-size:14px}
+    .action-card p{margin:0;color:var(--muted);font-size:13px}
+
+    .btn{padding:10px 12px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(8,48,71,0.06);color:var(--primaryA)}
+
+    .right-column .panel + .panel{margin-top:12px}
+
+    /* navbar bottom */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      width: min(920px, calc(100% - 40px));
+      max-width:1100px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(255,255,255,0.95));
+      border-radius: 14px;
+      padding:8px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-around;
+      gap:12px;
+      box-shadow: 0 16px 40px rgba(8,48,71,0.08);
+      border:1px solid rgba(8,48,71,0.04);
+      z-index:999;
+    }
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:12px;text-decoration:none}
+    .nav-item .icon{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(11,120,255,0.08),rgba(10,79,179,0.06));font-weight:800;color:var(--primaryB)}
+    .nav-item.primary .icon{background:var(--accent);color:#fff}
+
+    @media (max-width:920px){ main{grid-template-columns:1fr} .bottom-nav{left:12px;transform:none;width:calc(100% - 24px)} .right-column{order:2} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="EwomaClassicStore logo">
+        </div>
+        <div>
+          <h1>EwomaClassicStore</h1>
+          <div class="muted">Dashboard — Account & quick actions</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <button id="authBtn" class="btn ghost">Sign in</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- left: main content -->
+      <section>
+        <div class="panel profile" aria-live="polite">
+          <div class="avatar" id="avatar">U</div>
+          <div class="user-info">
+            <h2 id="displayName">Not signed in</h2>
+            <p id="uidline">UID: -</p>
+          </div>
+          <div>
+            <button id="signOutBtn" class="btn" style="display:none">Sign out</button>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Quick actions</div>
+            <div class="muted" style="font-size:13px">Tap a tile</div>
+          </div>
+
+          <div class="section-grid">
+            <div class="action-card" id="ordersCard" role="button" tabindex="0" aria-label="Orders">
+              <div>
+                <h3>Orders</h3>
+                <p>View recent orders, track shipments and reorder quickly.</p>
+              </div>
+              <div class="muted">orders.html →</div>
+            </div>
+
+            <div class="action-card" id="locationCard" role="button" tabindex="0" aria-label="Location Settings">
+              <div>
+                <h3>Location</h3>
+                <p>Manage delivery addresses and preferred locations.</p>
+              </div>
+              <div class="muted">location.html →</div>
+            </div>
+
+            <div class="action-card" id="paymentCard" role="button" tabindex="0" aria-label="Payment Settings">
+              <div>
+                <h3>Payment</h3>
+                <p>Payment methods, saved cards, and billing settings.</p>
+              </div>
+              <div class="muted">payment.html →</div>
+            </div>
+
+            <div class="action-card" id="inboxCard" role="button" tabindex="0" aria-label="Inbox">
+              <div>
+                <h3>Inbox</h3>
+                <p>Messages, promotions and alerts — all in one place.</p>
+              </div>
+              <div class="muted">inbox.html →</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Help & Support</div>
+            <div class="muted">24/7 assistance</div>
+          </div>
+          <div style="margin-top:10px">
+            <p class="muted">Find help articles, FAQs or contact support directly.</p>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <a class="btn" href="help.html">Help center</a>
+              <a class="btn ghost" id="contactSupport" href="contact.html">Contact support</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- right column -->
+      <aside class="right-column">
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Account summary</div>
+            <div class="muted" style="font-size:13px" id="accountStatus">Guest</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="muted">Saved addresses</div>
+              <div id="addrCount" style="font-weight:800">0</div>
+            </div>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <a class="btn ghost" href="location.html">Manage</a>
+              <a class="btn" href="orders.html">My orders</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Payment methods</div>
+            <div class="muted" style="font-size:13px" id="payCount">0</div>
+          </div>
+          <div style="margin-top:10px">
+            <p class="muted">Add or remove cards and wallets.</p>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <a class="btn" href="payment.html">Manage payments</a>
+              <a class="btn ghost" href="cart.html">My cart</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Notifications</div>
+            <div class="muted" id="notifCount">0</div>
+          </div>
+          <div style="margin-top:10px">
+            <p class="muted">Promotions & messages appear here. Open inbox for details.</p>
+            <div style="margin-top:10px">
+              <a class="btn" href="inbox.html">Open inbox</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- bottom navigation -->
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a class="nav-item" href="home.html" title="Home">
+      <div class="icon">🏠</div>
+      <div>Home</div>
+    </a>
+
+    <a class="nav-item" href="categories.html" title="Categories">
+      <div class="icon">📂</div>
+      <div>Categories</div>
+    </a>
+
+    <a class="nav-item" href="cart.html" title="Cart">
+      <div class="icon">🛒</div>
+      <div>Cart</div>
+    </a>
+
+    <a class="nav-item primary" href="dashboard.html" title="Account">
+      <div class="icon">👤</div>
+      <div>Account</div>
+    </a>
+  </nav>
+
+  <script type="module">
+    // Firebase v12 imports + provided config
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAhsWovZGZEwqY1QRJygQ2toECTeQarmsM",
+      authDomain: "ewomaclassicstore.firebaseapp.com",
+      projectId: "ewomaclassicstore",
+      storageBucket: "ewomaclassicstore.firebasestorage.app",
+      messagingSenderId: "436665012312",
+      appId: "1:436665012312:web:3b6f663ef44217e9c63a2d",
+      measurementId: "G-Q090M73LVG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // DOM refs
+    const authBtn = document.getElementById('authBtn');
+    const signOutBtn = document.getElementById('signOutBtn');
+    const displayNameEl = document.getElementById('displayName');
+    const uidLine = document.getElementById('uidline');
+    const avatarEl = document.getElementById('avatar');
+    const accountStatus = document.getElementById('accountStatus');
+    const addrCount = document.getElementById('addrCount');
+    const payCount = document.getElementById('payCount');
+    const notifCount = document.getElementById('notifCount');
+
+    // navigation cards
+    document.getElementById('ordersCard').addEventListener('click', ()=> location.href = 'orders.html');
+    document.getElementById('locationCard').addEventListener('click', ()=> location.href = 'location.html');
+    document.getElementById('paymentCard').addEventListener('click', ()=> location.href = 'payment.html');
+    document.getElementById('inboxCard').addEventListener('click', ()=> location.href = 'inbox.html');
+
+    document.getElementById('contactSupport').addEventListener('click', (e) => {
+      // fallback to contact page
+    });
+
+    // Sign in/out handlers
+    authBtn.addEventListener('click', async () => {
+      if(!auth.currentUser){
+        try{
+          const provider = new GoogleAuthProvider();
+          await signInWithPopup(auth, provider);
+        }catch(e){
+          console.error('Sign in failed', e);
+          alert('Sign in failed: ' + (e.message||e));
+        }
+      } else {
+        // sign out
+        try{ await signOut(auth); } catch(e){ console.error('signOut failed', e); }
+      }
+    });
+
+    signOutBtn.addEventListener('click', async () => {
+      try{ await signOut(auth); } catch(e){ console.error('signOut failed', e); }
+    });
+
+    // React to auth state
+    onAuthStateChanged(auth, (user) => {
+      if(!user){
+        displayNameEl.textContent = 'Not signed in';
+        uidLine.textContent = 'UID: -';
+        avatarEl.textContent = 'U';
+        authBtn.textContent = 'Sign in';
+        signOutBtn.style.display = 'none';
+        accountStatus.textContent = 'Guest';
+        // reset counts
+        addrCount.textContent = '0';
+        payCount.textContent = '0';
+        notifCount.textContent = '0';
+      } else {
+        const name = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+        displayNameEl.textContent = name;
+        uidLine.textContent = 'UID: ' + (user.uid ? user.uid.slice(0,8) : '-');
+        avatarEl.textContent = (name[0]||'U').toUpperCase();
+        authBtn.textContent = 'Signed in';
+        signOutBtn.style.display = 'inline-block';
+        accountStatus.textContent = user.email || 'Account';
+        // For demo, populate counts with placeholders. Replace with Firestore reads if you have collections.
+        addrCount.textContent = '1';
+        payCount.textContent = '1';
+        notifCount.textContent = '0';
+      }
+    });
+
+    // keyboard accessibility for cards
+    document.querySelectorAll('.action-card').forEach(card => {
+      card.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+      });
+    });
+
+    // small safety: ensure bottom nav links work on older browsers
+    document.querySelectorAll('.bottom-nav a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        // default anchors; nothing special required
+      });
+    });
+  </script>
+</body>
+</html>
