@@ -131,7 +131,7 @@
     <!-- Right: form -->
     <div class="form-wrap">
       <h1 id="loginTitle">Log in</h1>
-      <p class="lead-form">Enter your username (or email) and password.</p>
+      <p class="lead-form">Enter your username/email and password.</p>
 
       <div id="message" class="msg" role="status" aria-live="polite"></div>
 
@@ -157,7 +157,7 @@
 
         <button class="btn" type="submit">Sign in</button>
 
-        <div class="small">No account? <a class="link" href="signup.html">Create one</a></div>
+        <div class="small">No account? <a class="link" href="register.html">Create one</a></div>
       </form>
     </div>
   </div>
@@ -236,7 +236,7 @@
       try {
         await signInWithEmailAndPassword(auth, emailToUse, pw);
         showMessage('Login successful — redirecting...', 900);
-        setTimeout(()=> window.location.href = 'index.html', 900);
+        setTimeout(()=> window.location.href = 'dashboard.html', 900);
       } catch(err){
         console.error('Auth error', err);
         let txt = 'Login failed. Check credentials.';
