@@ -233,21 +233,21 @@
     </nav>
   </div>
 
-  <!-- Firebase + auth wiring (v12 modular) -->
+  <!-- Firebase + auth wiring (v12 modular) - UPDATED to your provided project -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-    // your firebase config (provided earlier)
+    // UPDATED firebase configuration (you provided)
     const firebaseConfig = {
-      apiKey: "AIzaSyAhsWovZGZEwqY1QRJygQ2toECTeQarmsM",
-      authDomain: "ewomaclassicstore.firebaseapp.com",
-      projectId: "ewomaclassicstore",
-      storageBucket: "ewomaclassicstore.firebasestorage.app",
-      messagingSenderId: "436665012312",
-      appId: "1:436665012312:web:3b6f663ef44217e9c63a2d",
-      measurementId: "G-Q090M73LVG"
+      apiKey: "AIzaSyCwU5ifazBjA09N6cvIroHysqE6cYLhsLg",
+      authDomain: "ewomaclassicstore-247.firebaseapp.com",
+      projectId: "ewomaclassicstore-247",
+      storageBucket: "ewomaclassicstore-247.firebasestorage.app",
+      messagingSenderId: "525266560178",
+      appId: "1:525266560178:web:647fb37a13d5f9ebddd5ab"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
