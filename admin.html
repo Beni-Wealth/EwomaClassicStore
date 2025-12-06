@@ -134,7 +134,8 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js';
     import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
     import { getFirestore, collection, addDoc, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js';
-    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js';
+    // NOTE: storage is NOT used here because we're uploading to Imgur
+    // import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from '...';
 
     // Firebase config (your supplied values)
     const firebaseConfig = {
@@ -151,7 +152,49 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const storage = getStorage(app);
+
+    // ========== Imgur config ==========
+    // Client-ID for anonymous uploads (from your screenshot)
+    const IMGUR_CLIENT_ID = 'fb533db21a59486'; // <- your Imgur Client ID
+
+    // helper to upload a File to Imgur (returns image link)
+    async function uploadToImgur(file, onProgress = null) {
+      // Use XMLHttpRequest if you want upload progress; fetch doesn't provide reliable progress for uploads.
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        const url = 'https://api.imgur.com/3/image';
+        const fd = new FormData();
+        fd.append('image', file);
+
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Authorization', 'Client-ID ' + IMGUR_CLIENT_ID);
+
+        xhr.upload.onprogress = function(e) {
+          if (e.lengthComputable && typeof onProgress === 'function') {
+            onProgress(Math.round((e.loaded / e.total) * 100));
+          }
+        };
+
+        xhr.onload = function() {
+          try {
+            const res = JSON.parse(xhr.responseText);
+            if (res && res.success && res.data && res.data.link) {
+              resolve(res.data.link);
+            } else {
+              reject(res && res.data && res.data.error ? res.data.error : 'Upload failed');
+            }
+          } catch (err) {
+            reject(err.message || err);
+          }
+        };
+
+        xhr.onerror = function() {
+          reject('Network error while uploading to Imgur');
+        };
+
+        xhr.send(fd);
+      });
+    }
 
     // DOM elements
     const options = document.querySelectorAll('.option');
@@ -192,7 +235,7 @@
       else if (!imageFile.files[0]) { preview.src = ''; preview.classList.add('hide'); }
     });
 
-    // Upload product handler
+    // Upload product handler (uploads image to Imgur if a file is selected)
     productForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       productMsg.textContent = '';
@@ -204,18 +247,33 @@
       if (!title) { productMsg.textContent = 'Title is required'; return; }
 
       try {
-        productMsg.textContent = 'Uploading...';
+        productMsg.textContent = 'Processing...';
+
         let imgLink = '';
+
+        // If a file is chosen, upload to Imgur
         if (imageFile.files[0]) {
-          const file = imageFile.files[0];
-          const sRef = storageRef(storage, `products/${Date.now()}_${file.name}`);
-          await uploadBytes(sRef, file);
-          imgLink = await getDownloadURL(sRef);
+          productMsg.textContent = 'Uploading image to Imgur...';
+          // optional progress callback
+          const progressCallback = (pct) => {
+            productMsg.textContent = `Uploading image to Imgur... (${pct}%)`;
+          };
+          try {
+            imgLink = await uploadToImgur(imageFile.files[0], progressCallback);
+          } catch (err) {
+            console.error('Imgur upload error', err);
+            productMsg.textContent = 'Imgur upload failed: ' + err;
+            return;
+          }
         } else if (imageUrl.value.trim()) {
+          // Use provided image URL directly
           imgLink = imageUrl.value.trim();
         }
 
-        // Save product doc
+        productMsg.textContent = 'Saving product...';
+
+        // Save product doc in Firestore (createdAt stored as ISO string here;
+        // you can use serverTimestamp() if using server-side Cloud Functions)
         await addDoc(collection(db, 'products'), {
           title,
           category,
@@ -252,15 +310,16 @@
 
         const table = document.createElement('table');
         const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Username</th><th>Email</th><th>Phone</th><th>Created</th></tr>';
+        thead.innerHTML = '<tr><th>Name</th><th>Username</th><th>Email</th><th>Phone</th><th>Created</th></tr>';
         table.appendChild(thead);
         const tbody = document.createElement('tbody');
 
-        snap.forEach(d => {
-          const data = d.data();
-          const tr = document.createElement('tr');
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          const name = (data.displayName || data.name || data.fullName || data.username || '');
           const createdVal = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate().toLocaleString() : (data.createdAt || '');
-          tr.innerHTML = `<td>${data.username||''}</td><td>${data.email||''}</td><td>${data.phone||''}</td><td>${createdVal}</td>`;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${escapeHtml(name)}</td><td>${escapeHtml(data.username||'')}</td><td>${escapeHtml(data.email||'')}</td><td>${escapeHtml(data.phone||'')}</td><td>${escapeHtml(createdVal)}</td>`;
           tbody.appendChild(tr);
         });
 
@@ -293,7 +352,7 @@
           const items = Array.isArray(data.items) ? data.items.map(i => `${i.name} x${i.qty}`).join(', ') : (data.items || '');
           const createdVal = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate().toLocaleString() : (data.createdAt || '');
           const tr = document.createElement('tr');
-          tr.innerHTML = `<td>${id}</td><td>${data.userEmail||data.userId||''}</td><td>${items}</td><td>${data.total||''}</td><td>${data.status||''}</td><td>${createdVal}</td>`;
+          tr.innerHTML = `<td>${escapeHtml(id)}</td><td>${escapeHtml(data.userEmail||data.userId||'')}</td><td>${escapeHtml(items)}</td><td>${escapeHtml(data.total||'')}</td><td>${escapeHtml(data.status||'')}</td><td>${escapeHtml(createdVal)}</td>`;
           tbody.appendChild(tr);
         });
 
@@ -328,6 +387,17 @@
 
     // Show upload section by default on load
     document.querySelector('[data-target="uploadSection"]').click();
+
+    // small helper to avoid XSS when inserting strings
+    function escapeHtml(str){
+      if(!str && str !== 0) return '';
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
   </script>
 </body>
 </html>
