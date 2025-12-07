@@ -4,6 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Login — Ewoma Classic Store</title>
+
+  <!-- favicon / logo -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
+  <meta name="theme-color" content="#0f61ff">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root{
@@ -20,57 +25,54 @@
       font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background: linear-gradient(180deg,var(--bg-1),var(--bg-2));
       color:#1f2937;
+      -webkit-font-smoothing:antialiased;
     }
 
     /* Full-viewport layout */
     .layout{
-      min-height:100vh; /* full height */
+      min-height:100vh;
       display:grid;
-      grid-template-columns: 1fr var(--max-card); /* left takes remaining space on desktop */
+      grid-template-columns: 1fr var(--max-card);
       gap:32px;
       align-items:center;
       padding:40px;
       box-sizing:border-box;
+      width:100%;
+      max-width:1100px;
+      margin:0 auto;
     }
 
     /* Left panel: welcome / illustration area */
     .hero{
       display:flex;
       flex-direction:column;
-      gap:24px;
+      gap:18px;
       justify-content:center;
-      padding:36px;
+      padding:28px;
       border-radius:calc(var(--card-radius) - 4px);
-      background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(99,102,241,0.03));
+      background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(99,102,241,0.02));
       box-shadow: 0 6px 20px rgba(16,24,40,0.04);
-      min-height:360px;
+      min-height:320px;
     }
-    .hero h2{
-      margin:0;
-      font-size:32px;
-      line-height:1.05;
-      color: #0f172a;
-      font-weight:700;
-    }
-    .hero p{
-      margin:0;
-      color:#334155;
-      font-size:16px;
-      max-width:680px;
+    .hero-top{display:flex;gap:14px;align-items:center}
+    .logo {
+      width:72px;height:72px;border-radius:10px;flex-shrink:0;
+      background-image:url('https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg');
+      background-size:cover;background-position:center;border:1px solid rgba(15,97,255,0.06);
+      box-shadow: 0 8px 30px rgba(15,97,255,0.06);
     }
     .pill{
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(37,99,235,0.12);
-      color:var(--accent);
-      font-weight:600;
-      font-size:13px;
+      padding:8px 12px;border-radius:999px;background:rgba(37,99,235,0.12);color:var(--accent);font-weight:600;font-size:13px;
     }
+    .hero h2{
+      margin:0;font-size:26px;line-height:1.05;color:#0f172a;font-weight:700;
+    }
+    .hero p{ margin:0;color:#334155;font-size:15px;max-width:680px; }
 
     /* Right panel: login card */
     .card{
       background:white;
-      padding:28px;
+      padding:24px;
       border-radius:var(--card-radius);
       box-shadow: 0 10px 40px rgba(15,23,42,0.06);
       width:100%;
@@ -78,12 +80,7 @@
       box-sizing:border-box;
     }
 
-    .card h1{
-      margin:0 0 10px;
-      font-size:20px;
-      font-weight:700;
-      color:#0b1220;
-    }
+    .card h1{ margin:0 0 10px; font-size:20px; font-weight:700; color:#0b1220; }
 
     label{ display:block; font-size:13px; margin-top:12px; color:#334155; }
     input[type="email"], input[type="password"], input[type="tel"], input[type="text"]{
@@ -97,10 +94,7 @@
       background: #fff;
       outline: none;
     }
-    input:focus{
-      border-color: rgba(37,99,235,0.9);
-      box-shadow: 0 4px 18px rgba(37,99,235,0.08);
-    }
+    input:focus{ border-color: rgba(37,99,235,0.9); box-shadow: 0 4px 18px rgba(37,99,235,0.08); }
 
     .row{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:8px; }
     .remember{ display:flex; align-items:center; gap:8px; font-size:13px; color:#475569; }
@@ -130,32 +124,17 @@
     .msg.error{ background:#fff1f0; color:#7a1f1f; border:1px solid #f6c7c5; }
 
     /* Spinner */
-    .spinner {
-      width:18px;
-      height:18px;
-      border:3px solid rgba(255,255,255,0.35);
-      border-top-color: white;
-      border-radius:50%;
-      display:inline-block;
-      vertical-align:middle;
-      animation: spin 1s linear infinite;
-      -webkit-animation: spin 1s linear infinite;
-    }
+    .spinner { width:18px; height:18px; border:3px solid rgba(255,255,255,0.35); border-top-color: white; border-radius:50%; display:inline-block; vertical-align:middle; animation: spin 1s linear infinite; -webkit-animation: spin 1s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
     /* Small screens: stack layout and make the card full width */
     @media (max-width: 900px){
-      .layout{
-        grid-template-columns: 1fr;
-        padding:20px;
-        gap:18px;
-      }
+      .layout{ grid-template-columns: 1fr; padding:20px; gap:18px; }
       .card{ max-width:100%; padding:20px; }
       .hero{ padding:18px; border-radius:12px; min-height:120px; }
       .hero h2{ font-size:22px; }
     }
 
-    /* Very small screens: allow inputs to be comfortable */
     @media (max-width:420px){
       .layout{ padding:12px; gap:12px; }
       .card{ padding:16px; border-radius:12px; }
@@ -166,12 +145,19 @@
 </head>
 <body>
   <div class="layout">
-    <!-- Left / Hero area (flexible, fills wide desktop) -->
+    <!-- Left / Hero area -->
     <div class="hero" aria-hidden="false">
-      <div class="pill">Welcome back</div>
-      <h2>Sign in to continue to Ewoma Classic Store</h2>
+      <div class="hero-top">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="pill">Welcome back</div>
+          <h2>Sign in to continue to Ewoma Classic Store</h2>
+        </div>
+      </div>
+
       <p>Access your dashboard, manage orders, and pick up where you left off. This layout uses a flexible two-column grid on desktop and stacks to a full-width form on mobile so it always fits the screen.</p>
-      <div class="hero-illus" aria-hidden="true" style="display:flex; gap:12px; align-items:center;">
+
+      <div style="display:flex; gap:12px; align-items:center;">
         <svg width="92" height="64" viewBox="0 0 92 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="decorative illustration">
           <rect x="0.5" y="0.5" width="91" height="63" rx="10" stroke="rgba(37,99,235,0.15)"></rect>
           <circle cx="28" cy="32" r="10" fill="rgba(59,130,246,0.12)"></circle>
@@ -201,7 +187,7 @@
           <button type="button" id="forgotBtn" class="link">Forgot password?</button>
         </div>
 
-        <!-- Sign in button replaced with spinner while loading -->
+        <!-- Sign in button -->
         <button id="submitBtn" type="submit" aria-live="polite" aria-atomic="true">
           <span class="btn-text">Sign in</span>
         </button>
@@ -222,10 +208,11 @@
       sendPasswordResetEmail,
       setPersistence,
       browserLocalPersistence,
-      browserSessionPersistence
+      browserSessionPersistence,
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-    // === Firebase config (same as your register page) ===
+    // === Firebase config (EwomaClassicStore) ===
     const firebaseConfig = {
       apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
       authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
@@ -278,6 +265,13 @@
       }
     }
 
+    // If user already signed in, send to dashboard immediately
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+
     form.addEventListener('submit', async (ev) => {
       ev.preventDefault();
       msgEl.innerHTML = '';
@@ -304,8 +298,8 @@
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         showMessage('Signed in successfully.', 'success');
 
-        // OPTIONAL: redirect to dashboard when ready
-        // window.location.href = '/dashboard.html';
+        // Redirect to dashboard on success
+        window.location.href = 'dashboard.html';
       } catch (error) {
         console.error('Login error', error);
         showMessage(error.message || 'Login failed. Check credentials.', 'error');
@@ -334,18 +328,6 @@
         setForgotLoading(false);
       }
     });
-
-    // OPTIONAL: if you want to auto-redirect logged-in users away from the login page,
-    // uncomment the block below and change the redirect path.
-    /*
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        // user is signed in
-        window.location.href = '/dashboard.html';
-      }
-    });
-    */
   </script>
 </body>
 </html>
