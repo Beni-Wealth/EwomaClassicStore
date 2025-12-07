@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Ewoma Classic Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg-1: #eef2ff;
+      --bg-2: #f5f7fb;
+      --accent: #2563eb;
+      --card-radius: 16px;
+      --max-card: 420px;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color:#1f2937;
+    }
+
+    /* Full-viewport layout */
+    .layout{
+      min-height:100vh; /* full height */
+      display:grid;
+      grid-template-columns: 1fr var(--max-card); /* left takes remaining space on desktop */
+      gap:32px;
+      align-items:center;
+      padding:40px;
+      box-sizing:border-box;
+    }
+
+    /* Left panel: welcome / illustration area */
+    .hero{
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      justify-content:center;
+      padding:36px;
+      border-radius:calc(var(--card-radius) - 4px);
+      background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(99,102,241,0.03));
+      box-shadow: 0 6px 20px rgba(16,24,40,0.04);
+      min-height:360px;
+    }
+    .hero h2{
+      margin:0;
+      font-size:32px;
+      line-height:1.05;
+      color: #0f172a;
+      font-weight:700;
+    }
+    .hero p{
+      margin:0;
+      color:#334155;
+      font-size:16px;
+      max-width:680px;
+    }
+    .hero-illus{
+      margin-top:12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .pill{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(37,99,235,0.12);
+      color:var(--accent);
+      font-weight:600;
+      font-size:13px;
+    }
+
+    /* Right panel: login card */
+    .card{
+      background:white;
+      padding:28px;
+      border-radius:var(--card-radius);
+      box-shadow: 0 10px 40px rgba(15,23,42,0.06);
+      width:100%;
+      max-width:var(--max-card);
+      box-sizing:border-box;
+    }
+
+    .card h1{
+      margin:0 0 10px;
+      font-size:20px;
+      font-weight:700;
+      color:#0b1220;
+    }
+
+    label{ display:block; font-size:13px; margin-top:12px; color:#334155; }
+    input[type="email"], input[type="password"], input[type="tel"], input[type="text"]{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid #e6e9ef;
+      margin-top:6px;
+      box-sizing:border-box;
+      font-size:15px;
+      background: #fff;
+      outline: none;
+    }
+    input:focus{
+      border-color: rgba(37,99,235,0.9);
+      box-shadow: 0 4px 18px rgba(37,99,235,0.08);
+    }
+
+    .row{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:8px; }
+    .remember{ display:flex; align-items:center; gap:8px; font-size:13px; color:#475569; }
+    .link{ font-size:13px; color:var(--accent); cursor:pointer; text-decoration:underline; background:none; border:none; padding:0; }
+
+    button[type="submit"]{
+      margin-top:16px;
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      background:linear-gradient(90deg,var(--accent), #3b82f6);
+      color:white;
+      font-weight:700;
+      font-size:15px;
+    }
+
+    .muted{ font-size:13px; color:#64748b; margin-top:10px; }
+    .msg{ margin-top:12px; font-size:13px; padding:10px; border-radius:10px; }
+    .msg.success{ background:#e6ffed; color:#046a2f; border:1px solid #c6f1d2; }
+    .msg.error{ background:#fff1f0; color:#7a1f1f; border:1px solid #f6c7c5; }
+
+    /* Small screens: stack layout and make the card full width */
+    @media (max-width: 900px){
+      .layout{
+        grid-template-columns: 1fr;
+        padding:20px;
+        gap:18px;
+      }
+      .card{ max-width:100%; padding:20px; }
+      .hero{ padding:18px; border-radius:12px; min-height:120px; }
+      .hero h2{ font-size:22px; }
+    }
+
+    /* Very small screens: allow inputs to be comfortable */
+    @media (max-width:420px){
+      .layout{ padding:12px; gap:12px; }
+      .card{ padding:16px; border-radius:12px; }
+      input[type="email"], input[type="password"]{ padding:10px; font-size:14px; }
+      button[type="submit"]{ padding:11px; font-size:14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Left / Hero area (flexible, fills wide desktop) -->
+    <div class="hero" aria-hidden="false">
+      <div class="pill">Welcome back</div>
+      <h2>Sign in to continue to Ewoma Classic Store</h2>
+      <p>Access your dashboard, manage orders, and pick up where you left off. This layout uses a flexible two-column grid on desktop and stacks to a full-width form on mobile so it always fits the screen.</p>
+
+      <div class="hero-illus" aria-hidden="true">
+        <!-- Simple decorative SVG illustration (scales nicely) -->
+        <svg width="92" height="64" viewBox="0 0 92 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="decorative illustration">
+          <rect x="0.5" y="0.5" width="91" height="63" rx="10" stroke="rgba(37,99,235,0.15)"></rect>
+          <circle cx="28" cy="32" r="10" fill="rgba(59,130,246,0.12)"></circle>
+          <rect x="46" y="18" width="36" height="28" rx="6" fill="rgba(99,102,241,0.08)"></rect>
+        </svg>
+
+        <div style="font-size:13px; color:#475569;">
+          Fast. Secure. Responsive.
+        </div>
+      </div>
+    </div>
+
+    <!-- Right / Login card -->
+    <div class="card" role="region" aria-label="Sign in form">
+      <h1>Sign in to your account</h1>
+
+      <form id="loginForm" autocomplete="on" novalidate>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com" inputmode="email" />
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required placeholder="Enter your password" />
+
+        <div class="row">
+          <label class="remember">
+            <input id="remember" type="checkbox" style="width:16px; height:16px;" />
+            Remember me
+          </label>
+
+          <button type="button" id="forgotBtn" class="link">Forgot password?</button>
+        </div>
+
+        <button type="submit">Sign in</button>
+
+        <div class="muted">Don't have an account? <a href="register.html" style="color:var(--accent); text-decoration:none;">Create one</a></div>
+      </form>
+
+      <div id="message" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    // === Firebase config (same as your register page) ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    try { const analytics = getAnalytics(app); } catch (e) { /* ignore in dev */ }
+
+    const auth = getAuth(app);
+    const form = document.getElementById('loginForm');
+    const msgEl = document.getElementById('message');
+    const forgotBtn = document.getElementById('forgotBtn');
+
+    function showMessage(text, type = 'success') {
+      msgEl.innerHTML = '';
+      const div = document.createElement('div');
+      div.className = `msg ${type === 'success' ? 'success' : 'error'}`;
+      div.textContent = text;
+      msgEl.appendChild(div);
+    }
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      msgEl.innerHTML = '';
+
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      const remember = document.getElementById('remember').checked;
+
+      if (!email || !password) {
+        showMessage('Please enter both email and password.', 'error');
+        return;
+      }
+
+      // Choose persistence based on "remember" checkbox
+      try {
+        await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+      } catch (pErr) {
+        console.warn('Persistence set failed, continuing with default.', pErr);
+      }
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        showMessage('Signed in successfully.', 'success');
+
+        // OPTIONAL: redirect to dashboard when ready
+        // window.location.href = '/dashboard.html';
+      } catch (error) {
+        console.error('Login error', error);
+        showMessage(error.message || 'Login failed. Check credentials.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign in';
+      }
+    });
+
+    forgotBtn.addEventListener('click', async () => {
+      msgEl.innerHTML = '';
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        showMessage('Enter your email in the email field above, then click "Forgot password?".', 'error');
+        return;
+      }
+
+      forgotBtn.disabled = true;
+      forgotBtn.textContent = 'Sending...';
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMessage('Password reset email sent. Check your inbox.', 'success');
+      } catch (err) {
+        console.error('Reset error', err);
+        showMessage(err.message || 'Could not send reset email.', 'error');
+      } finally {
+        forgotBtn.disabled = false;
+        forgotBtn.textContent = 'Forgot password?';
+      }
+    });
+
+    // OPTIONAL: if you want to auto-redirect logged-in users away from the login page,
+    // uncomment the block below and change the redirect path.
+    /*
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        // user is signed in
+        window.location.href = '/dashboard.html';
+      }
+    });
+    */
+  </script>
+</body>
+</html>
