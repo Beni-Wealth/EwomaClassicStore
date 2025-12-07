@@ -4,119 +4,145 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Register — Ewoma Classic Store</title>
+
+  <!-- logo (favicon + page) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
+  <meta name="theme-color" content="#0f61ff">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root{
-      --bg-1: #eef2ff;
-      --bg-2: #f5f7fb;
-      --accent: #2563eb;
-      --card-radius: 16px;
-      --max-card: 460px;
+      --bg-1: #f5f8ff;
+      --bg-2: #ffffff;
+      --primary: #0f61ff;       /* blue */
+      --primary-600: #0753e6;
+      --glass: rgba(15,97,255,0.06);
+      --muted: #52607a;
+      --card-radius: 14px;
+      --shadow: 0 10px 30px rgba(16,24,40,0.06);
+      --max-width: 1100px;
     }
-    html,body{ height:100%; margin:0; font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,var(--bg-1),var(--bg-2)); color:#0b1220; }
-    .layout{ min-height:100vh; display:grid; grid-template-columns: 1fr var(--max-card); gap:32px; align-items:center; padding:40px; box-sizing:border-box; }
-    .hero{ display:flex; flex-direction:column; gap:20px; justify-content:center; padding:36px; border-radius:calc(var(--card-radius) - 4px); background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(99,102,241,0.03)); box-shadow: 0 6px 20px rgba(16,24,40,0.04); min-height:360px; }
-    .pill{ padding:10px 14px; border-radius:999px; background:rgba(37,99,235,0.12); color:var(--accent); font-weight:700; font-size:13px; width:max-content; }
-    .hero h2{ margin:0; font-size:32px; line-height:1.05; }
-    .hero p{ margin:0; color:#334155; font-size:16px; max-width:720px; }
-    .card{ background:white; padding:28px; border-radius:var(--card-radius); box-shadow: 0 10px 40px rgba(15,23,42,0.06); width:100%; max-width:var(--max-card); box-sizing:border-box; }
-    .card h1{ margin:0 0 10px; font-size:20px; font-weight:700; color:#0b1220; }
-    label{ display:block; font-size:13px; margin-top:12px; color:#334155; }
-    input[type="email"], input[type="password"], input[type="tel"], input[type="text"]{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e6e9ef; margin-top:6px; box-sizing:border-box; font-size:15px; background:#fff; outline:none; }
-    input:focus{ border-color: rgba(37,99,235,0.9); box-shadow: 0 4px 18px rgba(37,99,235,0.08); }
-    .row{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:8px; }
-    .muted{ font-size:13px; color:#64748b; margin-top:10px; }
-    button[type="submit"]{ margin-top:16px; width:100%; padding:12px 14px; border-radius:10px; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent), #3b82f6); color:white; font-weight:700; font-size:15px; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
-    button[type="submit"][disabled]{ opacity:0.6; cursor:default; }
-    .msg{ margin-top:12px; font-size:13px; padding:10px; border-radius:10px; }
-    .msg.success{ background:#e6ffed; color:#046a2f; border:1px solid #c6f1d2; }
-    .msg.error{ background:#fff1f0; color:#7a1f1f; border:1px solid #f6c7c5; }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:#0b1220;-webkit-font-smoothing:antialiased}
+    .page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .frame{width:100%;max-width:var(--max-width);display:grid;grid-template-columns:1fr 420px;gap:36px;align-items:center}
+    /* hero */
+    .hero{
+      background:linear-gradient(180deg, rgba(15,97,255,0.06), rgba(15,97,255,0.02));
+      border-radius:var(--card-radius);
+      padding:36px;
+      box-shadow:var(--shadow);
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:18px;
+    }
+    .hero-top{display:flex;gap:18px;align-items:center}
+    .logo {
+      width:84px;height:84px;border-radius:10px;flex-shrink:0;
+      background-image:url('https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg');
+      background-size:cover;background-position:center;border:1px solid rgba(15,97,255,0.08);
+      box-shadow: 0 8px 30px rgba(15,97,255,0.06);
+    }
+    .hero h1{margin:0;font-size:28px;color:var(--primary-600);letter-spacing:-0.2px}
+    .hero p{margin:0;color:var(--muted);line-height:1.45;font-size:15px;max-width:56ch}
+    .features{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+    .pill{background:var(--glass);padding:8px 12px;border-radius:999px;color:var(--primary);font-weight:700;font-size:13px}
 
-    /* Spinner */
-    .spinner {
-      width:18px;
-      height:18px;
-      border:3px solid rgba(255,255,255,0.35);
-      border-top-color: white;
-      border-radius:50%;
-      display:inline-block;
-      vertical-align:middle;
-      animation: spin 1s linear infinite;
-      -webkit-animation: spin 1s linear infinite;
+    /* card / form */
+    .card{
+      background: #ffffff;
+      border-radius:var(--card-radius);
+      padding:22px;
+      box-shadow:var(--shadow);
+      border: 1px solid rgba(10,20,50,0.02);
     }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    .card h2{margin:0 0 8px;font-size:18px}
+    label{display:block;font-size:13px;color:var(--muted);margin-top:12px}
+    input[type="text"],input[type="email"],input[type="tel"],input[type="password"]{
+      width:100%;padding:12px 14px;border-radius:10px;border:1px solid #e8eef8;font-size:15px;margin-top:8px;background:#fff;outline:none;box-shadow:none;
     }
+    input:focus{border-color:var(--primary);box-shadow:0 6px 18px rgba(15,97,255,0.06)}
+    .hint{font-size:13px;color:#94a3b8;margin-top:10px}
+    .submit{margin-top:18px;display:block;width:100%;padding:12px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--primary),var(--primary-600));color:white;font-weight:700;font-size:15px;cursor:pointer}
+    .submit[disabled]{opacity:0.6;cursor:default}
+    .msg{margin-top:12px;padding:10px;border-radius:10px;font-size:14px}
+    .msg.success{background:#ecfdf5;color:#065f46;border:1px solid #bbf7d0}
+    .msg.error{background:#fff1f2;color:#7f1d1d;border:1px solid #fecaca}
 
-    /* Mobile / stacked */
-    @media (max-width:900px){
-      .layout{ grid-template-columns: 1fr; padding:20px; gap:18px; }
-      .card{ max-width:100%; padding:20px; }
-      .hero{ padding:18px; border-radius:12px; min-height:120px; }
-      .hero h2{ font-size:22px; }
-    }
-    @media (max-width:420px){
-      .layout{ padding:12px; gap:12px; }
-      .card{ padding:16px; border-radius:12px; }
-      input[type="email"], input[type="password"]{ padding:10px; font-size:14px; }
-      button[type="submit"]{ padding:11px; font-size:14px; }
+    /* footer small text */
+    .small{font-size:13px;color:var(--muted);margin-top:10px;text-align:center}
+
+    /* responsive */
+    @media (max-width:980px){
+      .frame{grid-template-columns:1fr;gap:18px;padding:8px}
+      .hero{min-height:180px;padding:20px}
+      .card{padding:18px}
     }
   </style>
 </head>
 <body>
-  <div class="layout">
-    <div class="hero" aria-hidden="false">
-      <div class="pill">Create account</div>
-      <h2>Join Ewoma Classic Store</h2>
-      <p>Create an account to manage orders, track deliveries, and access exclusive offers. This responsive layout fills the desktop and collapses to a comfortable single-column form on mobile devices.</p>
-      <div style="display:flex; gap:12px; align-items:center; margin-top:8px;">
-        <svg width="92" height="64" viewBox="0 0 92 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="decorative illustration">
-          <rect x="0.5" y="0.5" width="91" height="63" rx="10" stroke="rgba(37,99,235,0.15)"></rect>
-          <circle cx="28" cy="32" r="10" fill="rgba(59,130,246,0.12)"></circle>
-          <rect x="46" y="18" width="36" height="28" rx="6" fill="rgba(99,102,241,0.08)"></rect>
-        </svg>
-        <div style="font-size:13px; color:#475569;">Fast sign up • Secure accounts</div>
-      </div>
-    </div>
+  <div class="page">
+    <div class="frame" role="main" aria-labelledby="signup-title">
 
-    <div class="card" role="region" aria-label="Registration form">
-      <h1>Create an account</h1>
-      <form id="registerForm" autocomplete="on" novalidate>
-        <label for="fullName">Full name</label>
-        <input id="fullName" name="fullName" type="text" required minlength="2" placeholder="Jane Doe" />
+      <section class="hero" aria-hidden="false">
+        <div class="hero-top">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <div class="pill">EwomaClassicStore</div>
+            <h1 id="signup-title">Quality at affordable prices.</h1>
+            <div class="hint" style="margin-top:8px">Bulk purchases • Single items • Accessories, wigs & gadgets. Shop confidently with our secure checkout and fast delivery.</div>
+          </div>
+        </div>
 
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required placeholder="you@example.com" inputmode="email" />
+        <p>Register for an account to manage orders, track deliveries, save favourites, and access exclusive deals. Use the same account across desktop and mobile — everything syncs instantly.</p>
 
-        <label for="phone">Phone</label>
-        <input id="phone" name="phone" type="tel" placeholder="+2348012345678" inputmode="tel" />
+        <div class="features" aria-hidden="true">
+          <div style="background:#fff;padding:10px 12px;border-radius:10px;border:1px solid rgba(15,97,255,0.04)">Secure payments</div>
+          <div style="background:#fff;padding:10px 12px;border-radius:10px;border:1px solid rgba(15,97,255,0.04)">Fast delivery</div>
+          <div style="background:#fff;padding:10px 12px;border-radius:10px;border:1px solid rgba(15,97,255,0.04)">Easy returns</div>
+        </div>
+      </section>
 
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" required minlength="6" placeholder="At least 6 characters" />
+      <aside class="card" aria-label="Registration form">
+        <h2>Create an account</h2>
 
-        <label for="confirmPassword">Confirm password</label>
-        <input id="confirmPassword" name="confirmPassword" type="password" required minlength="6" placeholder="Repeat your password" />
+        <form id="registerForm" autocomplete="on" novalidate>
+          <label for="fullName">Full name</label>
+          <input id="fullName" name="fullName" type="text" required minlength="2" placeholder="Jane Doe" />
 
-        <!-- Button initially shows plain text; replaced with spinner + text while loading -->
-        <button id="submitBtn" type="submit" aria-live="polite" aria-atomic="true">
-          <span class="btn-text">Register</span>
-        </button>
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" required placeholder="you@example.com" inputmode="email" />
 
-        <div class="muted">By registering you agree to our platform's terms.</div>
-      </form>
+          <label for="phone">Phone (optional)</label>
+          <input id="phone" name="phone" type="tel" placeholder="+2348012345678" inputmode="tel" />
 
-      <div id="message" aria-live="polite"></div>
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" required minlength="6" placeholder="At least 6 characters" />
+
+          <label for="confirmPassword">Confirm password</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" required minlength="6" placeholder="Repeat your password" />
+
+          <button id="submitBtn" class="submit" type="submit" aria-live="polite" aria-atomic="true">
+            <span class="btn-text">Create account</span>
+          </button>
+
+          <div id="message" role="status" aria-live="polite"></div>
+
+          <div class="small">Already have an account? <a href="login.html" style="color:var(--primary);text-decoration:none">Sign in</a></div>
+        </form>
+      </aside>
+
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // === Firebase config (same as your other pages) ===
+    // === EwomaClassicStore Firebase config (kept same as you provided) ===
     const firebaseConfig = {
       apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
       authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
@@ -127,41 +153,45 @@
       measurementId: "G-HHG3KC5VZ3"
     };
 
-    // Initialize Firebase
+    // initialize
     const app = initializeApp(firebaseConfig);
-    try { const analytics = getAnalytics(app); } catch (err) { /* ignore in dev */ }
-
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // DOM
     const form = document.getElementById('registerForm');
-    const msgEl = document.getElementById('message');
+    const messageEl = document.getElementById('message');
     const submitBtn = document.getElementById('submitBtn');
 
-    function showMessage(text, type = 'success') {
-      msgEl.innerHTML = '';
-      const div = document.createElement('div');
-      div.className = `msg ${type === 'success' ? 'success' : 'error'}`;
-      div.textContent = text;
-      msgEl.appendChild(div);
+    function showMessage(text, type='success'){
+      messageEl.innerHTML = '';
+      const d = document.createElement('div');
+      d.className = 'msg ' + (type==='success'?'success':'error');
+      d.textContent = text;
+      messageEl.appendChild(d);
     }
 
-    function setButtonLoading(loading) {
-      if (loading) {
-        // set spinner + text
+    function setLoading(loading){
+      if(loading){
         submitBtn.disabled = true;
-        submitBtn.setAttribute('aria-busy', 'true');
-        submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text">Registering...</span>';
+        submitBtn.innerHTML = '<span style="display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,0.35);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;margin-right:10px"></span><span class="btn-text">Creating account...</span>';
       } else {
         submitBtn.disabled = false;
-        submitBtn.removeAttribute('aria-busy');
-        submitBtn.innerHTML = '<span class="btn-text">Register</span>';
+        submitBtn.innerHTML = '<span class="btn-text">Create account</span>';
       }
     }
 
-    form.addEventListener('submit', async (ev) => {
-      ev.preventDefault();
-      msgEl.innerHTML = '';
+    // redirect to login if the user is already signed in
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        // Already signed in -> go to login (as requested)
+        window.location.href = 'login.html';
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      messageEl.innerHTML = '';
 
       const fullName = form.fullName.value.trim();
       const email = form.email.value.trim();
@@ -169,62 +199,56 @@
       const password = form.password.value;
       const confirmPassword = form.confirmPassword.value;
 
-      // Basic client-side validation
-      if (!fullName || !email || !password || !confirmPassword) {
-        showMessage('Please fill all required fields.', 'error');
-        return;
+      // validations
+      if(!fullName || !email || !password || !confirmPassword){
+        showMessage('Please fill all required fields.', 'error'); return;
       }
-      if (password !== confirmPassword) {
-        showMessage('Passwords do not match.', 'error');
-        return;
+      if(password !== confirmPassword){
+        showMessage('Passwords do not match.', 'error'); return;
       }
-      if (password.length < 6) {
-        showMessage('Password must be at least 6 characters.', 'error');
-        return;
+      if(password.length < 6){
+        showMessage('Password must be at least 6 characters.', 'error'); return;
       }
 
-      setButtonLoading(true);
+      setLoading(true);
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        // create user
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const u = cred.user;
 
-        try {
-          await updateProfile(user, { displayName: fullName });
-        } catch (e) {
-          console.warn('updateProfile failed', e);
-        }
+        // set display name
+        try { await updateProfile(u, { displayName: fullName }); } catch(err){ console.warn('updateProfile failed', err); }
 
+        // create user doc
         const userDoc = {
-          uid: user.uid,
+          uid: u.uid,
           fullName,
           email,
           phone: phone || null,
           createdAt: serverTimestamp()
         };
+        await setDoc(doc(db, 'users', u.uid), userDoc);
 
-        await setDoc(doc(db, 'users', user.uid), userDoc);
-
-        showMessage('Registration successful — welcome!', 'success');
-        form.reset();
-
-        // Optionally redirect to your dashboard:
-        // window.location.href = '/dashboard.html';
-      } catch (error) {
-        console.error('Registration error', error);
-        showMessage(error.message || 'Registration failed. Check console for details.', 'error');
+        // success -> redirect to login.html
+        window.location.href = 'login.html';
+      } catch(err) {
+        console.error('Registration error', err);
+        // Show friendly message
+        const msg = err && err.code ? (err.message || 'Registration failed.') : (err.message || 'Registration failed.');
+        showMessage(msg, 'error');
       } finally {
-        setButtonLoading(false);
+        setLoading(false);
       }
     });
 
-    // OPTIONAL: auto-redirect if already signed in (uncomment and change path)
-    /*
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    onAuthStateChanged(auth, user => {
-      if (user) window.location.href = '/dashboard.html';
-    });
-    */
+    // small spinner CSS injection (used by setLoading)
+    (function addSpinKeyframe(){
+      const s = document.createElement('style');
+      s.innerHTML = '@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}';
+      document.head.appendChild(s);
+    })();
   </script>
 </body>
-</html>
+  </html>
+  
