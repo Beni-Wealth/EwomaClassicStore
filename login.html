@@ -58,13 +58,6 @@
       font-size:16px;
       max-width:680px;
     }
-    .hero-illus{
-      margin-top:12px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
     .pill{
       padding:10px 14px;
       border-radius:999px;
@@ -124,12 +117,31 @@
       color:white;
       font-weight:700;
       font-size:15px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
     }
+    button[type="submit"][disabled]{ opacity:0.6; cursor:default; }
 
     .muted{ font-size:13px; color:#64748b; margin-top:10px; }
     .msg{ margin-top:12px; font-size:13px; padding:10px; border-radius:10px; }
     .msg.success{ background:#e6ffed; color:#046a2f; border:1px solid #c6f1d2; }
     .msg.error{ background:#fff1f0; color:#7a1f1f; border:1px solid #f6c7c5; }
+
+    /* Spinner */
+    .spinner {
+      width:18px;
+      height:18px;
+      border:3px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius:50%;
+      display:inline-block;
+      vertical-align:middle;
+      animation: spin 1s linear infinite;
+      -webkit-animation: spin 1s linear infinite;
+    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
     /* Small screens: stack layout and make the card full width */
     @media (max-width: 900px){
@@ -159,18 +171,13 @@
       <div class="pill">Welcome back</div>
       <h2>Sign in to continue to Ewoma Classic Store</h2>
       <p>Access your dashboard, manage orders, and pick up where you left off. This layout uses a flexible two-column grid on desktop and stacks to a full-width form on mobile so it always fits the screen.</p>
-
-      <div class="hero-illus" aria-hidden="true">
-        <!-- Simple decorative SVG illustration (scales nicely) -->
+      <div class="hero-illus" aria-hidden="true" style="display:flex; gap:12px; align-items:center;">
         <svg width="92" height="64" viewBox="0 0 92 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="decorative illustration">
           <rect x="0.5" y="0.5" width="91" height="63" rx="10" stroke="rgba(37,99,235,0.15)"></rect>
           <circle cx="28" cy="32" r="10" fill="rgba(59,130,246,0.12)"></circle>
           <rect x="46" y="18" width="36" height="28" rx="6" fill="rgba(99,102,241,0.08)"></rect>
         </svg>
-
-        <div style="font-size:13px; color:#475569;">
-          Fast. Secure. Responsive.
-        </div>
+        <div style="font-size:13px; color:#475569;">Fast. Secure. Responsive.</div>
       </div>
     </div>
 
@@ -194,7 +201,10 @@
           <button type="button" id="forgotBtn" class="link">Forgot password?</button>
         </div>
 
-        <button type="submit">Sign in</button>
+        <!-- Sign in button replaced with spinner while loading -->
+        <button id="submitBtn" type="submit" aria-live="polite" aria-atomic="true">
+          <span class="btn-text">Sign in</span>
+        </button>
 
         <div class="muted">Don't have an account? <a href="register.html" style="color:var(--accent); text-decoration:none;">Create one</a></div>
       </form>
@@ -212,8 +222,7 @@
       sendPasswordResetEmail,
       setPersistence,
       browserLocalPersistence,
-      browserSessionPersistence,
-      onAuthStateChanged
+      browserSessionPersistence
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     // === Firebase config (same as your register page) ===
@@ -235,6 +244,7 @@
     const form = document.getElementById('loginForm');
     const msgEl = document.getElementById('message');
     const forgotBtn = document.getElementById('forgotBtn');
+    const submitBtn = document.getElementById('submitBtn');
 
     function showMessage(text, type = 'success') {
       msgEl.innerHTML = '';
@@ -242,6 +252,30 @@
       div.className = `msg ${type === 'success' ? 'success' : 'error'}`;
       div.textContent = text;
       msgEl.appendChild(div);
+    }
+
+    function setButtonLoading(loading) {
+      if (loading) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('aria-busy', 'true');
+        submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text">Signing in...</span>';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.removeAttribute('aria-busy');
+        submitBtn.innerHTML = '<span class="btn-text">Sign in</span>';
+      }
+    }
+
+    function setForgotLoading(loading) {
+      if (loading) {
+        forgotBtn.disabled = true;
+        forgotBtn.setAttribute('aria-busy', 'true');
+        forgotBtn.innerHTML = 'Sending...';
+      } else {
+        forgotBtn.disabled = false;
+        forgotBtn.removeAttribute('aria-busy');
+        forgotBtn.innerHTML = 'Forgot password?';
+      }
     }
 
     form.addEventListener('submit', async (ev) => {
@@ -264,9 +298,7 @@
         console.warn('Persistence set failed, continuing with default.', pErr);
       }
 
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
+      setButtonLoading(true);
 
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -278,8 +310,7 @@
         console.error('Login error', error);
         showMessage(error.message || 'Login failed. Check credentials.', 'error');
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign in';
+        setButtonLoading(false);
       }
     });
 
@@ -291,8 +322,7 @@
         return;
       }
 
-      forgotBtn.disabled = true;
-      forgotBtn.textContent = 'Sending...';
+      setForgotLoading(true);
 
       try {
         await sendPasswordResetEmail(auth, email);
@@ -301,14 +331,14 @@
         console.error('Reset error', err);
         showMessage(err.message || 'Could not send reset email.', 'error');
       } finally {
-        forgotBtn.disabled = false;
-        forgotBtn.textContent = 'Forgot password?';
+        setForgotLoading(false);
       }
     });
 
     // OPTIONAL: if you want to auto-redirect logged-in users away from the login page,
     // uncomment the block below and change the redirect path.
     /*
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     onAuthStateChanged(auth, user => {
       if (user) {
         // user is signed in
