@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register — Ewoma Classic Store</title>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f5f7fb; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    .card { background:white; padding:28px; border-radius:12px; box-shadow: 0 8px 30px rgba(25,30,40,0.06); width:360px; }
+    h1 { margin:0 0 16px; font-size:20px; }
+    label { display:block; font-size:13px; margin-top:12px; color:#333; }
+    input { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ef; margin-top:6px; box-sizing:border-box; }
+    button { margin-top:18px; width:100%; padding:10px 12px; border-radius:8px; border:0; cursor:pointer; background:#2563eb; color:white; font-weight:600; }
+    .muted { font-size:13px; color:#666; margin-top:8px; }
+    .msg { margin-top:12px; font-size:13px; padding:10px; border-radius:8px; }
+    .msg.success { background:#e6ffed; color:#046a2f; border:1px solid #c6f1d2; }
+    .msg.error { background:#fff1f0; color:#7a1f1f; border:1px solid #f6c7c5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Create an account</h1>
+    <form id="registerForm" autocomplete="on">
+      <label for="fullName">Full name</label>
+      <input id="fullName" name="fullName" type="text" required minlength="2" placeholder="Jane Doe" />
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required placeholder="you@example.com" />
+
+      <label for="phone">Phone</label>
+      <input id="phone" name="phone" type="tel" placeholder="+2348012345678" />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required minlength="6" placeholder="At least 6 characters" />
+
+      <label for="confirmPassword">Confirm password</label>
+      <input id="confirmPassword" name="confirmPassword" type="password" required minlength="6" placeholder="Repeat your password" />
+
+      <button type="submit">Register</button>
+      <div class="muted">By registering you agree to our platform's terms.</div>
+    </form>
+
+    <div id="message" aria-live="polite"></div>
+
+    <p style="font-size:12px; color:#666; margin-top:10px;">
+    </p>
+  </div>
+
+  <script type="module">
+    // Firebase modular SDK (CDN). Version can be updated as needed.
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // === Your Firebase config (from your message) ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    // Analytics may throw if you run locally via file://, so guard it:
+    try { const analytics = getAnalytics(app); } catch (err) { /* ignore in dev */ }
+
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('registerForm');
+    const msgEl = document.getElementById('message');
+
+    function showMessage(text, type = 'success') {
+      msgEl.innerHTML = '';
+      const div = document.createElement('div');
+      div.className = `msg ${type === 'success' ? 'success' : 'error'}`;
+      div.textContent = text;
+      msgEl.appendChild(div);
+    }
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      msgEl.innerHTML = '';
+
+      const fullName = form.fullName.value.trim();
+      const email = form.email.value.trim();
+      const phone = form.phone.value.trim();
+      const password = form.password.value;
+      const confirmPassword = form.confirmPassword.value;
+
+      // Basic client-side validation
+      if (!fullName || !email || !password || !confirmPassword) {
+        showMessage('Please fill all required fields.', 'error');
+        return;
+      }
+      if (password !== confirmPassword) {
+        showMessage('Passwords do not match.', 'error');
+        return;
+      }
+      if (password.length < 6) {
+        showMessage('Password must be at least 6 characters.', 'error');
+        return;
+      }
+
+      // Disable submit to prevent double submissions
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Registering...';
+
+      try {
+        // Create the Auth user
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Optionally set display name in Auth profile
+        try {
+          await updateProfile(user, { displayName: fullName });
+        } catch (e) {
+          // non-fatal
+          console.warn('updateProfile failed', e);
+        }
+
+        // Save profile to Firestore under collection "users" with document id = uid
+        const userDoc = {
+          uid: user.uid,
+          fullName,
+          email,
+          phone: phone || null,
+          createdAt: serverTimestamp()
+        };
+
+        await setDoc(doc(db, 'users', user.uid), userDoc);
+
+        showMessage('Registration successful — welcome!', 'success');
+        form.reset();
+
+        // Optionally redirect:
+        // window.location.href = '/dashboard.html';
+
+      } catch (error) {
+        console.error('Registration error', error);
+        // Show a user-friendly message (error.message contains Firebase messages)
+        showMessage(error.message || 'Registration failed. Check console for details.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Register';
+      }
+    });
+  </script>
+</body>
+</html>
