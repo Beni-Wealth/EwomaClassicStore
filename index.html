@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>EwomaClassicStore — Quality at affordable prices</title>
+
+  <!-- Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300,400,600,700&display=swap" rel="stylesheet">
+
+  <!-- favicon (logo) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
+
+  <meta name="description" content="EwomaClassicStore — Accessories, wigs and gadgets. Bulk and single purchases with quality at affordable prices." />
+
+  <style>
+    :root{
+      --bg:#f5fbff;
+      --white:#ffffff;
+      --blue-50:#eef7ff;
+      --blue-500:#0b78ff;
+      --blue-700:#0a4fb3;
+      --muted:#5b6b7a;
+      --accent:linear-gradient(90deg,var(--blue-500),var(--blue-700));
+      --radius:12px;
+      --shadow: 0 12px 36px rgba(11,120,255,0.08);
+      font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{background:linear-gradient(180deg,var(--bg),#f0f8ff);color:#083047;display:flex;justify-content:center;padding:20px}
+
+    .site{width:100%;max-width:1100px;background:var(--white);border-radius:14px;padding:22px;box-shadow:var(--shadow);overflow:auto;max-height: calc(100vh - 40px);-webkit-overflow-scrolling: touch;}
+
+    /* Header - becomes stacked on mobile */
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:64px;height:64px;border-radius:12px;overflow:hidden;flex:0 0 64px;box-shadow:0 8px 24px rgba(11,120,255,0.12)}
+    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+    .brand h1{font-size:18px;margin:0;color:var(--blue-700);letter-spacing:0.2px}
+    .brand p{margin:0;font-size:13px;color:var(--muted)}
+
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--accent);color:var(--white);box-shadow:0 8px 30px rgba(11,120,255,0.14)}
+    .btn.ghost{background:transparent;border:1px solid rgba(8,48,71,0.06);color:var(--blue-700)}
+
+    /* layout uses a fluid single-column on small screens */
+    main{display:grid;grid-template-columns:1fr 360px;gap:22px;margin-top:18px;align-items:start}
+
+    /* Hero */
+    .hero{padding:6px}
+    .kicker{display:inline-block;background:var(--blue-50);color:var(--blue-700);padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px}
+    .title{font-size:34px;margin:12px 0;color:#062a44;line-height:1.04}
+    .motto{font-size:16px;color:var(--muted);margin-bottom:14px}
+    .hero-cta{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+    .feature{background:linear-gradient(180deg,#ffffff,#fbfeff);border-radius:12px;padding:12px;border:1px solid rgba(8,48,71,0.03)}
+    .feature h4{margin:0 0 6px 0;font-size:14px;color:var(--blue-700)}
+    .feature p{margin:0;color:var(--muted);font-size:13px}
+
+    /* testimonials & faqs */
+    .section-title{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+    .testimonial{background:linear-gradient(180deg,#f8fbff,#ffffff);padding:12px;border-radius:12px;border:1px solid rgba(8,48,71,0.03)}
+    .stars{color:var(--blue-700);font-weight:700}
+    .faq{margin-top:12px}
+    .faq-item{border-radius:10px;padding:10px;border:1px solid rgba(8,48,71,0.03);background:#fff;margin-bottom:8px}
+
+    /* aside */
+    .aside{padding:16px;border-radius:12px;background:linear-gradient(180deg,#f7fbff,#ffffff);border:1px solid rgba(8,48,71,0.03)}
+    .aside h3{margin:0 0 8px 0}
+    .list{display:flex;flex-direction:column;gap:12px}
+    .list-item{display:flex;gap:12px;align-items:flex-start}
+    .dot{width:44px;height:44px;border-radius:10px;background:var(--blue-50);display:grid;place-items:center;font-weight:700;color:var(--blue-700)}
+    .item-text h4{margin:0;font-size:14px;color:var(--blue-700)}
+    .item-text p{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+    footer{margin-top:18px;padding-top:14px;border-top:1px dashed rgba(8,48,71,0.04);display:flex;justify-content:space-between;align-items:center}
+    .legal{font-size:13px;color:var(--muted)}
+
+    /* responsive rules */
+    @media (max-width:1000px){ main{grid-template-columns:1fr 320px} }
+    @media (max-width:820px){ body{padding:14px} .site{padding:14px} header{align-items:flex-start} .cta{width:100%;margin-top:8px;justify-content:space-between} main{grid-template-columns:1fr} .aside{order:2} .hero{order:1} .title{font-size:26px} }
+    @media (max-width:420px){ .title{font-size:22px} .logo{width:48px;height:48px} .kicker{padding:5px 8px} .btn{padding:10px;border-radius:10px;font-size:14px} }
+  </style>
+</head>
+<body>
+  <div class="site" role="main">
+    <header>
+      <div class="brand" aria-label="EwomaClassicStore brand">
+        <div class="logo" aria-hidden="true"><img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="EwomaClassicStore logo"></div>
+        <div>
+          <h1>EwomaClassicStore</h1>
+          <p>Accessories • Wigs • Gadgets</p>
+        </div>
+      </div>
+
+      <nav class="cta" aria-label="Primary actions">
+        <a href="login.html" class="btn ghost" role="button">Log in</a>
+        <a href="register.html" class="btn primary" role="button">Sign up</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="kicker">Accessories • Wigs • Gadgets</span>
+        <h2 class="title">EwomaClassicStore — Quality at affordable prices</h2>
+        <p class="motto">Shop stylish accessories, premium wigs and the latest gadgets. Bulk ordering for businesses and single-unit purchases for individuals — all delivered with reliable service and clear pricing.</p>
+
+        <div class="hero-cta">
+          <a href="register.html" class="btn primary">Create account</a>
+          <a href="#services" class="btn ghost">Explore services</a>
+        </div>
+
+        <!-- removed quick-search block as requested; kept CTAs above -->
+
+        <div class="features" id="services">
+          <div class="feature">
+            <h4>Bulk Purchase</h4>
+            <p>Competitive tiered pricing for large orders, priority fulfillment and dedicated account support for resellers and retailers.</p>
+          </div>
+          <div class="feature">
+            <h4>Single Purchase</h4>
+            <p>Order single items with fast checkout and flexible shipping options for personal shoppers.</p>
+          </div>
+          <div class="feature">
+            <h4>Curated Collections</h4>
+            <p>Hand-picked accessories and wig collections — quality-checked before they reach you.</p>
+          </div>
+          <div class="feature">
+            <h4>Secure Payments</h4>
+            <p>Multiple payment methods with secure checkout and order tracking for peace of mind.</p>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h3 style="margin:0">What customers say</h3>
+          <div class="muted small">Real feedback from buyers</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px">
+          <div class="testimonial">
+            <div class="stars">★★★★★</div>
+            <div style="font-weight:700;margin-top:8px">Lovely wig quality</div>
+            <div style="color:var(--muted);margin-top:6px">"The lace is soft and delivery was fast. I'll order in bulk next time." — Aisha</div>
+          </div>
+
+          <div class="testimonial">
+            <div class="stars">★★★★☆</div>
+            <div style="font-weight:700;margin-top:8px">Great for reselling</div>
+            <div style="color:var(--muted);margin-top:6px">"Good margins and dependable restock options for my shop." — Peter</div>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h3 style="margin:0">Frequently asked questions</h3>
+          <div class="muted small">Answers to common questions</div>
+        </div>
+
+        <div class="faq">
+          <div class="faq-item">
+            <strong>Do you offer discounts for large orders?</strong>
+            <p style="margin:6px 0 0;color:var(--muted)">Yes — bulk pricing tiers are available. Contact sales for custom quotes.</p>
+          </div>
+          <div class="faq-item">
+            <strong>What shipping options are available?</strong>
+            <p style="margin:6px 0 0;color:var(--muted)">We provide standard and express shipping. Bulk orders may qualify for freight options.</p>
+          </div>
+          <div class="faq-item">
+            <strong>Can I return or exchange items?</strong>
+            <p style="margin:6px 0 0;color:var(--muted)">Returns are accepted within our policy window. Some hygiene-sensitive items (e.g., wigs) have limited return options — check product page for details.</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="aside">
+        <h3>Why choose EwomaClassicStore?</h3>
+        <div class="list">
+          <div class="list-item">
+            <div class="dot">01</div>
+            <div class="item-text"><h4>Quality Products</h4><p>We source from trusted suppliers and inspect products for quality.</p></div>
+          </div>
+          <div class="list-item">
+            <div class="dot">02</div>
+            <div class="item-text"><h4>Flexible Orders</h4><p>Buy in bulk or single units using the same streamlined ordering process.</p></div>
+          </div>
+          <div class="list-item">
+            <div class="dot">03</div>
+            <div class="item-text"><h4>Fast Delivery</h4><p>Priority dispatch for bulk orders and reliable tracking for all purchases.</p></div>
+          </div>
+          <div class="list-item">
+            <div class="dot">04</div>
+            <div class="item-text"><h4>Dedicated Support</h4><p>Sales and aftercare support to help with orders and returns.</p></div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <a href="login.html" class="btn ghost" style="flex:1">Log in</a>
+          <a href="register.html" class="btn primary" style="flex:1">Create account</a>
+        </div>
+
+        <!-- newsletter removed as requested -->
+
+        <div style="margin-top:12px;font-size:13px;color:var(--muted)">Contact sales: <a href="mailto:sales@ewomaclassicstore.example" style="color:var(--blue-700);text-decoration:none">sales@ewomaclassicstore.example</a></div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="legal">© <span id="year"></span> EwomaClassicStore. All rights reserved.</div>
+      <div style="font-size:13px;color:var(--muted)">Designed to deliver — Quality at affordable prices</div>
+    </footer>
+  </div>
+
+  <!-- Firebase initialization: UPDATED to the project you provided (ewomaclassicstore-43b5e) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+
+    // Your web app's Firebase configuration (updated)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch(e){ /* analytics optional — ignore errors in some environments */ }
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // small prototype interactions (no backend)
+    document.querySelectorAll('.small-btn').forEach(b=>{
+      b.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const t = document.createElement('div');
+        t.textContent = 'This is a prototype — integrate with your backend to complete this action.';
+        t.style.position='fixed'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.bottom='20px'; t.style.background='rgba(4,38,75,0.9)'; t.style.color='#fff'; t.style.padding='10px 14px'; t.style.borderRadius='10px'; t.style.zIndex=9999; document.body.appendChild(t);
+        setTimeout(()=>t.remove(),2200);
+      });
+    });
+
+    // smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault(); const id = a.getAttribute('href').slice(1); const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    });
+  </script>
+</body>
+</html>
