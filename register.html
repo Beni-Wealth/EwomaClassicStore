@@ -4,56 +4,119 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Register — Ewoma Classic Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
-    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f5f7fb; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
-    .card { background:white; padding:28px; border-radius:12px; box-shadow: 0 8px 30px rgba(25,30,40,0.06); width:360px; }
-    h1 { margin:0 0 16px; font-size:20px; }
-    label { display:block; font-size:13px; margin-top:12px; color:#333; }
-    input { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e9ef; margin-top:6px; box-sizing:border-box; }
-    button { margin-top:18px; width:100%; padding:10px 12px; border-radius:8px; border:0; cursor:pointer; background:#2563eb; color:white; font-weight:600; }
-    .muted { font-size:13px; color:#666; margin-top:8px; }
-    .msg { margin-top:12px; font-size:13px; padding:10px; border-radius:8px; }
-    .msg.success { background:#e6ffed; color:#046a2f; border:1px solid #c6f1d2; }
-    .msg.error { background:#fff1f0; color:#7a1f1f; border:1px solid #f6c7c5; }
+    :root{
+      --bg-1: #eef2ff;
+      --bg-2: #f5f7fb;
+      --accent: #2563eb;
+      --card-radius: 16px;
+      --max-card: 460px;
+    }
+    html,body{ height:100%; margin:0; font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,var(--bg-1),var(--bg-2)); color:#0b1220; }
+    .layout{ min-height:100vh; display:grid; grid-template-columns: 1fr var(--max-card); gap:32px; align-items:center; padding:40px; box-sizing:border-box; }
+    .hero{ display:flex; flex-direction:column; gap:20px; justify-content:center; padding:36px; border-radius:calc(var(--card-radius) - 4px); background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(99,102,241,0.03)); box-shadow: 0 6px 20px rgba(16,24,40,0.04); min-height:360px; }
+    .pill{ padding:10px 14px; border-radius:999px; background:rgba(37,99,235,0.12); color:var(--accent); font-weight:700; font-size:13px; width:max-content; }
+    .hero h2{ margin:0; font-size:32px; line-height:1.05; }
+    .hero p{ margin:0; color:#334155; font-size:16px; max-width:720px; }
+    .card{ background:white; padding:28px; border-radius:var(--card-radius); box-shadow: 0 10px 40px rgba(15,23,42,0.06); width:100%; max-width:var(--max-card); box-sizing:border-box; }
+    .card h1{ margin:0 0 10px; font-size:20px; font-weight:700; color:#0b1220; }
+    label{ display:block; font-size:13px; margin-top:12px; color:#334155; }
+    input[type="email"], input[type="password"], input[type="tel"], input[type="text"]{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e6e9ef; margin-top:6px; box-sizing:border-box; font-size:15px; background:#fff; outline:none; }
+    input:focus{ border-color: rgba(37,99,235,0.9); box-shadow: 0 4px 18px rgba(37,99,235,0.08); }
+    .row{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:8px; }
+    .muted{ font-size:13px; color:#64748b; margin-top:10px; }
+    button[type="submit"]{ margin-top:16px; width:100%; padding:12px 14px; border-radius:10px; border:0; cursor:pointer; background:linear-gradient(90deg,var(--accent), #3b82f6); color:white; font-weight:700; font-size:15px; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+    button[type="submit"][disabled]{ opacity:0.6; cursor:default; }
+    .msg{ margin-top:12px; font-size:13px; padding:10px; border-radius:10px; }
+    .msg.success{ background:#e6ffed; color:#046a2f; border:1px solid #c6f1d2; }
+    .msg.error{ background:#fff1f0; color:#7a1f1f; border:1px solid #f6c7c5; }
+
+    /* Spinner */
+    .spinner {
+      width:18px;
+      height:18px;
+      border:3px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius:50%;
+      display:inline-block;
+      vertical-align:middle;
+      animation: spin 1s linear infinite;
+      -webkit-animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Mobile / stacked */
+    @media (max-width:900px){
+      .layout{ grid-template-columns: 1fr; padding:20px; gap:18px; }
+      .card{ max-width:100%; padding:20px; }
+      .hero{ padding:18px; border-radius:12px; min-height:120px; }
+      .hero h2{ font-size:22px; }
+    }
+    @media (max-width:420px){
+      .layout{ padding:12px; gap:12px; }
+      .card{ padding:16px; border-radius:12px; }
+      input[type="email"], input[type="password"]{ padding:10px; font-size:14px; }
+      button[type="submit"]{ padding:11px; font-size:14px; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Create an account</h1>
-    <form id="registerForm" autocomplete="on">
-      <label for="fullName">Full name</label>
-      <input id="fullName" name="fullName" type="text" required minlength="2" placeholder="Jane Doe" />
+  <div class="layout">
+    <div class="hero" aria-hidden="false">
+      <div class="pill">Create account</div>
+      <h2>Join Ewoma Classic Store</h2>
+      <p>Create an account to manage orders, track deliveries, and access exclusive offers. This responsive layout fills the desktop and collapses to a comfortable single-column form on mobile devices.</p>
+      <div style="display:flex; gap:12px; align-items:center; margin-top:8px;">
+        <svg width="92" height="64" viewBox="0 0 92 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="decorative illustration">
+          <rect x="0.5" y="0.5" width="91" height="63" rx="10" stroke="rgba(37,99,235,0.15)"></rect>
+          <circle cx="28" cy="32" r="10" fill="rgba(59,130,246,0.12)"></circle>
+          <rect x="46" y="18" width="36" height="28" rx="6" fill="rgba(99,102,241,0.08)"></rect>
+        </svg>
+        <div style="font-size:13px; color:#475569;">Fast sign up • Secure accounts</div>
+      </div>
+    </div>
 
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" required placeholder="you@example.com" />
+    <div class="card" role="region" aria-label="Registration form">
+      <h1>Create an account</h1>
+      <form id="registerForm" autocomplete="on" novalidate>
+        <label for="fullName">Full name</label>
+        <input id="fullName" name="fullName" type="text" required minlength="2" placeholder="Jane Doe" />
 
-      <label for="phone">Phone</label>
-      <input id="phone" name="phone" type="tel" placeholder="+2348012345678" />
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com" inputmode="email" />
 
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" required minlength="6" placeholder="At least 6 characters" />
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" type="tel" placeholder="+2348012345678" inputmode="tel" />
 
-      <label for="confirmPassword">Confirm password</label>
-      <input id="confirmPassword" name="confirmPassword" type="password" required minlength="6" placeholder="Repeat your password" />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required minlength="6" placeholder="At least 6 characters" />
 
-      <button type="submit">Register</button>
-      <div class="muted">By registering you agree to our platform's terms.</div>
-    </form>
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" required minlength="6" placeholder="Repeat your password" />
 
-    <div id="message" aria-live="polite"></div>
+        <!-- Button initially shows plain text; replaced with spinner + text while loading -->
+        <button id="submitBtn" type="submit" aria-live="polite" aria-atomic="true">
+          <span class="btn-text">Register</span>
+        </button>
 
-    <p style="font-size:12px; color:#666; margin-top:10px;">
-    </p>
+        <div class="muted">By registering you agree to our platform's terms.</div>
+      </form>
+
+      <div id="message" aria-live="polite"></div>
+    </div>
   </div>
 
   <script type="module">
-    // Firebase modular SDK (CDN). Version can be updated as needed.
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
     import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // === Your Firebase config (from your message) ===
+    // === Firebase config (same as your other pages) ===
     const firebaseConfig = {
       apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
       authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
@@ -66,7 +129,6 @@
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    // Analytics may throw if you run locally via file://, so guard it:
     try { const analytics = getAnalytics(app); } catch (err) { /* ignore in dev */ }
 
     const auth = getAuth(app);
@@ -74,6 +136,7 @@
 
     const form = document.getElementById('registerForm');
     const msgEl = document.getElementById('message');
+    const submitBtn = document.getElementById('submitBtn');
 
     function showMessage(text, type = 'success') {
       msgEl.innerHTML = '';
@@ -81,6 +144,19 @@
       div.className = `msg ${type === 'success' ? 'success' : 'error'}`;
       div.textContent = text;
       msgEl.appendChild(div);
+    }
+
+    function setButtonLoading(loading) {
+      if (loading) {
+        // set spinner + text
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('aria-busy', 'true');
+        submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text">Registering...</span>';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.removeAttribute('aria-busy');
+        submitBtn.innerHTML = '<span class="btn-text">Register</span>';
+      }
     }
 
     form.addEventListener('submit', async (ev) => {
@@ -107,25 +183,18 @@
         return;
       }
 
-      // Disable submit to prevent double submissions
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Registering...';
+      setButtonLoading(true);
 
       try {
-        // Create the Auth user
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Optionally set display name in Auth profile
         try {
           await updateProfile(user, { displayName: fullName });
         } catch (e) {
-          // non-fatal
           console.warn('updateProfile failed', e);
         }
 
-        // Save profile to Firestore under collection "users" with document id = uid
         const userDoc = {
           uid: user.uid,
           fullName,
@@ -139,18 +208,23 @@
         showMessage('Registration successful — welcome!', 'success');
         form.reset();
 
-        // Optionally redirect:
+        // Optionally redirect to your dashboard:
         // window.location.href = '/dashboard.html';
-
       } catch (error) {
         console.error('Registration error', error);
-        // Show a user-friendly message (error.message contains Firebase messages)
         showMessage(error.message || 'Registration failed. Check console for details.', 'error');
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Register';
+        setButtonLoading(false);
       }
     });
+
+    // OPTIONAL: auto-redirect if already signed in (uncomment and change path)
+    /*
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    onAuthStateChanged(auth, user => {
+      if (user) window.location.href = '/dashboard.html';
+    });
+    */
   </script>
 </body>
 </html>
