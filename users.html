@@ -1,0 +1,44 @@
+<!doctype html>
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="admin.html">← Back to dashboard</a>
+<h2>View Users</h2>
+<div id="authError" style="color:#b91c1c;display:none">Unauthorized — you must be signed in with an admin email.</div>
+
+
+<table id="usersTable" style="display:none">
+<thead>
+<tr><th>#</th><th>Name</th><th>Email</th><th>Joined</th></tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+
+<script>
+// Use the shared window.ADMIN_ALLOWED (defined in admin.html) if available, otherwise fall back to a local list.
+window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || ['beniwealth70@gmail.com','owanaomubo76@gmail.com','orivriewoma@gmail.com'];
+function isAllowed(email){return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase());}
+const admin = localStorage.getItem('adminEmail');
+if(!isAllowed(admin)){
+document.getElementById('authError').style.display='block';
+} else {
+// demo users - replace by API call
+const demo = [
+{name:'Adaobi Okoro', email:'adaobi@example.com', joined:'2024-02-12'},
+{name:'Chinedu Eze', email:'chinedu@example.com', joined:'2024-05-18'},
+{name:'Funke Akin', email:'funke@example.com', joined:'2024-09-02'}
+];
+const tbody = document.querySelector('#usersTable tbody');
+demo.forEach((u,i)=>{
+const tr = document.createElement('tr');
+tr.innerHTML = `<td>${i+1}</td><td>${u.name}</td><td>${u.email}</td><td>${u.joined}</td>`;
+tbody.appendChild(tr);
+});
+document.getElementById('usersTable').style.display='table';
+}
+</script>
+</body>
+</html>
