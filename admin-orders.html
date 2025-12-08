@@ -1,0 +1,34 @@
+<!doctype html>
+<div class="wrap">
+<a class="back" href="admin.html">← Back to dashboard</a>
+<h2>Orders</h2>
+<div id="authError" style="color:#b91c1c;display:none">Unauthorized — you must be signed in with an admin email.</div>
+<table id="ordersTable" style="display:none">
+<thead><tr><th>#</th><th>Order ID</th><th>User</th><th>Amount</th><th>Status</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+<script>
+// Use shared window.ADMIN_ALLOWED if present, otherwise fallback
+window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || ['beniwealth70@gmail.com','owanaomubo76@gmail.com','orivriewoma@gmail.com'];
+function isAllowed(email){return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase());}
+const admin = localStorage.getItem('adminEmail');
+if(!isAllowed(admin)){
+document.getElementById('authError').style.display='block';
+} else {
+const demo = [
+{id:'ORD-1001', user:'Adaobi', amount:12500, status:'Processed'},
+{id:'ORD-1002', user:'Chinedu', amount:5800, status:'Pending'},
+{id:'ORD-1003', user:'Funke', amount:7200, status:'Delivered'}
+];
+const tbody = document.querySelector('#ordersTable tbody');
+demo.forEach((o,i)=>{
+const tr = document.createElement('tr');
+tr.innerHTML = `<td>${i+1}</td><td>${o.id}</td><td>${o.user}</td><td>₦${o.amount.toLocaleString()}</td><td>${o.status}</td>`;
+tbody.appendChild(tr);
+});
+document.getElementById('ordersTable').style.display='table';
+}
+</script>
+</body>
+</html>
