@@ -17,6 +17,7 @@
     .brand{display:flex;gap:12px;align-items:center}
     .brand img{width:56px;height:56px;border-radius:10px;object-fit:cover}
     .brand h1{font-size:18px;margin:0;color:var(--primary)}
+    .brand .who{font-size:13px;color:var(--muted)}
     main{padding:20px}
     .welcome{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(11,116,255,0.04);display:flex;align-items:center;justify-content:space-between;gap:12px}
     .welcome h2{margin:0;font-size:20px;color:var(--primary)}
@@ -41,7 +42,6 @@
     th{background:#fbfdff}
     .note{font-size:13px;color:var(--muted);margin-top:10px}
     .small{font-size:13px;color:var(--muted)}
-    .file-input{display:flex;gap:8px;align-items:center}
     .preview{width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-top:8px;border:1px solid #eef6ff}
   </style>
 </head>
@@ -50,8 +50,8 @@
     <div class="brand">
       <img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="logo">
       <div>
-        <h1>Welcome To EwomaClassicStore</h1>
-        <div class="small">Admin dashboard</div>
+        <h1 id="headerTitle">Welcome To EwomaClassicStore</h1>
+        <div class="who" id="adminWho">Not signed in</div>
       </div>
     </div>
     <div class="controls">
@@ -132,8 +132,8 @@
   <script type="module">
     // Firebase (modular) imports
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js';
-    import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js';
+    import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, getDoc } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js';
 
     // FIREBASE CONFIG: use the project you provided (ewomaclassicstore-43b5e)
     const firebaseConfig = {
@@ -169,7 +169,10 @@
     const usersList = document.getElementById('usersList');
     const ordersList = document.getElementById('ordersList');
 
-    // Switch sections
+    const headerTitle = document.getElementById('headerTitle');
+    const adminWho = document.getElementById('adminWho');
+
+    // Navigation actions
     options.forEach(opt => opt.addEventListener('click', () => {
       const target = opt.dataset.target;
       sections.forEach(s => s.classList.add('hide'));
@@ -213,7 +216,7 @@
       return json.data.link;
     }
 
-    // Upload product handler
+    // Upload product handler (now records createdBy info)
     productForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       productMsg.textContent = '';
@@ -241,6 +244,14 @@
           imgLink = imageUrl.value.trim();
         }
 
+        // attach admin info if signed in
+        const currentUser = auth.currentUser;
+        const createdBy = currentUser ? {
+          uid: currentUser.uid,
+          email: currentUser.email || '',
+          name: currentUser.displayName || (currentUser.email ? currentUser.email.split('@')[0] : '')
+        } : { uid: '', email: '', name: '' };
+
         // Save product doc to Firestore with server timestamp
         await addDoc(collection(db, 'products'), {
           title,
@@ -248,7 +259,8 @@
           price,
           description,
           image: imgLink || '',
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          createdBy
         });
 
         productMsg.textContent = 'Product uploaded.';
@@ -268,7 +280,7 @@
       productMsg.textContent = '';
     });
 
-    // Load users from Firestore
+    // Load users from Firestore, prefer displayName -> username -> email
     async function loadUsers() {
       usersList.textContent = 'Loading users...';
       try {
@@ -278,15 +290,16 @@
 
         const table = document.createElement('table');
         const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Username</th><th>Email</th><th>Phone</th><th>Created</th></tr>';
+        thead.innerHTML = '<tr><th>Name</th><th>Email</th><th>Phone</th><th>Created</th></tr>';
         table.appendChild(thead);
         const tbody = document.createElement('tbody');
 
         snap.forEach(d => {
           const data = d.data();
-          const tr = document.createElement('tr');
+          const name = data.displayName || data.username || data.email || '';
           const createdVal = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate().toLocaleString() : (data.createdAt || '');
-          tr.innerHTML = `<td>${data.username||''}</td><td>${data.email||''}</td><td>${data.phone||''}</td><td>${createdVal}</td>`;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${name}</td><td>${data.email||''}</td><td>${data.phone||''}</td><td>${createdVal}</td>`;
           tbody.appendChild(tr);
         });
 
@@ -299,7 +312,7 @@
       }
     }
 
-    // Load orders from Firestore
+    // Load orders and attempt to resolve user name from users collection (by userId)
     async function loadOrders() {
       ordersList.textContent = 'Loading orders...';
       try {
@@ -313,15 +326,45 @@
         table.appendChild(thead);
         const tbody = document.createElement('tbody');
 
-        snap.forEach(d => {
+        // cache for user lookups to avoid repeated reads
+        const userCache = {};
+
+        for (const d of snap.docs) {
           const data = d.data();
           const id = d.id;
+          let userName = '';
+
+          if (data.userName) userName = data.userName;
+          else if (data.userEmail) userName = data.userEmail;
+          else if (data.userId) {
+            // try to fetch user doc from users collection
+            if (userCache[data.userId]) {
+              userName = userCache[data.userId];
+            } else {
+              try {
+                const ud = await getDoc(doc(db, 'users', data.userId));
+                if (ud.exists()) {
+                  const udData = ud.data();
+                  userName = udData.displayName || udData.username || udData.email || data.userId;
+                  userCache[data.userId] = userName;
+                } else {
+                  userName = data.userId;
+                }
+              } catch (e) {
+                console.warn('user lookup failed', e);
+                userName = data.userId;
+              }
+            }
+          } else {
+            userName = 'Unknown';
+          }
+
           const items = Array.isArray(data.items) ? data.items.map(i => `${i.name} x${i.qty}`).join(', ') : (data.items || '');
           const createdVal = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate().toLocaleString() : (data.createdAt || '');
           const tr = document.createElement('tr');
-          tr.innerHTML = `<td>${id}</td><td>${data.userEmail||data.userId||''}</td><td>${items}</td><td>${data.total||''}</td><td>${data.status||''}</td><td>${createdVal}</td>`;
+          tr.innerHTML = `<td>${id}</td><td>${userName}</td><td>${items}</td><td>${data.total||''}</td><td>${data.status||''}</td><td>${createdVal}</td>`;
           tbody.appendChild(tr);
-        });
+        }
 
         table.appendChild(tbody);
         ordersList.innerHTML = '';
@@ -332,7 +375,7 @@
       }
     }
 
-    // Refresh button: reload depending on visible section
+    // Refresh behavior
     refreshBtn.addEventListener('click', () => {
       const active = document.querySelector('.panel-section:not(.hide)');
       if (active) {
@@ -341,19 +384,33 @@
       }
     });
 
-    // Sign out (demo)
+    // Sign out
     signOutBtn.addEventListener('click', async () => {
       try {
         await signOut(auth);
-        alert('Signed out (demo)');
+        alert('Signed out');
+        // update header
+        headerTitle.textContent = 'Welcome To EwomaClassicStore';
+        adminWho.textContent = 'Not signed in';
       } catch (e) {
         console.warn(e);
         alert('Sign out failed');
       }
     });
 
-    // Show upload section by default on load
+    // show upload section by default
     document.querySelector('[data-target="uploadSection"]').click();
+
+    // show current admin name in header
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        adminWho.textContent = 'Not signed in';
+        return;
+      }
+      const name = user.displayName || (user.email ? user.email.split('@')[0] : 'Admin');
+      adminWho.textContent = `${name} • ${user.email || ''}`;
+      headerTitle.textContent = `Welcome — ${name}`;
+    });
   </script>
 </body>
 </html>
