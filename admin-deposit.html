@@ -10,6 +10,9 @@
     .back{display:inline-block;margin-bottom:12px;text-decoration:none;color:#1d4ed8}
     .card{background:#fff;padding:18px;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,.06)}
     .error{color:#b91c1c}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;margin-top:12px}
+    th,td{padding:12px;border-bottom:1px solid #eef2f7;text-align:left}
+    th{background:#f8fafc}
   </style>
 </head>
 <body>
@@ -20,18 +23,59 @@
     <div id="depositCard" class="card" style="display:none">
       <p>Current total deposit: <strong id="depositVal">₦0</strong></p>
     </div>
+
+    <table id="depositsTable" style="display:none">
+      <thead><tr><th>#</th><th>Amount</th><th>Source</th><th>Date</th></tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
 
-  <script>
-    window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || ['beniwealth70@gmail.com','owanaomubo76@gmail.com','orivriewoma@gmail.com'];
-    function isAllowed(email){ return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase()); }
-    const admin = localStorage.getItem('adminEmail');
-    if(!isAllowed(admin)){
-      document.getElementById('authError').style.display='block';
+  <script type="module">
+    import { initFirebase, isAdminEmail } from './admin-common.js';
+    import { collection, getDocs, orderBy, query } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+
+    const { db } = initFirebase();
+
+    const adminEmail = (localStorage.getItem('adminEmail') || '').toLowerCase();
+    if (!isAdminEmail(adminEmail)) {
+      document.getElementById('authError').style.display = 'block';
     } else {
-      const deposit = 452300;
-      document.getElementById('depositVal').textContent = '₦' + deposit.toLocaleString();
-      document.getElementById('depositCard').style.display = 'block';
+      (async () => {
+        try {
+          const q = query(collection(db, 'deposits'), orderBy('createdAt', 'desc'));
+          const snap = await getDocs(q);
+          const tbody = document.querySelector('#depositsTable tbody');
+          let total = 0;
+          let i = 0;
+          snap.forEach(doc => {
+            const d = doc.data();
+            const amount = Number(d.amount || 0);
+            const source = d.source || '—';
+            const date = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toLocaleString() : (d.createdAt || '—');
+            total += amount;
+            i++;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i}</td><td>₦${amount.toLocaleString()}</td><td>${escapeHtml(source)}</td><td>${escapeHtml(date)}</td>`;
+            tbody.appendChild(tr);
+          });
+          document.getElementById('depositVal').textContent = '₦' + total.toLocaleString();
+          if (i) document.getElementById('depositsTable').style.display = 'table';
+          document.getElementById('depositCard').style.display = 'block';
+        } catch (err) {
+          console.error(err);
+          document.getElementById('authError').textContent = 'Failed to load deposit data: ' + (err.message || err);
+          document.getElementById('authError').style.display = 'block';
+        }
+      })();
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
     }
   </script>
 </body>
