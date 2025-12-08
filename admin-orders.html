@@ -25,21 +25,49 @@
     </table>
   </div>
 
-  <script>
-    window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || ['beniwealth70@gmail.com','owanaomubo76@gmail.com','orivriewoma@gmail.com'];
-    function isAllowed(email){ return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase()); }
-    const admin = localStorage.getItem('adminEmail');
-    if(!isAllowed(admin)){
-      document.getElementById('authError').style.display='block';
+  <script type="module">
+    import { initFirebase, isAdminEmail } from './admin-common.js';
+    import { collection, getDocs, orderBy, query } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+
+    const { db } = initFirebase();
+
+    const adminEmail = (localStorage.getItem('adminEmail') || '').toLowerCase();
+    if (!isAdminEmail(adminEmail)) {
+      document.getElementById('authError').style.display = 'block';
     } else {
-      ];
-      const tbody = document.querySelector('#ordersTable tbody');
-      demo.forEach((o,i)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${i+1}</td><td>${o.id}</td><td>${o.user}</td><td>₦${o.amount.toLocaleString()}</td><td>${o.status}</td>`;
-        tbody.appendChild(tr);
-      });
-      document.getElementById('ordersTable').style.display='table';
+      (async () => {
+        try {
+          const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+          const snap = await getDocs(q);
+          const tbody = document.querySelector('#ordersTable tbody');
+          let i = 0;
+          snap.forEach(doc => {
+            const d = doc.data();
+            i++;
+            const orderId = d.orderId || doc.id;
+            const user = d.userEmail || d.user || '—';
+            const amount = Number(d.amount || 0);
+            const status = d.status || '—';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i}</td><td>${escapeHtml(orderId)}</td><td>${escapeHtml(user)}</td><td>₦${amount.toLocaleString()}</td><td>${escapeHtml(status)}</td>`;
+            tbody.appendChild(tr);
+          });
+          document.getElementById('ordersTable').style.display = 'table';
+        } catch (err) {
+          console.error(err);
+          document.getElementById('authError').textContent = 'Failed to load orders: ' + (err.message || err);
+          document.getElementById('authError').style.display = 'block';
+        }
+      })();
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
     }
   </script>
 </body>
