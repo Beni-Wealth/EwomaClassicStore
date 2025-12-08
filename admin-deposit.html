@@ -1,34 +1,39 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Deposit — Admin</title>
-<style>body{font-family:Inter,Arial;margin:0;background:#f4f6fb;color:#0f172a}.wrap{max-width:1000px;margin:28px auto;padding:18px}.back{display:inline-block;margin-bottom:12px;text-decoration:none;color:#1d4ed8}.card{background:#fff;padding:18px;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,.06)}</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deposit — Admin</title>
+  <style>
+    body{font-family:Inter,Arial;margin:0;background:#f4f6fb;color:#0f172a}
+    .wrap{max-width:1000px;margin:28px auto;padding:18px}
+    .back{display:inline-block;margin-bottom:12px;text-decoration:none;color:#1d4ed8}
+    .card{background:#fff;padding:18px;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,.06)}
+    .error{color:#b91c1c}
+  </style>
 </head>
 <body>
-<div class="wrap">
-<a class="back" href="admin.html">← Back to dashboard</a>
-<h2>Deposit</h2>
-<div id="authError" style="color:#b91c1c;display:none">Unauthorized — you must be signed in with an admin email.</div>
-<div id="depositCard" class="card" style="display:none">
-<p>Current total deposit: <strong id="depositVal">₦0</strong></p>
-<p style="margin-top:10px">(This is a demo; replace with real data from your API.)</p>
-</div>
-</div>
-<script>
-// Use shared window.ADMIN_ALLOWED if present, otherwise fallback
-window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || ['beniwealth70@gmail.com','owanaomubo76@gmail.com','orivriewoma@gmail.com'];
-function isAllowed(email){return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase());}
-const admin = localStorage.getItem('adminEmail');
-if(!isAllowed(admin)){
-document.getElementById('authError').style.display='block';
-} else {
-// demo value
-const deposit = 452300;
-document.getElementById('depositVal').textContent = '₦' + deposit.toLocaleString();
-document.getElementById('depositCard').style.display = 'block';
-}
-</script>
+  <div class="wrap">
+    <a class="back" href="admin.html">← Back to dashboard</a>
+    <h2>Deposit</h2>
+    <div id="authError" class="error" style="display:none">Unauthorized — you must be signed in with an admin email.</div>
+    <div id="depositCard" class="card" style="display:none">
+      <p>Current total deposit: <strong id="depositVal">₦0</strong></p>
+      <p style="margin-top:10px">(This is a demo; replace with real data from your API.)</p>
+    </div>
+  </div>
+
+  <script>
+    window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || ['beniwealth70@gmail.com','owanaomubo76@gmail.com','orivriewoma@gmail.com'];
+    function isAllowed(email){ return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase()); }
+    const admin = localStorage.getItem('adminEmail');
+    if(!isAllowed(admin)){
+      document.getElementById('authError').style.display='block';
+    } else {
+      const deposit = 452300;
+      document.getElementById('depositVal').textContent = '₦' + deposit.toLocaleString();
+      document.getElementById('depositCard').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
