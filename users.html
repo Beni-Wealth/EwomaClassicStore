@@ -30,17 +30,11 @@
 
   <script>
     // Ensure a shared allowed list exists (no redeclaration errors)
-    window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || ['beniwealth70@gmail.com','owanaomubo76@gmail.com','orivriewoma@gmail.com'];
     function isAllowed(email){ return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase()); }
     const admin = localStorage.getItem('adminEmail');
     if(!isAllowed(admin)){
       document.getElementById('authError').style.display='block';
     } else {
-      // demo users - replace by API call
-      const demo = [
-        {name:'Adaobi Okoro', email:'adaobi@example.com', joined:'2024-02-12'},
-        {name:'Chinedu Eze', email:'chinedu@example.com', joined:'2024-05-18'},
-        {name:'Funke Akin', email:'funke@example.com', joined:'2024-09-02'}
       ];
       const tbody = document.querySelector('#usersTable tbody');
       demo.forEach((u,i)=>{
