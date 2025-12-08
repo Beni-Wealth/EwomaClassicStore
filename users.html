@@ -19,30 +19,57 @@
     <a class="back" href="admin.html">← Back to dashboard</a>
     <h2>View Users</h2>
     <div id="authError" class="error" style="display:none">Unauthorized — you must be signed in with an admin email.</div>
-
     <table id="usersTable" style="display:none">
-      <thead>
-        <tr><th>#</th><th>Name</th><th>Email</th><th>Joined</th></tr>
-      </thead>
+      <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Joined</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
 
-  <script>
-    // Ensure a shared allowed list exists (no redeclaration errors)
-    function isAllowed(email){ return (window.ADMIN_ALLOWED || []).includes((email||'').toLowerCase()); }
-    const admin = localStorage.getItem('adminEmail');
-    if(!isAllowed(admin)){
-      document.getElementById('authError').style.display='block';
+  <script type="module">
+    import { initFirebase, isAdminEmail } from './admin-common.js';
+    import { collection, getDocs, orderBy, query } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+
+    const { auth, db } = initFirebase();
+
+    // require signed in admin (either via Firebase auth or localStorage)
+    const adminEmail = (localStorage.getItem('adminEmail') || '').toLowerCase();
+    if (!isAdminEmail(adminEmail)) {
+      document.getElementById('authError').style.display = 'block';
     } else {
-      ];
-      const tbody = document.querySelector('#usersTable tbody');
-      demo.forEach((u,i)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${i+1}</td><td>${u.name}</td><td>${u.email}</td><td>${u.joined}</td>`;
-        tbody.appendChild(tr);
-      });
-      document.getElementById('usersTable').style.display='table';
+      (async () => {
+        try {
+          // load users (ordered by createdAt if available)
+          const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+          const snap = await getDocs(q);
+          const tbody = document.querySelector('#usersTable tbody');
+          let i = 0;
+          snap.forEach(doc => {
+            const data = doc.data();
+            const name = data.name || '—';
+            const email = data.email || '—';
+            const createdAt = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate().toLocaleString() : (data.createdAt || '—');
+            i++;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i}</td><td>${escapeHtml(name)}</td><td>${escapeHtml(email)}</td><td>${escapeHtml(createdAt)}</td>`;
+            tbody.appendChild(tr);
+          });
+          document.getElementById('usersTable').style.display = 'table';
+        } catch (err) {
+          console.error(err);
+          document.getElementById('authError').textContent = 'Failed to load users: ' + (err.message || err);
+          document.getElementById('authError').style.display = 'block';
+        }
+      })();
+    }
+
+    // small helper to avoid injection
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
     }
   </script>
 </body>
