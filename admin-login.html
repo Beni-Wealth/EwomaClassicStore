@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Sign in — Ewoma Classicstore</title>
+
+  <link rel="icon" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f5f9ff;
+      --card:#fff;
+      --primary:#0b78ff;
+      --muted:#6b7280;
+      --radius:12px;
+      font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#fff);-webkit-font-smoothing:antialiased}
+    .page{min-height:100vh;display:grid;place-items:center;padding:20px}
+    .card{width:100%;max-width:520px;background:var(--card);border-radius:14px;padding:20px;box-shadow:0 18px 40px rgba(7,38,82,0.06);border:1px solid rgba(11,120,255,0.04)}
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+    .brand img{width:56px;height:56px;border-radius:10px;object-fit:cover}
+    h1{margin:0;font-size:20px;color:var(--primary)}
+    p.lead{margin:6px 0 14px;color:var(--muted);font-size:14px}
+
+    form{display:grid;gap:12px}
+    label{font-size:13px;color:var(--muted)}
+    .field{display:flex;gap:8px;align-items:center;background:#f3f8ff;border-radius:10px;padding:10px;border:1px solid rgba(11,120,255,0.04)}
+    .field input{border:0;background:transparent;outline:none;font-size:15px;width:100%}
+
+    .row{display:flex;gap:8px}
+    .btn{background:linear-gradient(90deg,var(--primary),#0a4fb3);border:0;color:#fff;padding:12px;border-radius:10px;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(11,120,255,0.08);color:var(--primary)}
+    .note{font-size:13px;color:var(--muted);margin-top:6px}
+
+    .msg{display:none;padding:10px;border-radius:8px;background:#fff6f6;border:1px solid #ffd6d6;color:#7a1b1b;font-size:14px}
+    .status{display:none;padding:10px;border-radius:8px;background:#f0f7ff;border:1px solid #d7eaff;color:#073763;font-size:14px}
+
+    @media (max-width:420px){
+      .card{padding:14px}
+      h1{font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card" role="main" aria-labelledby="title">
+      <div class="brand">
+        <img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="logo">
+        <div>
+          <h1 id="title">Admin sign in</h1>
+          <div class="note">Use your admin username or email and password to continue.</div>
+        </div>
+      </div>
+
+      <p class="lead">Enter username (or email) and password used for your account.</p>
+
+      <div id="message" class="msg" role="alert" aria-live="assertive"></div>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+
+      <form id="loginForm" autocomplete="on" novalidate>
+        <div>
+          <label for="identifier">Username or email</label>
+          <div class="field">
+            <input id="identifier" name="identifier" type="text" placeholder="username or email" required autocomplete="username" />
+          </div>
+        </div>
+
+        <div>
+          <label for="password">Password</label>
+          <div class="field">
+            <input id="password" name="password" type="password" placeholder="password" required minlength="6" autocomplete="current-password" />
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="submitBtn" class="btn" type="submit">Sign in</button>
+          <button id="demoBtn" type="button" class="btn ghost">Use demo</button>
+        </div>
+
+        <div style="margin-top:10px;font-size:13px;color:var(--muted)">
+          <a href="forgot-password.html" style="color:var(--primary);font-weight:600">Forgot password?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    // FIREBASE CONFIG (your project: ewomaclassicstore-43b5e)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
+
+    // init
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ui
+    const form = document.getElementById('loginForm');
+    const identifierEl = document.getElementById('identifier');
+    const passwordEl = document.getElementById('password');
+    const messageEl = document.getElementById('message');
+    const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+    const demoBtn = document.getElementById('demoBtn');
+
+    let processing = false;
+
+    function showMessage(text, timeout = 5000){
+      messageEl.textContent = text;
+      messageEl.style.display = 'block';
+      statusEl.style.display = 'none';
+      if(timeout) setTimeout(()=> { messageEl.style.display = 'none'; }, timeout);
+    }
+    function showStatus(text){
+      statusEl.textContent = text;
+      statusEl.style.display = 'block';
+      messageEl.style.display = 'none';
+    }
+
+    // If identifier is a username (no @), try to resolve email from users collection
+    async function resolveUsernameToEmail(username){
+      try{
+        const q = query(collection(db, 'users'), where('username', '==', username.toLowerCase()));
+        const snap = await getDocs(q);
+        if(!snap.empty){
+          const doc = snap.docs[0].data();
+          return doc.email || null;
+        }
+        return null;
+      } catch(e){
+        console.warn('username lookup failed', e);
+        return null;
+      }
+    }
+
+    async function attemptSignInWithEmail(email, password){
+      try{
+        showStatus('Signing in...');
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        // success -> redirect to admin page
+        showStatus('Signed in. Redirecting...');
+        // small delay so the status is visible
+        setTimeout(()=> window.location.href = 'admin.html', 700);
+      } catch(err){
+        console.error('auth error', err);
+        // map common firebase errors to friendly messages
+        let msg = 'Incorrect username or password.';
+        if(err && err.code){
+          if(err.code === 'auth/wrong-password') msg = 'Incorrect password.';
+          else if(err.code === 'auth/user-not-found') msg = 'No account found for that email or username.';
+          else if(err.code === 'auth/invalid-email') msg = 'Invalid email address.';
+          else msg = err.message || msg;
+        }
+        showMessage(msg, 7000);
+        processing = false;
+        submitBtn.disabled = false;
+        statusEl.style.display = 'none';
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if(processing) return;
+      const idVal = identifierEl.value.trim();
+      const pw = passwordEl.value;
+
+      if(!idVal || !pw){
+        showMessage('Please fill both fields.');
+        return;
+      }
+      if(pw.length < 6){
+        showMessage('Password must be at least 6 characters.');
+        return;
+      }
+
+      processing = true;
+      submitBtn.disabled = true;
+      messageEl.style.display = 'none';
+
+      try{
+        // if identifier contains "@", treat as email
+        if(idVal.includes('@')){
+          await attemptSignInWithEmail(idVal, pw);
+          return;
+        }
+
+        // else treat as username - resolve to email
+        showStatus('Resolving username...');
+        const email = await resolveUsernameToEmail(idVal);
+        if(!email){
+          showMessage('Incorrect username or password.', 6000);
+          processing = false;
+          submitBtn.disabled = false;
+          statusEl.style.display = 'none';
+          return;
+        }
+
+        await attemptSignInWithEmail(email, pw);
+
+      } catch(err){
+        console.error('unexpected', err);
+        showMessage('An error occurred. Check console for details.');
+        processing = false;
+        submitBtn.disabled = false;
+        statusEl.style.display = 'none';
+      }
+    });
+
+    // small demo button (optional) — remove if not wanted
+    demoBtn.addEventListener('click', () => {
+      // fill with placeholder demo credentials (if you have demo account)
+      identifierEl.value = 'admin@example.com';
+      passwordEl.value = 'password123';
+    });
+
+    // accessibility: pressing Enter on identifier -> focus password
+    identifierEl.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ e.preventDefault(); passwordEl.focus(); } });
+  </script>
+</body>
+</html>
