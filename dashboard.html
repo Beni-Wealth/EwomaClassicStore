@@ -15,16 +15,43 @@
       --muted: #6b7280;
       --card: #ffffff;
       --radius: 12px;
+      --nav-height: 86px; /* used to reserve space at bottom */
       font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;background:var(--bg);color:#07203a}
     a{color:inherit;text-decoration:none}
 
-    /* safe area spacing */
-    body{padding:env(safe-area-inset-top,12px) 12px 84px; display:flex; justify-content:center}
+    /* reserve safe area + room for floating bottom nav so content never hidden */
+    body{
+      padding-top:env(safe-area-inset-top,12px);
+      padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom,16px));
+      display:flex;
+      justify-content:center;
+      -webkit-font-smoothing:antialiased;
+    }
 
-    .wrap{width:100%;max-width:480px;background:var(--white);border-radius:12px;box-shadow:0 10px 30px rgba(8,60,120,0.06);overflow:hidden}
+    /* centered card that scrolls internally */
+    .wrap{
+      width:100%;
+      max-width:720px;             /* desktop-friendly width */
+      background:var(--white);
+      border-radius:12px;
+      box-shadow:0 10px 30px rgba(8,60,120,0.06);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      margin:12px;
+      max-height: calc(100vh - 96px); /* fit inside viewport */
+      border: 1px solid rgba(8,48,71,0.03);
+    }
+
+    /* inner scrollable content area so header/nav don't get cut */
+    .content {
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom:18px;
+    }
 
     /* search / header */
     .top{
@@ -41,6 +68,7 @@
     .search input{border:0;background:transparent;outline:none;font-size:14px}
     .login-btn{
       background:var(--primary); color:#fff; padding:8px 12px; border-radius:10px; font-weight:600; border:0;
+      flex-shrink:0;
     }
 
     /* welcome card */
@@ -49,17 +77,17 @@
     }
     .avatar{
       width:60px;height:60px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#0a4fb3);display:grid;place-items:center;color:#fff;font-weight:800;font-size:20px;
+      flex-shrink:0;
     }
-    .welcome{
-      flex:1;
-    }
-    .welcome h3{margin:0;font-size:16px;color:#083047}
-    .welcome p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .welcome{flex:1; min-width:0}
+    .welcome h3{margin:0;font-size:16px;color:#083047; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .welcome p{margin:6px 0 0;color:var(--muted);font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
     /* action button (large) */
     .big-btn{
       margin:12px; padding:12px;border-radius:10px;background:var(--primary);color:#fff;font-weight:700;text-align:center;
       box-shadow:0 8px 20px rgba(11,120,255,0.12);
+      width:100%;
     }
 
     /* list */
@@ -67,15 +95,16 @@
     .item{
       display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:10px;background:var(--card);border:1px solid rgba(8,48,71,0.03);
     }
-    .item-left{display:flex;align-items:center;gap:12px}
+    .item-left{display:flex;align-items:center;gap:12px;min-width:0}
     .icon{
       width:36px;height:36px;border-radius:8px;background:#eef7ff;display:grid;place-items:center;color:var(--primary);font-weight:800;font-size:16px;
+      flex-shrink:0;
     }
-    .item-text{display:flex;flex-direction:column}
-    .item-text strong{font-size:14px;color:#083047}
-    .item-text small{font-size:12px;color:var(--muted)}
+    .item-text{display:flex;flex-direction:column;min-width:0}
+    .item-text strong{font-size:14px;color:#083047; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .item-text small{font-size:12px;color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
-    .chev{color:var(--muted);font-size:16px}
+    .chev{color:var(--muted);font-size:18px; margin-left:8px; flex-shrink:0}
 
     /* small legal / support */
     .section{padding:12px;border-top:1px dashed rgba(8,48,71,0.04);font-size:13px;color:var(--muted)}
@@ -84,102 +113,115 @@
     /* bottom nav (floating) */
     .bottom {
       position:fixed; left:50%; transform:translateX(-50%);
-      bottom:18px; width:min(480px,calc(100% - 24px));
+      bottom:18px; width:min(720px,calc(100% - 36px));
       background:#fff;border-radius:12px;box-shadow:0 18px 40px rgba(8,48,71,0.12);
-      display:flex;justify-content:space-around;align-items:center;padding:8px 6px; gap:6px;
-      z-index:9999;
+      display:flex;justify-content:space-around;align-items:center;padding:10px 8px; gap:6px;
+      z-index:9999; height: var(--nav-height);
     }
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:12px}
     .nav-item.active{color:var(--primary);font-weight:700}
-    .nav-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:#f1f7ff;color:var(--primary);font-weight:800}
+    .nav-icon{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:#f1f7ff;color:var(--primary);font-weight:800}
 
-    /* utility */
-    .muted{color:var(--muted)}
+    /* reduce sizes on very small phones */
     @media (max-width:420px){
       .avatar{width:56px;height:56px}
       .search input{font-size:13px}
+      .nav-icon{width:40px;height:40px}
+      .wrap{margin:8px}
+    }
+
+    /* desktop tweaks: allow a slightly wider card and keep nav visible */
+    @media (min-width:900px){
+      body{padding-bottom: calc(var(--nav-height) + 24px);}
+      .wrap{max-width:960px; border-radius:14px;}
+      .card{padding:18px}
+      .top{padding:14px 18px}
+      .big-btn{max-width:320px;margin-left:14px}
     }
   </style>
 </head>
 <body>
   <div class="wrap" role="main" aria-label="Account dashboard">
-    <!-- top / search -->
-    <div class="top" role="region" aria-label="top">
-      <div class="search" aria-hidden="false">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#0b78ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#0b78ff" stroke-width="1.6"/></svg>
-        <input id="searchInput" placeholder="Search products" aria-label="Search products">
+    <!-- make content scrollable inside the card -->
+    <div class="content">
+      <!-- top / search -->
+      <div class="top" role="region" aria-label="top">
+        <div class="search" aria-hidden="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#0b78ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#0b78ff" stroke-width="1.6"/></svg>
+          <input id="searchInput" placeholder="Search products" aria-label="Search products">
+        </div>
+        <button id="loginBtn" class="login-btn">Login</button>
       </div>
-      <button id="loginBtn" class="login-btn">Login</button>
-    </div>
 
-    <!-- welcome card -->
-    <div class="card" role="region" aria-label="welcome">
-      <div class="avatar" id="avatar">E</div>
-      <div class="welcome">
-        <h3 id="welcomeTitle">Welcome</h3>
-        <p id="welcomeSub">Enter your account</p>
+      <!-- welcome card -->
+      <div class="card" role="region" aria-label="welcome">
+        <div class="avatar" id="avatar">E</div>
+        <div class="welcome">
+          <h3 id="welcomeTitle">Welcome</h3>
+          <p id="welcomeSub">Enter your account</p>
+        </div>
+        <div style="min-width:120px;text-align:right">
+          <button id="openLogin" class="big-btn" style="padding:8px 12px;font-size:14px;max-width:220px">Login</button>
+        </div>
       </div>
-      <div style="min-width:80px;text-align:right">
-        <button id="openLogin" class="big-btn" style="padding:8px 10px;font-size:14px">Login</button>
+
+      <!-- Live chat / support callout -->
+      <div style="padding:12px">
+        <div class="big-btn" id="liveChat" style="background:#ff9800">Live Chat</div>
       </div>
-    </div>
 
-    <!-- Live chat / support callout -->
-    <div style="padding:12px">
-      <div class="big-btn" id="liveChat" style="background:#ff9800">Live Chat</div>
-    </div>
+      <!-- list of account options -->
+      <div class="list" role="list">
+        <a class="item" href="help.html" role="listitem">
+          <div class="item-left">
+            <div class="icon">i</div>
+            <div class="item-text"><strong>Help & Support</strong><small class="muted">Contact us for assistance</small></div>
+          </div>
+          <div class="chev" aria-hidden="true">›</div>
+        </a>
 
-    <!-- list of account options -->
-    <div class="list" role="list">
-      <a class="item" href="help.html" role="listitem">
-        <div class="item-left">
-          <div class="icon">i</div>
-          <div class="item-text"><strong>Help & Support</strong><small class="muted">Contact us for assistance</small></div>
-        </div>
-        <div class="chev">›</div>
-      </a>
+        <button class="item" id="ordersItem" role="listitem">
+          <div class="item-left">
+            <div class="icon">🧾</div>
+            <div class="item-text"><strong>Orders</strong><small class="muted" id="ordersSub">View recent orders</small></div>
+          </div>
+          <div class="chev" aria-hidden="true">›</div>
+        </button>
 
-      <button class="item" id="ordersItem" role="listitem">
-        <div class="item-left">
-          <div class="icon">🧾</div>
-          <div class="item-text"><strong>Orders</strong><small class="muted" id="ordersSub">View recent orders</small></div>
-        </div>
-        <div class="chev">›</div>
-      </button>
+        <button class="item" id="inboxItem" role="listitem">
+          <div class="item-left">
+            <div class="icon">✉️</div>
+            <div class="item-text"><strong>Inbox</strong><small class="muted" id="inboxSub">Messages and updates</small></div>
+          </div>
+          <div class="chev" aria-hidden="true">›</div>
+        </button>
 
-      <button class="item" id="inboxItem" role="listitem">
-        <div class="item-left">
-          <div class="icon">✉️</div>
-          <div class="item-text"><strong>Inbox</strong><small class="muted" id="inboxSub">Messages and updates</small></div>
-        </div>
-        <div class="chev">›</div>
-      </button>
+        <a class="item" href="ratings.html" role="listitem">
+          <div class="item-left">
+            <div class="icon">★</div>
+            <div class="item-text"><strong>Ratings & Reviews</strong><small class="muted">See your feedback</small></div>
+          </div>
+          <div class="chev" aria-hidden="true">›</div>
+        </a>
 
-      <a class="item" href="ratings.html" role="listitem">
-        <div class="item-left">
-          <div class="icon">★</div>
-          <div class="item-text"><strong>Ratings & Reviews</strong><small class="muted">See your feedback</small></div>
-        </div>
-        <div class="chev">›</div>
-      </a>
-
-      <a class="item" href="recently-viewed.html" role="listitem">
-        <div class="item-left">
-          <div class="icon">⟳</div>
-          <div class="item-text"><strong>Recently Viewed</strong><small class="muted">Items you checked</small></div>
-        </div>
-        <div class="chev">›</div>
-      </a>
-    </div>
-
-    <div class="section">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="muted">My account</div>
-        <div><a href="orders.html">Manage orders</a></div>
+        <a class="item" href="recently-viewed.html" role="listitem">
+          <div class="item-left">
+            <div class="icon">⟳</div>
+            <div class="item-text"><strong>Recently Viewed</strong><small class="muted">Items you checked</small></div>
+          </div>
+          <div class="chev" aria-hidden="true">›</div>
+        </a>
       </div>
-      <div style="margin-top:10px;font-size:13px" id="userMeta">Not signed in</div>
-    </div>
-  </div>
+
+      <div class="section">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="muted">My account</div>
+          <div><a href="orders.html">Manage orders</a></div>
+        </div>
+        <div style="margin-top:10px;font-size:13px" id="userMeta">Not signed in</div>
+      </div>
+    </div> <!-- /.content -->
+  </div> <!-- /.wrap -->
 
   <!-- bottom nav -->
   <nav class="bottom" role="navigation" aria-label="main navigation">
@@ -233,8 +275,6 @@
     const userMeta = document.getElementById('userMeta');
     const ordersSub = document.getElementById('ordersSub');
     const inboxSub = document.getElementById('inboxSub');
-    const ordersItem = document.getElementById('ordersItem');
-    const inboxItem = document.getElementById('inboxItem');
 
     // navigate actions
     openLogin.addEventListener('click', ()=> location.href = 'login.html');
@@ -242,7 +282,6 @@
     document.getElementById('ordersItem').addEventListener('click', ()=> location.href = 'orders.html');
     document.getElementById('inboxItem').addEventListener('click', ()=> location.href = 'inbox.html');
 
-    // helper: count documents for a user in a collection (simple)
     async function countForUser(collectionName, userId){
       try{
         const q = query(collection(db, collectionName), where('userId', '==', userId));
@@ -254,10 +293,8 @@
       }
     }
 
-    // respond to auth state
     onAuthStateChanged(auth, async (user) => {
       if(!user){
-        // not signed in
         avatar.textContent = 'E';
         welcomeTitle.textContent = 'Welcome';
         welcomeSub.textContent = 'Enter your account';
@@ -271,23 +308,19 @@
 
       openLogin.style.display = 'none';
       loginBtn.textContent = 'Account';
-      // display name fallback to email username
       const name = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
       avatar.textContent = (name[0] || 'U').toUpperCase();
       welcomeTitle.textContent = `Welcome, ${name}`;
       welcomeSub.textContent = user.email || '';
 
-      // get counts from Firestore (orders, inbox)
       const ordersCount = await countForUser('orders', user.uid);
-      const inboxCount = await countForUser('messages', user.uid); // adjust collection name if different
+      const inboxCount = await countForUser('messages', user.uid);
 
       ordersSub.textContent = ordersCount ? `${ordersCount} orders` : 'No recent orders';
       inboxSub.textContent = inboxCount ? `${inboxCount} messages` : 'No new messages';
       userMeta.textContent = `Signed in as ${user.email || name} • UID: ${user.uid.slice(0,8)}`;
 
-      // clicking login when signed in opens profile (here, we show sign out)
       loginBtn.addEventListener('click', async ()=>{
-        // toggle sign out
         try {
           await signOut(auth);
           window.location.href = 'login.html';
@@ -298,12 +331,8 @@
       });
     });
 
-    // quick: support live chat click
-    document.getElementById('liveChat').addEventListener('click', ()=>{
-      // placeholder action - open chat page or contact support
-      location.href = 'help.html';
-    });
-
+    // Live chat
+    document.getElementById('liveChat').addEventListener('click', ()=> location.href = 'help.html');
   </script>
 </body>
 </html>
