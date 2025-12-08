@@ -17,7 +17,7 @@
     .card h3{margin:0 0 8px 0;font-size:14px;color:var(--muted)}
     .card .value{font-size:28px;font-weight:700}
     .nav{margin-top:20px;display:flex;gap:12px}
-    .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:8px;text-decoration:none;display:inline-block}
+    .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:8px;text-decoration:none;display:inline-block;cursor:pointer}
     .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(43,108,176,.12)}
 
     /* Login box */
@@ -25,11 +25,8 @@
     .login-box{background:var(--card);padding:28px;border-radius:10px;box-shadow:0 10px 30px rgba(2,6,23,.06);width:360px}
     .login-box h2{margin:0 0 12px 0}
     .field{margin-bottom:12px}
-    input[type="email"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6edf3}
     .error{color:#b91c1c;font-size:13px;margin-top:8px}
-
     footer{margin-top:40px;color:var(--muted);font-size:13px}
-
     @media (max-width:720px){.card-grid{flex-direction:column}}
   </style>
 </head>
@@ -47,16 +44,24 @@
     <div id="loginView" class="center" style="display:none">
       <div class="login-box">
         <h2>Admin Login</h2>
-        <p style="color:var(--muted);margin:6px 0 16px 0">Sign in with the admin email.</p>
-        <div class="field">
-          <label>Email</label>
-          <input id="emailInput" type="email" placeholder="you@domain.com" autocomplete="username" />
+        <p style="color:var(--muted);margin:6px 0 16px 0">Sign in with Google (only the allowed emails can access).</p>
+
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+          <button id="googleSignIn" class="btn">Sign in with Google</button>
+          <button id="demoSignIn" class="btn secondary">Use demo (email)</button>
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button id="loginBtn" class="btn">Sign in</button>
-          <button id="clearBtn" class="btn secondary">Clear</button>
+
+        <div id="demoForm" style="display:none;margin-top:8px">
+          <div class="field">
+            <label>Email</label>
+            <input id="emailInput" type="email" placeholder="you@domain.com" autocomplete="username" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e6edf3"/>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="loginBtn" class="btn">Sign in (demo)</button>
+            <button id="clearBtn" class="btn secondary">Clear</button>
+          </div>
+          <div id="loginError" class="error" style="display:none"></div>
         </div>
-        <div id="loginError" class="error" style="display:none"></div>
 
         <p style="margin-top:12px;color:var(--muted);font-size:13px">Allowed: beniwealth70@gmail.com, owanaomubo76@gmail.com, orivriewoma@gmail.com</p>
       </div>
@@ -92,74 +97,147 @@
     </div>
   </div>
 
-  <script>
-    // Allowed admin emails (lowercase)
-    const ALLOWED = [
+  <!-- Firebase + Auth logic (module) -->
+  <script type="module">
+    // ensure allowed list is available globally and only declared once
+    window.ADMIN_ALLOWED = window.ADMIN_ALLOWED || [
       'beniwealth70@gmail.com',
       'owanaomubo76@gmail.com',
       'orivriewoma@gmail.com'
     ];
 
-    const emailInput = document.getElementById('emailInput');
-    const loginBtn = document.getElementById('loginBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const loginError = document.getElementById('loginError');
+    // Firebase imports (modular v9+). If you prefer other versions, swap the URLs.
+    import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
+    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js';
+
+    // Your Firebase config (as provided)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
+
+    // Initialize Firebase app only if not already initialized
+    let app;
+    if (!getApps().length) {
+      app = initializeApp(firebaseConfig);
+      try { getAnalytics(app); } catch (e) { /* analytics may fail on non-https/localhost */ }
+    } else {
+      app = getApps()[0];
+    }
+
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // UI refs
     const loginView = document.getElementById('loginView');
     const dashboardView = document.getElementById('dashboardView');
     const signedInEmail = document.getElementById('signedInEmail');
+    const loginError = document.getElementById('loginError');
+    const googleSignInBtn = document.getElementById('googleSignIn');
+    const demoSignInBtn = document.getElementById('demoSignIn');
+    const demoForm = document.getElementById('demoForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const emailInput = document.getElementById('emailInput');
     const logoutBtn = document.getElementById('logoutBtn');
 
-    function isAllowed(email){
-      if(!email) return false;
-      return ALLOWED.includes(email.trim().toLowerCase());
+    function isAllowed(email) {
+      if (!email) return false;
+      return window.ADMIN_ALLOWED.includes(email.trim().toLowerCase());
     }
 
-    function showLogin(){
+    function showLogin() {
       loginView.style.display = 'grid';
       dashboardView.style.display = 'none';
       document.getElementById('hdr-actions').innerHTML = '';
     }
-    function showDashboard(email){
+    function showDashboard(email) {
       loginView.style.display = 'none';
       dashboardView.style.display = 'block';
       signedInEmail.textContent = email;
       document.getElementById('hdr-actions').innerHTML = '<span style="color:var(--muted)">Admin</span>';
     }
 
-    // Simulated fetch for counts (replace with real API calls)
     function fetchCounts(){
-      // Demo: random numbers
-      const users = 128; // replace with API response
-      const orders = 37; // replace with API response
-      const deposit = 452300; // replace with API response (in Naira as integer)
+      // Demo values — replace with API calls
+      const users = 128;
+      const orders = 37;
+      const deposit = 452300;
       document.getElementById('totalUsers').textContent = users;
       document.getElementById('totalOrders').textContent = orders;
       document.getElementById('totalDeposit').textContent = '₦' + deposit.toLocaleString();
     }
 
-    // Login handler
-    loginBtn.addEventListener('click', ()=>{
-      const email = (emailInput.value || '').trim().toLowerCase();
-      if(!email){ loginError.style.display='block'; loginError.textContent='Please enter email.'; return; }
-      if(!isAllowed(email)){
-        loginError.style.display='block'; loginError.textContent='This email is not authorized to access the admin page.'; return;
+    // Google sign-in flow
+    googleSignInBtn.addEventListener('click', async () => {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const email = (user.email || '').toLowerCase();
+        if (!isAllowed(email)) {
+          // not allowed: sign out immediately and show error
+          await signOut(auth);
+          localStorage.removeItem('adminEmail');
+          loginError.style.display = 'block';
+          loginError.textContent = 'This Google account is not authorized to access the admin page.';
+          return;
+        }
+        // allowed: store a session marker locally (demo-only)
+        localStorage.setItem('adminEmail', email);
+        loginError.style.display = 'none';
+        init(); // show dashboard
+      } catch (err) {
+        console.error(err);
+        loginError.style.display = 'block';
+        loginError.textContent = 'Sign-in failed. ' + (err.message || '');
       }
-      // store session (client-side) — for demo only
+    });
+
+    // Demo sign-in by entering one of the allowed emails (no password) - useful for quick testing
+    demoSignInBtn.addEventListener('click', () => {
+      demoForm.style.display = demoForm.style.display === 'none' ? 'block' : 'none';
+      loginError.style.display = 'none';
+    });
+
+    loginBtn.addEventListener('click', () => {
+      const email = (emailInput.value || '').trim().toLowerCase();
+      if (!email) {
+        loginError.style.display = 'block';
+        loginError.textContent = 'Please enter an email.';
+        return;
+      }
+      if (!isAllowed(email)) {
+        loginError.style.display = 'block';
+        loginError.textContent = 'This email is not authorized to access the admin page.';
+        return;
+      }
+      // demo auth: store in localStorage only
       localStorage.setItem('adminEmail', email);
-      loginError.style.display='none';
+      loginError.style.display = 'none';
       init();
     });
 
-    clearBtn.addEventListener('click', ()=>{ emailInput.value=''; loginError.style.display='none'; });
+    clearBtn.addEventListener('click', () => { emailInput.value = ''; loginError.style.display = 'none'; });
 
-    logoutBtn.addEventListener('click', ()=>{
-      localStorage.removeItem('adminEmail');
-      init();
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        // attempt firebase sign out if user is signed in via firebase
+        try { await signOut(auth); } catch(e){ /* ignore */ }
+      } finally {
+        localStorage.removeItem('adminEmail');
+        init();
+      }
     });
 
-    function init(){
+    function init() {
       const stored = (localStorage.getItem('adminEmail') || '').toLowerCase();
-      if(isAllowed(stored)){
+      if (isAllowed(stored)) {
         showDashboard(stored);
         fetchCounts();
       } else {
