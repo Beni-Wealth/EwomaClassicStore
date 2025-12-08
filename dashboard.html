@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Account — EwomaClassicStore</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f5f9ff;
+      --white: #ffffff;
+      --primary: #0b78ff; /* blue */
+      --muted: #6b7280;
+      --card: #ffffff;
+      --radius: 12px;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:#07203a}
+    a{color:inherit;text-decoration:none}
+
+    /* safe area spacing */
+    body{padding:env(safe-area-inset-top,12px) 12px 84px; display:flex; justify-content:center}
+
+    .wrap{width:100%;max-width:480px;background:var(--white);border-radius:12px;box-shadow:0 10px 30px rgba(8,60,120,0.06);overflow:hidden}
+
+    /* search / header */
+    .top{
+      padding:12px 14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background:linear-gradient(180deg,#f7fbff, #ffffff);
+    }
+    .search{
+      flex:1; display:flex; align-items:center; gap:10px; background:#f1f7ff; border-radius:10px; padding:10px 12px;
+      border:1px solid rgba(11,120,255,0.06);
+    }
+    .search input{border:0;background:transparent;outline:none;font-size:14px}
+    .login-btn{
+      background:var(--primary); color:#fff; padding:8px 12px; border-radius:10px; font-weight:600; border:0;
+    }
+
+    /* welcome card */
+    .card{
+      padding:14px; display:flex; align-items:center; gap:12px; border-bottom:1px solid rgba(8,48,71,0.04);
+    }
+    .avatar{
+      width:60px;height:60px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#0a4fb3);display:grid;place-items:center;color:#fff;font-weight:800;font-size:20px;
+    }
+    .welcome{
+      flex:1;
+    }
+    .welcome h3{margin:0;font-size:16px;color:#083047}
+    .welcome p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* action button (large) */
+    .big-btn{
+      margin:12px; padding:12px;border-radius:10px;background:var(--primary);color:#fff;font-weight:700;text-align:center;
+      box-shadow:0 8px 20px rgba(11,120,255,0.12);
+    }
+
+    /* list */
+    .list{display:flex;flex-direction:column;gap:6px;padding:8px}
+    .item{
+      display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:10px;background:var(--card);border:1px solid rgba(8,48,71,0.03);
+    }
+    .item-left{display:flex;align-items:center;gap:12px}
+    .icon{
+      width:36px;height:36px;border-radius:8px;background:#eef7ff;display:grid;place-items:center;color:var(--primary);font-weight:800;font-size:16px;
+    }
+    .item-text{display:flex;flex-direction:column}
+    .item-text strong{font-size:14px;color:#083047}
+    .item-text small{font-size:12px;color:var(--muted)}
+
+    .chev{color:var(--muted);font-size:16px}
+
+    /* small legal / support */
+    .section{padding:12px;border-top:1px dashed rgba(8,48,71,0.04);font-size:13px;color:var(--muted)}
+    .section a{color:var(--primary);font-weight:600}
+
+    /* bottom nav (floating) */
+    .bottom {
+      position:fixed; left:50%; transform:translateX(-50%);
+      bottom:18px; width:min(480px,calc(100% - 24px));
+      background:#fff;border-radius:12px;box-shadow:0 18px 40px rgba(8,48,71,0.12);
+      display:flex;justify-content:space-around;align-items:center;padding:8px 6px; gap:6px;
+      z-index:9999;
+    }
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:12px}
+    .nav-item.active{color:var(--primary);font-weight:700}
+    .nav-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:#f1f7ff;color:var(--primary);font-weight:800}
+
+    /* utility */
+    .muted{color:var(--muted)}
+    @media (max-width:420px){
+      .avatar{width:56px;height:56px}
+      .search input{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-label="Account dashboard">
+    <!-- top / search -->
+    <div class="top" role="region" aria-label="top">
+      <div class="search" aria-hidden="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#0b78ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#0b78ff" stroke-width="1.6"/></svg>
+        <input id="searchInput" placeholder="Search products" aria-label="Search products">
+      </div>
+      <button id="loginBtn" class="login-btn">Login</button>
+    </div>
+
+    <!-- welcome card -->
+    <div class="card" role="region" aria-label="welcome">
+      <div class="avatar" id="avatar">E</div>
+      <div class="welcome">
+        <h3 id="welcomeTitle">Welcome</h3>
+        <p id="welcomeSub">Enter your account</p>
+      </div>
+      <div style="min-width:80px;text-align:right">
+        <button id="openLogin" class="big-btn" style="padding:8px 10px;font-size:14px">Login</button>
+      </div>
+    </div>
+
+    <!-- Live chat / support callout -->
+    <div style="padding:12px">
+      <div class="big-btn" id="liveChat" style="background:#ff9800">Live Chat</div>
+    </div>
+
+    <!-- list of account options -->
+    <div class="list" role="list">
+      <a class="item" href="help.html" role="listitem">
+        <div class="item-left">
+          <div class="icon">i</div>
+          <div class="item-text"><strong>Help & Support</strong><small class="muted">Contact us for assistance</small></div>
+        </div>
+        <div class="chev">›</div>
+      </a>
+
+      <button class="item" id="ordersItem" role="listitem">
+        <div class="item-left">
+          <div class="icon">🧾</div>
+          <div class="item-text"><strong>Orders</strong><small class="muted" id="ordersSub">View recent orders</small></div>
+        </div>
+        <div class="chev">›</div>
+      </button>
+
+      <button class="item" id="inboxItem" role="listitem">
+        <div class="item-left">
+          <div class="icon">✉️</div>
+          <div class="item-text"><strong>Inbox</strong><small class="muted" id="inboxSub">Messages and updates</small></div>
+        </div>
+        <div class="chev">›</div>
+      </button>
+
+      <a class="item" href="ratings.html" role="listitem">
+        <div class="item-left">
+          <div class="icon">★</div>
+          <div class="item-text"><strong>Ratings & Reviews</strong><small class="muted">See your feedback</small></div>
+        </div>
+        <div class="chev">›</div>
+      </a>
+
+      <a class="item" href="recently-viewed.html" role="listitem">
+        <div class="item-left">
+          <div class="icon">⟳</div>
+          <div class="item-text"><strong>Recently Viewed</strong><small class="muted">Items you checked</small></div>
+        </div>
+        <div class="chev">›</div>
+      </a>
+    </div>
+
+    <div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="muted">My account</div>
+        <div><a href="orders.html">Manage orders</a></div>
+      </div>
+      <div style="margin-top:10px;font-size:13px" id="userMeta">Not signed in</div>
+    </div>
+  </div>
+
+  <!-- bottom nav -->
+  <nav class="bottom" role="navigation" aria-label="main navigation">
+    <a class="nav-item" href="index.html">
+      <div class="nav-icon">🏠</div>
+      <div>Home</div>
+    </a>
+    <a class="nav-item" href="categories.html">
+      <div class="nav-icon">📂</div>
+      <div>Categories</div>
+    </a>
+    <a class="nav-item" href="cart.html">
+      <div class="nav-icon">🛒</div>
+      <div>Cart</div>
+    </a>
+    <a class="nav-item active" href="dashboard.html">
+      <div class="nav-icon">👤</div>
+      <div>Account</div>
+    </a>
+  </nav>
+
+  <!-- Firebase (modular CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    // FIREBASE CONFIG: ewomaclassicstore-43b5e (from you)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch(e){}
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // UI refs
+    const avatar = document.getElementById('avatar');
+    const welcomeTitle = document.getElementById('welcomeTitle');
+    const welcomeSub = document.getElementById('welcomeSub');
+    const openLogin = document.getElementById('openLogin');
+    const loginBtn = document.getElementById('loginBtn');
+    const userMeta = document.getElementById('userMeta');
+    const ordersSub = document.getElementById('ordersSub');
+    const inboxSub = document.getElementById('inboxSub');
+    const ordersItem = document.getElementById('ordersItem');
+    const inboxItem = document.getElementById('inboxItem');
+
+    // navigate actions
+    openLogin.addEventListener('click', ()=> location.href = 'login.html');
+    loginBtn.addEventListener('click', ()=> location.href = 'login.html');
+    document.getElementById('ordersItem').addEventListener('click', ()=> location.href = 'orders.html');
+    document.getElementById('inboxItem').addEventListener('click', ()=> location.href = 'inbox.html');
+
+    // helper: count documents for a user in a collection (simple)
+    async function countForUser(collectionName, userId){
+      try{
+        const q = query(collection(db, collectionName), where('userId', '==', userId));
+        const snap = await getDocs(q);
+        return snap.size;
+      } catch(e){
+        console.warn('countForUser error', e);
+        return 0;
+      }
+    }
+
+    // respond to auth state
+    onAuthStateChanged(auth, async (user) => {
+      if(!user){
+        // not signed in
+        avatar.textContent = 'E';
+        welcomeTitle.textContent = 'Welcome';
+        welcomeSub.textContent = 'Enter your account';
+        userMeta.textContent = 'Not signed in';
+        ordersSub.textContent = 'View recent orders';
+        inboxSub.textContent = 'Messages and updates';
+        openLogin.style.display = 'inline-block';
+        loginBtn.style.display = 'inline-block';
+        return;
+      }
+
+      openLogin.style.display = 'none';
+      loginBtn.textContent = 'Account';
+      // display name fallback to email username
+      const name = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+      avatar.textContent = (name[0] || 'U').toUpperCase();
+      welcomeTitle.textContent = `Welcome, ${name}`;
+      welcomeSub.textContent = user.email || '';
+
+      // get counts from Firestore (orders, inbox)
+      const ordersCount = await countForUser('orders', user.uid);
+      const inboxCount = await countForUser('messages', user.uid); // adjust collection name if different
+
+      ordersSub.textContent = ordersCount ? `${ordersCount} orders` : 'No recent orders';
+      inboxSub.textContent = inboxCount ? `${inboxCount} messages` : 'No new messages';
+      userMeta.textContent = `Signed in as ${user.email || name} • UID: ${user.uid.slice(0,8)}`;
+
+      // clicking login when signed in opens profile (here, we show sign out)
+      loginBtn.addEventListener('click', async ()=>{
+        // toggle sign out
+        try {
+          await signOut(auth);
+          window.location.href = 'login.html';
+        } catch(e){
+          console.error('signout', e);
+          alert('Sign out failed, check console.');
+        }
+      });
+    });
+
+    // quick: support live chat click
+    document.getElementById('liveChat').addEventListener('click', ()=>{
+      // placeholder action - open chat page or contact support
+      location.href = 'help.html';
+    });
+
+  </script>
+</body>
+</html>
