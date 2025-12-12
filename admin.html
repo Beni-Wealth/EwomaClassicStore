@@ -7,44 +7,54 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root{
-      --bg: #f6fbff; /* very light blue */
+      --bg: #eaf6ff; /* very soft blue */
       --card: #ffffff;
-      --accent-blue: #2b9af3; /* primary blue */
-      --accent-soft: #e6f4ff; /* soft blue */
+      --accent-blue: #1572d3; /* deeper blue for power */
+      --accent-soft: #dff3ff;
       --accent-orange: #ff8a00;
-      --muted: #6b7280;
-      --glass: rgba(255,255,255,0.6);
+      --muted: #475569;
       font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
 
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);color:#0f172a}
-    .wrap{max-width:1200px;margin:28px auto;padding:20px}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);color:#0b1220}
+    .wrap{max-width:1240px;margin:28px auto;padding:22px}
 
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent-blue),#7fd1ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;box-shadow:0 6px 18px rgba(43,154,243,0.15)}
-    .brand h1{font-size:18px;margin:0}
-    .brand p{margin:0;font-size:12px;color:var(--muted)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:64px;height:64px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(21,114,211,0.15);border:4px solid rgba(255,255,255,0.6)}
+    .logo img{width:100%;height:100%;object-fit:cover;display:block}
+    .brand h1{font-size:20px;margin:0}
+    .brand p{margin:0;font-size:13px;color:var(--muted)}
 
     .admin-actions{display:flex;align-items:center;gap:12px}
-    .chip{background:var(--card);padding:8px 12px;border-radius:999px;box-shadow:0 4px 18px rgba(15,23,42,0.06);font-weight:600}
-    .signout{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px 12px;border-radius:10px;cursor:pointer}
+    .chip{background:linear-gradient(90deg,#ffffff, #f7fbff);padding:10px 14px;border-radius:999px;box-shadow:0 6px 22px rgba(11,52,96,0.06);font-weight:700}
+    .signout{background:var(--accent-orange);border:0;padding:10px 14px;border-radius:12px;color:white;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(255,138,0,0.12)}
+
+    .hero{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:6px;padding:18px;border-radius:14px;background:linear-gradient(90deg,rgba(21,114,211,0.06), rgba(255,138,0,0.02));box-shadow:0 10px 40px rgba(13,71,161,0.04)}
+    .hero h2{margin:0;font-size:20px}
+    .hero p{margin:0;color:var(--muted)}
 
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:18px}
-    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 8px 28px rgba(11,52,96,0.05);display:flex;flex-direction:column;gap:12px}
+    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 18px 48px rgba(8,30,70,0.06);display:flex;flex-direction:column;gap:12px;border-left:6px solid rgba(21,114,211,0.12)}
     .card .top{display:flex;justify-content:space-between;align-items:center}
-    .metric{font-size:28px;font-weight:700}
+    .metric{font-size:18px;font-weight:800;letter-spacing:0.4px}
     .label{font-size:13px;color:var(--muted)}
     .card-cta{margin-top:auto;display:flex;gap:10px;align-items:center}
-    .btn{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600}
-    .btn.primary{background:linear-gradient(90deg,var(--accent-blue),#4fb0ff);color:white;box-shadow:0 8px 20px rgba(43,154,243,0.18)}
-    .btn.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06);color:var(--muted)}
+    .btn{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+    .btn.primary{background:linear-gradient(90deg,var(--accent-blue),#2ea6ff);color:white;box-shadow:0 12px 30px rgba(21,114,211,0.14)}
+    .btn.ghost{background:transparent;border:1px solid rgba(11,52,96,0.06);color:var(--muted)}
 
-    .emoji{font-size:21px}
+    .emoji{font-size:22px}
 
-    /* header stats bar */
-    .hero{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:6px}
-    .hero p{margin:0;color:var(--muted)}
+    .placeholder{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(90deg,rgba(255,138,0,0.06),rgba(0,0,0,0));padding:8px 12px;border-radius:999px;font-weight:700;color:var(--muted)}
+    .placeholder .lock{font-size:18px}
+
+    .notice{margin-top:12px;padding:12px;border-radius:10px;background:#fff7ed;border:1px solid rgba(255,138,0,0.12);color:#92400e}
+
+    /* hover / interactions */
+    .card:hover{transform:translateY(-6px);transition:transform .22s ease}
+    .btn.primary:hover{transform:translateY(-3px);transition:transform .18s ease}
 
     /* responsive */
     @media (max-width:1000px){
@@ -53,23 +63,19 @@
     @media (max-width:640px){
       .wrap{padding:14px}
       .grid{grid-template-columns:1fr}
-      .brand h1{font-size:16px}
-      .metric{font-size:24px}
+      .brand h1{font-size:18px}
+      .logo{width:56px;height:56px}
     }
-
-    /* small helpers */
-    .loading{opacity:0.6;font-style:italic}
-    .error{color:#b91c1c;font-weight:600}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="brand">
-        <div class="logo">https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg</div>
+        <div class="logo"><img src="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" alt="logo" /></div>
         <div>
-          <h1>Admin Dashboard</h1>
-          <p>Light blue · white · touch of orange</p>
+          <h1>Ewomaclassicstore — Admin</h1>
+          <p>Powerful control · light blue · orange accents</p>
         </div>
       </div>
       <div class="admin-actions">
@@ -80,11 +86,11 @@
 
     <div class="hero">
       <div>
-        <h2 style="margin:0">Overview</h2>
-        <p>Quick access to users, deposits, orders and messages.</p>
+        <h2>Overview</h2>
+        <p>Direct links to management pages. Counts are hidden — Firestore rules prevent listing documents from the client. Use the buttons to open each area.</p>
       </div>
       <div>
-        <button class="btn ghost" id="refreshBtn">Refresh counts 🔄</button>
+        <a class="btn primary" href="#" id="supportLink">Request access</a>
       </div>
     </div>
 
@@ -95,15 +101,15 @@
           <div class="top">
             <div>
               <div class="label">Users</div>
-              <div class="metric" id="usersCount">—</div>
+              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
             </div>
             <div style="text-align:right">
               <div class="emoji">👥</div>
-              <div style="font-size:12px;color:var(--muted);">Total records</div>
+              <div style="font-size:12px;color:var(--muted);">Manage user accounts</div>
             </div>
           </div>
           <div class="card-cta">
-            <a class="btn primary" id="goto-users" href="users.html">View users ➜</a>
+            <a class="btn primary" id="goto-users" href="users.html">Open users ➜</a>
             <a class="btn ghost" id="users-small" href="users.html">Manage</a>
           </div>
         </div>
@@ -112,15 +118,15 @@
           <div class="top">
             <div>
               <div class="label">Deposits</div>
-              <div class="metric" id="depositsCount">—</div>
+              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
             </div>
             <div style="text-align:right">
               <div class="emoji">💳</div>
-              <div style="font-size:12px;color:var(--muted);">Incoming funds</div>
+              <div style="font-size:12px;color:var(--muted);">Verify & approve</div>
             </div>
           </div>
           <div class="card-cta">
-            <a class="btn primary" id="goto-deposits" href="admin-deposit.html">View deposits ➜</a>
+            <a class="btn primary" id="goto-deposits" href="admin-deposit.html">Open deposits ➜</a>
             <a class="btn ghost" id="deposits-small" href="admin-deposit.html">Manage</a>
           </div>
         </div>
@@ -129,15 +135,15 @@
           <div class="top">
             <div>
               <div class="label">Orders</div>
-              <div class="metric" id="ordersCount">—</div>
+              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
             </div>
             <div style="text-align:right">
               <div class="emoji">📦</div>
-              <div style="font-size:12px;color:var(--muted);">Placed orders</div>
+              <div style="font-size:12px;color:var(--muted);">Fulfill & track</div>
             </div>
           </div>
           <div class="card-cta">
-            <a class="btn primary" id="goto-orders" href="admin-orders.html">View orders ➜</a>
+            <a class="btn primary" id="goto-orders" href="admin-orders.html">Open orders ➜</a>
             <a class="btn ghost" id="orders-small" href="admin-orders.html">Manage</a>
           </div>
         </div>
@@ -146,11 +152,11 @@
           <div class="top">
             <div>
               <div class="label">Messages</div>
-              <div class="metric" id="messagesCount">—</div>
+              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
             </div>
             <div style="text-align:right">
               <div class="emoji">✉️</div>
-              <div style="font-size:12px;color:var(--muted);">Inbox</div>
+              <div style="font-size:12px;color:var(--muted);">Customer inbox</div>
             </div>
           </div>
           <div class="card-cta">
@@ -162,21 +168,22 @@
       </div>
 
       <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <div id="status" class="loading">Loading counts…</div>
-        <div id="errorMsg" class="error" style="display:none"></div>
+        <div id="status" class="loading">Counts hidden — Firestore prevents client listing (Missing or insufficient permissions)</div>
+        <div id="errorMsg" class="" style="display:none"></div>
+      </div>
+
+      <div class="notice" style="margin-top:18px">
+        Tip: If you want live counts on the dashboard you'll need to either (1) create callable Cloud Functions that return counts, (2) adjust Firestore security rules to allow a secure server-side read, or (3) create an admin-only endpoint that the client can call. I can implement any of these for you.
       </div>
 
     </main>
   </div>
 
   <script type="module">
-    // --- Firebase SDKs via CDN (modular) ---
+    // --- Firebase SDKs via CDN (auth only) ---
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js';
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
-    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
 
-    // Paste your firebaseConfig here (you already provided it earlier)
     const firebaseConfig = {
       apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
       authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
@@ -188,77 +195,26 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    let analytics;
-    try{ analytics = getAnalytics(app); }catch(e){ console.warn('Analytics not initialized', e); }
-
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
     // allowed admin emails
     const ALLOWED = new Set(["beniwealth70@gmail.com","orivriewoma@gmail.com"]);
 
-    const usersCountEl = document.getElementById('usersCount');
-    const depositsCountEl = document.getElementById('depositsCount');
-    const ordersCountEl = document.getElementById('ordersCount');
-    const messagesCountEl = document.getElementById('messagesCount');
-    const statusEl = document.getElementById('status');
-    const errorEl = document.getElementById('errorMsg');
     const adminEmailChip = document.getElementById('adminEmail');
     const signOutBtn = document.getElementById('signOutBtn');
-    const refreshBtn = document.getElementById('refreshBtn');
+    const statusEl = document.getElementById('status');
+    const supportLink = document.getElementById('supportLink');
 
-    async function fetchCount(collectionName){
-      try{
-        const colRef = collection(db, collectionName);
-        const snap = await getDocs(colRef);
-        return snap.size;
-      }catch(err){
-        throw err;
-      }
-    }
+    // simple support link (you can replace target with ticket system)
+    supportLink.addEventListener('click', (e)=>{ e.preventDefault(); alert('To request access, contact the project owner or update Firestore rules. I can prepare a Cloud Function for counts.'); });
 
-    async function refreshAll(){
-      statusEl.style.display = '';
-      statusEl.textContent = 'Refreshing counts…';
-      errorEl.style.display = 'none';
-      try{
-        // run in parallel
-        const [users, deposits, orders, messages] = await Promise.all([
-          fetchCount('users'),
-          fetchCount('deposits'),
-          fetchCount('orders'),
-          fetchCount('messages')
-        ]);
+    signOutBtn.addEventListener('click', ()=>{ signOut(auth).catch(e=>console.error(e)); });
 
-        usersCountEl.textContent = users;
-        depositsCountEl.textContent = deposits;
-        ordersCountEl.textContent = orders;
-        messagesCountEl.textContent = messages;
-        statusEl.textContent = 'Counts updated';
-      }catch(err){
-        console.error(err);
-        errorEl.style.display = '';
-        errorEl.textContent = 'Error fetching counts — check Firestore rules or network. ' + (err.message || '');
-        statusEl.style.display = 'none';
-      }
-    }
-
-    refreshBtn.addEventListener('click', refreshAll);
-
-    signOutBtn.addEventListener('click', ()=>{
-      signOut(auth).catch(e=>console.error(e));
-    });
-
-    // auth listener — permit only two emails
-    onAuthStateChanged(auth, async user => {
+    onAuthStateChanged(auth, user=>{
       if(!user){
-        // not signed in
         adminEmailChip.textContent = 'Not signed in';
         signOutBtn.style.display = 'none';
-        // redirect to login page or show message
-        statusEl.textContent = 'You must be signed in to access this page. Redirecting to login…';
-        // optional: go to your sign-in page. Commented out to avoid surprises.
-        // location.href = '/login.html';
+        statusEl.textContent = 'You must be signed in to use admin pages.';
         return;
       }
 
@@ -267,22 +223,14 @@
       signOutBtn.style.display = '';
 
       if(!ALLOWED.has(email)){
-        // not allowed — sign out and show message
-        statusEl.style.display = 'none';
-        errorEl.style.display = '';
-        errorEl.textContent = 'Access denied — your account is not authorized to view this admin page.';
-        // sign out after 2s to be safe
+        statusEl.textContent = 'Access denied — your account is not authorized to view this admin page.';
         setTimeout(()=> signOut(auth).catch(()=>{}), 1200);
         return;
       }
 
-      // allowed — load counts
-      await refreshAll();
+      // admin signed in — show the dashboard but counts are intentionally hidden
+      statusEl.textContent = 'Signed in as admin — counts are hidden due to Firestore rules.';
     });
-
-    // nice little keyboard shortcut to refresh
-    window.addEventListener('keydown', (e)=>{ if((e.ctrlKey||e.metaKey) && e.key === 'r'){ e.preventDefault(); refreshAll(); }});
-
   </script>
 </body>
 </html>
