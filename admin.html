@@ -2,200 +2,287 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin — Beni Wealth</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ewomaclassicstore — Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
-    /* same styles as before (omitted for brevity) — copy the CSS from your original admin page */
-    :root{--bg:#f4f6fb;--card:#fff;--accent:#2b6cb0;--muted:#6b7280}
-    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,sans-serif}
-    body{margin:0;background:var(--bg);color:#0f172a}
-    .container{max-width:1100px;margin:32px auto;padding:20px}
-    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand h1{font-size:20px;margin:0}
-    .card-grid{display:flex;gap:16px;flex-wrap:wrap}
-    .card{background:var(--card);padding:18px;border-radius:12px;flex:1;min-width:220px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
-    .card h3{margin:0 0 8px 0;font-size:14px;color:var(--muted)}
-    .card .value{font-size:28px;font-weight:700}
-    .nav{margin-top:20px;display:flex;gap:12px}
-    .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:8px;text-decoration:none;display:inline-block;cursor:pointer}
-    .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(43,108,176,.12)}
-    .center{display:grid;place-items:center;height:70vh}
-    .login-box{background:var(--card);padding:28px;border-radius:10px;box-shadow:0 10px 30px rgba(2,6,23,.06);width:360px}
-    .login-box h2{margin:0 0 12px 0}
-    .field{margin-bottom:12px}
-    .error{color:#b91c1c;font-size:13px;margin-top:8px}
-    footer{margin-top:40px;color:var(--muted);font-size:13px}
-    @media (max-width:720px){.card-grid{flex-direction:column}}
+    :root{
+      --bg: #f6fbff; /* very light blue */
+      --card: #ffffff;
+      --accent-blue: #2b9af3; /* primary blue */
+      --accent-soft: #e6f4ff; /* soft blue */
+      --accent-orange: #ff8a00;
+      --muted: #6b7280;
+      --glass: rgba(255,255,255,0.6);
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);color:#0f172a}
+    .wrap{max-width:1200px;margin:28px auto;padding:20px}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent-blue),#7fd1ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;box-shadow:0 6px 18px rgba(43,154,243,0.15)}
+    .brand h1{font-size:18px;margin:0}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .admin-actions{display:flex;align-items:center;gap:12px}
+    .chip{background:var(--card);padding:8px 12px;border-radius:999px;box-shadow:0 4px 18px rgba(15,23,42,0.06);font-weight:600}
+    .signout{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px 12px;border-radius:10px;cursor:pointer}
+
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:18px}
+    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 8px 28px rgba(11,52,96,0.05);display:flex;flex-direction:column;gap:12px}
+    .card .top{display:flex;justify-content:space-between;align-items:center}
+    .metric{font-size:28px;font-weight:700}
+    .label{font-size:13px;color:var(--muted)}
+    .card-cta{margin-top:auto;display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600}
+    .btn.primary{background:linear-gradient(90deg,var(--accent-blue),#4fb0ff);color:white;box-shadow:0 8px 20px rgba(43,154,243,0.18)}
+    .btn.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06);color:var(--muted)}
+
+    .emoji{font-size:21px}
+
+    /* header stats bar */
+    .hero{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:6px}
+    .hero p{margin:0;color:var(--muted)}
+
+    /* responsive */
+    @media (max-width:1000px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:640px){
+      .wrap{padding:14px}
+      .grid{grid-template-columns:1fr}
+      .brand h1{font-size:16px}
+      .metric{font-size:24px}
+    }
+
+    /* small helpers */
+    .loading{opacity:0.6;font-style:italic}
+    .error{color:#b91c1c;font-weight:600}
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="wrap">
     <header>
       <div class="brand">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#2b6cb0"/><path d="M7 12h10M7 8h10M7 16h6" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <h1>Admin — Beni Wealth</h1>
+        <div class="logo">https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg</div>
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p>Light blue · white · touch of orange</p>
+        </div>
       </div>
-      <div id="hdr-actions"></div>
+      <div class="admin-actions">
+        <div class="chip" id="adminEmail">Not signed in</div>
+        <button class="signout" id="signOutBtn" style="display:none">Sign out</button>
+      </div>
     </header>
 
-    <div id="loginView" class="center" style="display:none">
-      <div class="login-box">
-        <h2>Admin Login</h2>
-        <p style="color:var(--muted);margin:6px 0 16px 0">Sign in with Google to access the admin dashboard.</p>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button id="googleSignIn" class="btn">Sign in with Google</button>
-        </div>
-        <div id="loginError" class="error" style="display:none"></div>
-        <p style="margin-top:12px;color:var(--muted);font-size:13px">Allowed: beniwealth70@gmail.com, owanaomubo76@gmail.com, orivriewoma@gmail.com</p>
+    <div class="hero">
+      <div>
+        <h2 style="margin:0">Overview</h2>
+        <p>Quick access to users, deposits, orders and messages.</p>
+      </div>
+      <div>
+        <button class="btn ghost" id="refreshBtn">Refresh counts 🔄</button>
       </div>
     </div>
 
-    <div id="dashboardView" style="display:none">
-      <div class="card-grid">
-        <div class="card">
-          <h3>Total users</h3>
-          <div class="value" id="totalUsers">0</div>
+    <main>
+      <div class="grid" style="margin-top:16px">
+
+        <div class="card" id="card-users" aria-live="polite">
+          <div class="top">
+            <div>
+              <div class="label">Users</div>
+              <div class="metric" id="usersCount">—</div>
+            </div>
+            <div style="text-align:right">
+              <div class="emoji">👥</div>
+              <div style="font-size:12px;color:var(--muted);">Total records</div>
+            </div>
+          </div>
+          <div class="card-cta">
+            <a class="btn primary" id="goto-users" href="users.html">View users ➜</a>
+            <a class="btn ghost" id="users-small" href="users.html">Manage</a>
+          </div>
         </div>
-        <div class="card">
-          <h3>Total orders</h3>
-          <div class="value" id="totalOrders">0</div>
+
+        <div class="card" id="card-deposits">
+          <div class="top">
+            <div>
+              <div class="label">Deposits</div>
+              <div class="metric" id="depositsCount">—</div>
+            </div>
+            <div style="text-align:right">
+              <div class="emoji">💳</div>
+              <div style="font-size:12px;color:var(--muted);">Incoming funds</div>
+            </div>
+          </div>
+          <div class="card-cta">
+            <a class="btn primary" id="goto-deposits" href="admin-deposit.html">View deposits ➜</a>
+            <a class="btn ghost" id="deposits-small" href="admin-deposit.html">Manage</a>
+          </div>
         </div>
-        <div class="card">
-          <h3>Deposit</h3>
-          <div class="value" id="totalDeposit">₦0</div>
+
+        <div class="card" id="card-orders">
+          <div class="top">
+            <div>
+              <div class="label">Orders</div>
+              <div class="metric" id="ordersCount">—</div>
+            </div>
+            <div style="text-align:right">
+              <div class="emoji">📦</div>
+              <div style="font-size:12px;color:var(--muted);">Placed orders</div>
+            </div>
+          </div>
+          <div class="card-cta">
+            <a class="btn primary" id="goto-orders" href="admin-orders.html">View orders ➜</a>
+            <a class="btn ghost" id="orders-small" href="admin-orders.html">Manage</a>
+          </div>
         </div>
+
+        <div class="card" id="card-messages">
+          <div class="top">
+            <div>
+              <div class="label">Messages</div>
+              <div class="metric" id="messagesCount">—</div>
+            </div>
+            <div style="text-align:right">
+              <div class="emoji">✉️</div>
+              <div style="font-size:12px;color:var(--muted);">Inbox</div>
+            </div>
+          </div>
+          <div class="card-cta">
+            <a class="btn primary" id="goto-messages" href="admin-inbox.html">Open inbox ➜</a>
+            <a class="btn ghost" id="messages-small" href="admin-inbox.html">Manage</a>
+          </div>
+        </div>
+
       </div>
 
-      <div class="nav">
-        <a class="btn secondary" href="users.html">View users</a>
-        <a class="btn secondary" href="admin-orders.html">Orders</a>
-        <a class="btn secondary" href="admin-deposit.html">Deposit</a>
+      <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <div id="status" class="loading">Loading counts…</div>
+        <div id="errorMsg" class="error" style="display:none"></div>
       </div>
 
-      <footer>
-        <div>Signed in as <strong id="signedInEmail"></strong></div>
-        <div style="margin-top:8px"><button id="logoutBtn" class="btn secondary">Sign out</button></div>
-      </footer>
-    </div>
+    </main>
   </div>
 
-  <!-- load shared module -->
   <script type="module">
-    import { initFirebase, isAdminEmail, isAdminEmail as _isAdminEmail, signOutIfNotAdmin,
-             getAuth, GoogleAuthProvider, onAuthStateChanged, signOut } from './admin-common.js';
-    // also import Firestore helpers
-    import { getAuth as _getAuth } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
-    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+    // --- Firebase SDKs via CDN (modular) ---
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
 
-    const { auth, db } = initFirebase();
+    // Paste your firebaseConfig here (you already provided it earlier)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
 
-    // UI refs
-    const loginView = document.getElementById('loginView');
-    const dashboardView = document.getElementById('dashboardView');
-    const googleSignInBtn = document.getElementById('googleSignIn');
-    const loginError = document.getElementById('loginError');
-    const signedInEmailEl = document.getElementById('signedInEmail');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const totalUsersEl = document.getElementById('totalUsers');
-    const totalOrdersEl = document.getElementById('totalOrders');
-    const totalDepositEl = document.getElementById('totalDeposit');
+    const app = initializeApp(firebaseConfig);
+    let analytics;
+    try{ analytics = getAnalytics(app); }catch(e){ console.warn('Analytics not initialized', e); }
 
-    // helper UI toggles
-    function showLogin(){ loginView.style.display = 'grid'; dashboardView.style.display = 'none'; document.getElementById('hdr-actions').innerHTML = ''; }
-    function showDashboard(email){ loginView.style.display = 'none'; dashboardView.style.display = 'block'; signedInEmailEl.textContent = email; document.getElementById('hdr-actions').innerHTML = '<span style="color:var(--muted)">Admin</span>'; }
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // sign-in
-    googleSignInBtn.addEventListener('click', async () => {
-      try {
-        const { getAuth, GoogleAuthProvider, signInWithPopup } = await import('https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js');
-        const _auth = getAuth();
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(_auth, provider);
-        // onAuthStateChanged below will handle verification & UI
-      } catch (err) {
+    // allowed admin emails
+    const ALLOWED = new Set(["beniwealth70@gmail.com","orivriewoma@gmail.com"]);
+
+    const usersCountEl = document.getElementById('usersCount');
+    const depositsCountEl = document.getElementById('depositsCount');
+    const ordersCountEl = document.getElementById('ordersCount');
+    const messagesCountEl = document.getElementById('messagesCount');
+    const statusEl = document.getElementById('status');
+    const errorEl = document.getElementById('errorMsg');
+    const adminEmailChip = document.getElementById('adminEmail');
+    const signOutBtn = document.getElementById('signOutBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    async function fetchCount(collectionName){
+      try{
+        const colRef = collection(db, collectionName);
+        const snap = await getDocs(colRef);
+        return snap.size;
+      }catch(err){
+        throw err;
+      }
+    }
+
+    async function refreshAll(){
+      statusEl.style.display = '';
+      statusEl.textContent = 'Refreshing counts…';
+      errorEl.style.display = 'none';
+      try{
+        // run in parallel
+        const [users, deposits, orders, messages] = await Promise.all([
+          fetchCount('users'),
+          fetchCount('deposits'),
+          fetchCount('orders'),
+          fetchCount('messages')
+        ]);
+
+        usersCountEl.textContent = users;
+        depositsCountEl.textContent = deposits;
+        ordersCountEl.textContent = orders;
+        messagesCountEl.textContent = messages;
+        statusEl.textContent = 'Counts updated';
+      }catch(err){
         console.error(err);
-        loginError.style.display = 'block';
-        loginError.textContent = 'Sign-in failed: ' + (err.message || err);
-      }
-    });
-
-    // logout
-    logoutBtn.addEventListener('click', async () => {
-      try { await signOut(auth); } catch(e) { console.warn(e); }
-      localStorage.removeItem('adminEmail');
-      initUI();
-    });
-
-    // Fetch counts from Firestore (simple client aggregation)
-    async function fetchCounts() {
-      try {
-        // users count
-        const usersSnap = await getDocs(collection(db, 'users'));
-        totalUsersEl.textContent = usersSnap.size;
-
-        // orders count
-        const ordersSnap = await getDocs(collection(db, 'orders'));
-        totalOrdersEl.textContent = ordersSnap.size;
-
-        // deposit sum — expects numeric 'amount' field in 'deposits' collection
-        const depositsSnap = await getDocs(collection(db, 'deposits'));
-        let sum = 0;
-        depositsSnap.forEach(d => {
-          const data = d.data();
-          const amt = Number(data.amount || 0);
-          if (!Number.isNaN(amt)) sum += amt;
-        });
-        totalDepositEl.textContent = '₦' + sum.toLocaleString();
-      } catch (err) {
-        console.error('fetchCounts error', err);
-        totalUsersEl.textContent = '—';
-        totalOrdersEl.textContent = '—';
-        totalDepositEl.textContent = '—';
+        errorEl.style.display = '';
+        errorEl.textContent = 'Error fetching counts — check Firestore rules or network. ' + (err.message || '');
+        statusEl.style.display = 'none';
       }
     }
 
-    // Observe auth state
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const email = (user.email || '').toLowerCase();
-        if (!isAdminEmail(email)) {
-          // unauthorized
-          try { await signOut(auth); } catch(e){}
-          localStorage.removeItem('adminEmail');
-          loginError.style.display = 'block';
-          loginError.textContent = 'Your account is not authorized for admin access.';
-          showLogin();
-          return;
-        }
-        // authorized
-        localStorage.setItem('adminEmail', email);
-        showDashboard(email);
-        await fetchCounts();
-      } else {
+    refreshBtn.addEventListener('click', refreshAll);
+
+    signOutBtn.addEventListener('click', ()=>{
+      signOut(auth).catch(e=>console.error(e));
+    });
+
+    // auth listener — permit only two emails
+    onAuthStateChanged(auth, async user => {
+      if(!user){
         // not signed in
-        const stored = (localStorage.getItem('adminEmail') || '').toLowerCase();
-        // fallback: if localStorage has allowed admin, show (useful when auth persisted elsewhere)
-        if (stored && isAdminEmail(stored)) {
-          showDashboard(stored);
-          await fetchCounts();
-        } else {
-          showLogin();
-        }
+        adminEmailChip.textContent = 'Not signed in';
+        signOutBtn.style.display = 'none';
+        // redirect to login page or show message
+        statusEl.textContent = 'You must be signed in to access this page. Redirecting to login…';
+        // optional: go to your sign-in page. Commented out to avoid surprises.
+        // location.href = '/login.html';
+        return;
       }
+
+      const email = user.email || 'unknown';
+      adminEmailChip.textContent = email;
+      signOutBtn.style.display = '';
+
+      if(!ALLOWED.has(email)){
+        // not allowed — sign out and show message
+        statusEl.style.display = 'none';
+        errorEl.style.display = '';
+        errorEl.textContent = 'Access denied — your account is not authorized to view this admin page.';
+        // sign out after 2s to be safe
+        setTimeout(()=> signOut(auth).catch(()=>{}), 1200);
+        return;
+      }
+
+      // allowed — load counts
+      await refreshAll();
     });
 
-    // init UI
-    function initUI(){ // force check
-      const stored = (localStorage.getItem('adminEmail') || '').toLowerCase();
-      if (stored && isAdminEmail(stored)) {
-        showDashboard(stored);
-        fetchCounts();
-      } else showLogin();
-    }
+    // nice little keyboard shortcut to refresh
+    window.addEventListener('keydown', (e)=>{ if((e.ctrlKey||e.metaKey) && e.key === 'r'){ e.preventDefault(); refreshAll(); }});
 
-    // initial check
-    initUI();
   </script>
 </body>
 </html>
