@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ewomaclassicstore — Admin Dashboard</title>
+  <link rel="icon" href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root{
@@ -47,10 +48,7 @@
 
     .emoji{font-size:22px}
 
-    .placeholder{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(90deg,rgba(255,138,0,0.06),rgba(0,0,0,0));padding:8px 12px;border-radius:999px;font-weight:700;color:var(--muted)}
-    .placeholder .lock{font-size:18px}
-
-    .notice{margin-top:12px;padding:12px;border-radius:10px;background:#fff7ed;border:1px solid rgba(255,138,0,0.12);color:#92400e}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(90deg,rgba(255,255,255,1),rgba(255,255,255,0.7));padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted)}
 
     /* hover / interactions */
     .card:hover{transform:translateY(-6px);transition:transform .22s ease}
@@ -87,10 +85,10 @@
     <div class="hero">
       <div>
         <h2>Overview</h2>
-        <p>Direct links to management pages. Counts are hidden — Firestore rules prevent listing documents from the client. Use the buttons to open each area.</p>
+        <p>Direct links to management pages. Use the buttons to open each area.</p>
       </div>
       <div>
-        <a class="btn primary" href="#" id="supportLink">Request access</a>
+        <button class="btn ghost" id="refreshBtn">Refresh</button>
       </div>
     </div>
 
@@ -101,7 +99,7 @@
           <div class="top">
             <div>
               <div class="label">Users</div>
-              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
+              <div class="metric">—</div>
             </div>
             <div style="text-align:right">
               <div class="emoji">👥</div>
@@ -118,7 +116,7 @@
           <div class="top">
             <div>
               <div class="label">Deposits</div>
-              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
+              <div class="metric">—</div>
             </div>
             <div style="text-align:right">
               <div class="emoji">💳</div>
@@ -135,7 +133,7 @@
           <div class="top">
             <div>
               <div class="label">Orders</div>
-              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
+              <div class="metric">—</div>
             </div>
             <div style="text-align:right">
               <div class="emoji">📦</div>
@@ -152,7 +150,7 @@
           <div class="top">
             <div>
               <div class="label">Messages</div>
-              <div class="metric"><span class="placeholder"><span class="lock">🔒</span> Restricted</span></div>
+              <div class="metric">—</div>
             </div>
             <div style="text-align:right">
               <div class="emoji">✉️</div>
@@ -165,15 +163,28 @@
           </div>
         </div>
 
+        <div class="card" id="card-addproduct">
+          <div class="top">
+            <div>
+              <div class="label">Add product</div>
+              <div class="metric">—</div>
+            </div>
+            <div style="text-align:right">
+              <div class="emoji">🛒</div>
+              <div style="font-size:12px;color:var(--muted);">Create advert & product</div>
+            </div>
+          </div>
+          <div class="card-cta">
+            <a class="btn primary" id="goto-addproduct" href="advertise.html">Add product ➜</a>
+            <a class="btn ghost" id="addproduct-small" href="advertise.html">Advertise</a>
+          </div>
+        </div>
+
       </div>
 
       <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <div id="status" class="loading">Counts hidden — Firestore prevents client listing (Missing or insufficient permissions)</div>
+        <div id="status" class="pill">Ready</div>
         <div id="errorMsg" class="" style="display:none"></div>
-      </div>
-
-      <div class="notice" style="margin-top:18px">
-        Tip: If you want live counts on the dashboard you'll need to either (1) create callable Cloud Functions that return counts, (2) adjust Firestore security rules to allow a secure server-side read, or (3) create an admin-only endpoint that the client can call. I can implement any of these for you.
       </div>
 
     </main>
@@ -197,16 +208,12 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // allowed admin emails
-    const ALLOWED = new Set(["beniwealth70@gmail.com","orivriewoma@gmail.com"]);
-
     const adminEmailChip = document.getElementById('adminEmail');
     const signOutBtn = document.getElementById('signOutBtn');
     const statusEl = document.getElementById('status');
-    const supportLink = document.getElementById('supportLink');
+    const refreshBtn = document.getElementById('refreshBtn');
 
-    // simple support link (you can replace target with ticket system)
-    supportLink.addEventListener('click', (e)=>{ e.preventDefault(); alert('To request access, contact the project owner or update Firestore rules. I can prepare a Cloud Function for counts.'); });
+    refreshBtn.addEventListener('click', ()=>{ statusEl.textContent = 'Refreshed'; setTimeout(()=> statusEl.textContent = 'Ready',1200); });
 
     signOutBtn.addEventListener('click', ()=>{ signOut(auth).catch(e=>console.error(e)); });
 
@@ -214,22 +221,14 @@
       if(!user){
         adminEmailChip.textContent = 'Not signed in';
         signOutBtn.style.display = 'none';
-        statusEl.textContent = 'You must be signed in to use admin pages.';
+        statusEl.textContent = 'Please sign in to access admin pages.';
         return;
       }
 
       const email = user.email || 'unknown';
       adminEmailChip.textContent = email;
       signOutBtn.style.display = '';
-
-      if(!ALLOWED.has(email)){
-        statusEl.textContent = 'Access denied — your account is not authorized to view this admin page.';
-        setTimeout(()=> signOut(auth).catch(()=>{}), 1200);
-        return;
-      }
-
-      // admin signed in — show the dashboard but counts are intentionally hidden
-      statusEl.textContent = 'Signed in as admin — counts are hidden due to Firestore rules.';
+      statusEl.textContent = 'Signed in as admin.';
     });
   </script>
 </body>
