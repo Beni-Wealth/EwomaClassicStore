@@ -168,6 +168,7 @@
 </head>
 
 <body>
+
   <div class="wrap">
     <a class="back" href="admin.html">← Back to dashboard</a>
     <h2>Users</h2>
@@ -217,11 +218,21 @@
     </div>
   </div>
 
+  <!-- Firebase + App Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      orderBy,
+      doc,
+      updateDoc,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    // Your Firebase Config
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
       authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
@@ -236,21 +247,27 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const adminEmail = (localStorage.getItem('adminEmail') || "").toLowerCase();
-    const authError = document.getElementById('authError');
-    const spinner = document.getElementById('spinner');
-    const tableError = document.getElementById('tableError');
-    const usersTable = document.getElementById('usersTable');
-    const usersTbody = usersTable.querySelector('tbody');
+    // Only allow this admin
+    const ALLOWED_ADMIN = "beniwealth70@gmail.com";
+    const adminEmail = (localStorage.getItem("adminEmail") || "").toLowerCase();
+
+    const authError = document.getElementById("authError");
+    const spinner = document.getElementById("spinner");
+    const tableError = document.getElementById("tableError");
+    const usersTable = document.getElementById("usersTable");
+    const usersTbody = usersTable.querySelector("tbody");
 
     function escapeHtml(str) {
-      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
     }
 
-    // CHECK ADMIN
-    if (!adminEmail || adminEmail.indexOf("@") === -1) {
+    // Admin check
+    if (adminEmail !== ALLOWED_ADMIN) {
       spinner.style.display = "none";
-      authError.textContent = "You must be signed in as an admin.";
+      authError.textContent = "Unauthorized — only the admin can access this page.";
       authError.style.display = "block";
     } else {
       loadUsers();
@@ -275,7 +292,9 @@
               <td>${count}</td>
               <td>${escapeHtml(data.name || "—")}</td>
               <td>${escapeHtml(data.email || "—")}</td>
-              <td>${escapeHtml((data.createdAt?.toDate?.().toLocaleString()) || "—")}</td>
+              <td>${escapeHtml(
+                (data.createdAt?.toDate?.().toLocaleString()) || "—"
+              )}</td>
               <td>
                 <button class="edit" onclick="openEdit('${docSnap.id}')">Details</button>
               </td>
@@ -298,7 +317,7 @@
     const editEmail = document.getElementById("editEmail");
     const editRole = document.getElementById("editRole");
     const modalMsg = document.getElementById("modalMsg");
-    let currentUserId = null;
+    let currentUserId;
 
     window.openEdit = async (id) => {
       currentUserId = id;
@@ -306,9 +325,9 @@
       modalBg.style.display = "flex";
 
       try {
-        const userDoc = doc(db, "users", id);
-        const userSnap = await getDocs(query(collection(db, "users")));
-        const userData = (await userDoc.get()).data();
+        const docRef = doc(db, "users", id);
+        const snap = await getDocs(query(collection(db, "users")));
+        const userData = (await docRef.get()).data();
 
         editName.value = userData.name || "";
         editEmail.value = userData.email || "";
@@ -325,7 +344,7 @@
       try {
         await updateDoc(doc(db, "users", currentUserId), {
           name: editName.value.trim(),
-          role: editRole.value.trim()
+          role: editRole.value.trim(),
         });
         modalMsg.innerHTML = `<div class="success">Saved!</div>`;
         loadUsers();
