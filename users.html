@@ -4,6 +4,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- favicon / logo -->
+  <link rel="icon" type="image/png" sizes="32x32"
+    href="https://res.cloudinary.com/dq7fpxfbc/image/upload/v1763817088/IMG-20250110-WA0108_pgxmqj.jpg">
+  <meta name="theme-color" content="#0f61ff">
+
   <title>Users — Admin</title>
 
   <!-- Fonts + Icons -->
@@ -52,7 +58,8 @@
       margin-top: 16px;
     }
 
-    th, td {
+    th,
+    td {
       padding: 14px;
       border-bottom: 1px solid #e5e7eb;
     }
@@ -157,6 +164,7 @@
       margin-left: 8px;
     }
   </style>
+
 </head>
 
 <body>
@@ -210,53 +218,64 @@
   </div>
 
   <script type="module">
-    import { initFirebase, isAdminEmail } from './admin-common.js';
-    import {
-      collection,
-      getDocs,
-      orderBy,
-      query,
-      doc,
-      updateDoc,
-      deleteDoc
-    } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    const { auth, db } = initFirebase();
+    // Your Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo8QfyV3FxWtZMgRI-VvxGJWxLErosIZo",
+      authDomain: "ewomaclassicstore-43b5e.firebaseapp.com",
+      projectId: "ewomaclassicstore-43b5e",
+      storageBucket: "ewomaclassicstore-43b5e.firebasestorage.app",
+      messagingSenderId: "294976130252",
+      appId: "1:294976130252:web:8520570810950d64e14669",
+      measurementId: "G-HHG3KC5VZ3"
+    };
 
-    const adminEmail = (localStorage.getItem('adminEmail') || '').toLowerCase();
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const adminEmail = (localStorage.getItem('adminEmail') || "").toLowerCase();
     const authError = document.getElementById('authError');
     const spinner = document.getElementById('spinner');
     const tableError = document.getElementById('tableError');
     const usersTable = document.getElementById('usersTable');
     const usersTbody = usersTable.querySelector('tbody');
 
-    if (!isAdminEmail(adminEmail)) {
-      spinner.style.display = 'none';
-      authError.textContent = "Unauthorized — admin sign‑in required.";
-      authError.style.display = 'block';
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // CHECK ADMIN
+    if (!adminEmail || adminEmail.indexOf("@") === -1) {
+      spinner.style.display = "none";
+      authError.textContent = "You must be signed in as an admin.";
+      authError.style.display = "block";
     } else {
       loadUsers();
     }
 
     async function loadUsers() {
       try {
-        spinner.style.display = 'block';
-        tableError.style.display = 'none';
+        spinner.style.display = "block";
+        tableError.style.display = "none";
 
-        const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
-        const snap = await getDocs(q);
+        const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
 
-        usersTbody.innerHTML = '';
-        let i = 0;
-        snap.forEach(docSnap => {
+        usersTbody.innerHTML = "";
+        let count = 0;
+
+        snapshot.forEach(docSnap => {
           const data = docSnap.data();
-          i++;
-          usersTbody.insertAdjacentHTML('beforeend', `
+          count++;
+          usersTbody.insertAdjacentHTML("beforeend", `
             <tr data-id="${docSnap.id}">
-              <td>${i}</td>
-              <td>${escapeHtml(data.name || '—')}</td>
-              <td>${escapeHtml(data.email || '—')}</td>
-              <td>${escapeHtml((data.createdAt?.toDate?.().toLocaleString()) || '—')}</td>
+              <td>${count}</td>
+              <td>${escapeHtml(data.name || "—")}</td>
+              <td>${escapeHtml(data.email || "—")}</td>
+              <td>${escapeHtml((data.createdAt?.toDate?.().toLocaleString()) || "—")}</td>
               <td>
                 <button class="edit" onclick="openEdit('${docSnap.id}')">Details</button>
               </td>
@@ -264,44 +283,44 @@
           `);
         });
 
-        spinner.style.display = 'none';
-        usersTable.style.display = 'table';
+        spinner.style.display = "none";
+        usersTable.style.display = "table";
       } catch (err) {
-        spinner.style.display = 'none';
+        spinner.style.display = "none";
         tableError.textContent = "Error loading users: " + err.message;
-        tableError.style.display = 'block';
+        tableError.style.display = "block";
       }
     }
 
-    // modal logic
-    const modalBg = document.getElementById('modalBg');
-    const editName = document.getElementById('editName');
-    const editEmail = document.getElementById('editEmail');
-    const editRole = document.getElementById('editRole');
-    const modalMsg = document.getElementById('modalMsg');
-    let currentUserId;
+    // Modal logic
+    const modalBg = document.getElementById("modalBg");
+    const editName = document.getElementById("editName");
+    const editEmail = document.getElementById("editEmail");
+    const editRole = document.getElementById("editRole");
+    const modalMsg = document.getElementById("modalMsg");
+    let currentUserId = null;
 
     window.openEdit = async (id) => {
       currentUserId = id;
       modalMsg.innerHTML = "";
-      modalBg.style.display = 'flex';
+      modalBg.style.display = "flex";
 
       try {
-        const docRef = doc(db, "users", id);
-        const snap = await getDocs(query(collection(db, "users"), orderBy("createdAt")));
-        const userData = (await docRef.get()).data();
+        const userDoc = doc(db, "users", id);
+        const userSnap = await getDocs(query(collection(db, "users")));
+        const userData = (await userDoc.get()).data();
 
-        editName.value = userData.name || '';
-        editEmail.value = userData.email || '';
-        editRole.value = userData.role || '';
+        editName.value = userData.name || "";
+        editEmail.value = userData.email || "";
+        editRole.value = userData.role || "";
       } catch (err) {
-        modalMsg.innerHTML = `<div class="error-msg">Failed to load user: ${err.message}</div>`;
+        modalMsg.innerHTML = `<div class="error-msg">${err.message}</div>`;
       }
     };
 
-    document.getElementById('cancelBtn').onclick = () => modalBg.style.display = 'none';
+    document.getElementById("cancelBtn").onclick = () => modalBg.style.display = "none";
 
-    document.getElementById('saveBtn').onclick = async () => {
+    document.getElementById("saveBtn").onclick = async () => {
       modalMsg.innerHTML = "";
       try {
         await updateDoc(doc(db, "users", currentUserId), {
@@ -315,21 +334,18 @@
       }
     };
 
-    document.getElementById('deleteUserBtn').onclick = async () => {
-      if (!confirm("Are you sure you want to delete this user?")) return;
+    document.getElementById("deleteUserBtn").onclick = async () => {
+      if (!confirm("Confirm delete user?")) return;
       try {
         await deleteDoc(doc(db, "users", currentUserId));
-        modalBg.style.display = 'none';
+        modalBg.style.display = "none";
         loadUsers();
       } catch (err) {
         modalMsg.innerHTML = `<div class="error-msg">${err.message}</div>`;
       }
     };
-
-    function escapeHtml(str) {
-      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
   </script>
+
 </body>
 
 </html>
